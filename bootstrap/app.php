@@ -13,8 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         $middleware->web(append: [
-        \App\Http\Middleware\HandleInertiaRequests::class,
-    ]);
+            \App\Http\Middleware\HandleInertiaRequests::class,
+        ]);
+        $middleware->alias([
+        // Daftarkan baris ini untuk Spatie Permission
+            'role' => \App\Http\Middleware\CheckRole::class,
+        ]);
+
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

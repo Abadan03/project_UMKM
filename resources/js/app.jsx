@@ -10,10 +10,25 @@ createInertiaApp({
     resolve: (name) =>
         resolvePageComponent(
             `./Pages/${name}.jsx`,
-            import.meta.glob('./Pages/**/*.jsx')
+            import.meta.glob(['./Pages/**/*.jsx', './Pages/**/*.tsx'])
         ),
     setup({ el, App, props }) {
         const root = createRoot(el);
         root.render(<App {...props} />);
     },
 }).then(() => console.log('Inertia app mounted successfully'));
+
+// createInertiaApp({
+//     pages: {
+//         path: './Pages',
+//         extension: '.tsx',
+//         lazy: true,
+//         transform: (name, page) => name.replace('/', '-'),
+//     },
+// })
+
+// createInertiaApp({
+//     id: 'my-app',
+//      pages: './Pages',
+//      extension: '.jsx'
+// })
