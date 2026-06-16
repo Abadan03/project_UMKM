@@ -7,8 +7,14 @@ use Illuminate\Support\Facades\Route;
 // =====================
 // Guest Only
 // =====================
-Route::get('/', [AuthController::class, 'index'])->name('redirect-default');
-Route::get('/login', [AuthController::class, 'index'])->name('login');
+
+// Render Company Profile
+Route::get('/', function () {
+    return Inertia::render('Home');
+})->name('index');
+
+// Route::get('/', [AuthController::class, 'index'])->name('redirect-default');
+Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 // Route::middleware('guest')->group(function () {
 // });

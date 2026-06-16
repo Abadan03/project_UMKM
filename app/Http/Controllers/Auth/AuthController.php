@@ -12,8 +12,15 @@ use Inertia\Inertia;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthServices $authService) {}
-     public function index()
+    public function __construct(private AuthServices $authService)
+    {
+    }
+    public function index()
+    {
+        return Inertia::render('Home');
+    }
+
+    public function auth()
     {
         return Inertia::render('Auth/Login');
     }

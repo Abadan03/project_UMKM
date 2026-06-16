@@ -14,7 +14,7 @@ class StaffDashboard extends Controller
     public function index()
     {
         // dd(Auth()->user);
-        return Inertia::render('Staff/Dashboard');
+        return Inertia::render('Dashboard/Dashboard');
         // dd(Auth()->user);
     }
 }
