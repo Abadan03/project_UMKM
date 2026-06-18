@@ -13,6 +13,11 @@ createInertiaApp({
             `./Pages/${name}.tsx`,
             import.meta.glob(["./Pages/**/*.jsx", "./Pages/**/*.tsx"])
         ) as Promise<any>,
+    defaults: {
+        visitOptions: (href, options) => {
+            return { viewTransition: true };
+        },
+    },
     setup({ el, App, props }) {
         const root = createRoot(el);
 

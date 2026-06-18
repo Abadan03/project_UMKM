@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Compro\ComproController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 
@@ -16,8 +17,17 @@ Route::get('/', function () {
 // Route::get('/', [AuthController::class, 'index'])->name('redirect-default');
 Route::get('/login', [AuthController::class, 'auth'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-// Route::middleware('guest')->group(function () {
-// });
+
+
+
+// COMPRO SECTION ==================
+// ===================== Feature Tab
+Route::get('/feature', [ComproController::class, 'feature'])->name('feature');
+
+// ===================== Pricing Tab
+Route::get('/pricing', [ComproController::class, 'pricing'])->name('pricing');
+
+// COMPRO SECTION END ==================
 
 // =====================
 // Authenticated

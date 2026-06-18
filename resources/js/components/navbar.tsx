@@ -4,12 +4,12 @@ import {
     DisclosurePanel,
 } from "@headlessui/react";
 import { Button } from "./ui/button";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 
 const navigation = [
-    { name: "Home", href: "#", current: true },
-    { name: "Feature", href: "#", current: false },
-    { name: "Pricing", href: "#", current: false },
+    { name: "Home", href: "/", current: true },
+    { name: "Feature", href: "/feature", current: false },
+    { name: "Pricing", href: "/pricing", current: false },
     { name: "Contact", href: "#", current: false },
 ];
 
@@ -18,6 +18,8 @@ function classNames(...classes: any) {
 }
 
 export default function NavbarLayout() {
+    const { url } = usePage()
+    
     return (
         <Disclosure as="nav" className="fixed top-4 left-0 right-0 z-50">
             <div className="relative mx-auto rounded-xl px-2 sm:px-6 bg-gray-900 w-[95%] lg:px-10">
@@ -33,21 +35,21 @@ export default function NavbarLayout() {
                     <div className="flex shrink-0 items-center space-x-4">
                         <div className="space-x-4">
                             {navigation.map((item) => (
-                                <a
+                                <Link
                                     key={item.name}
                                     href={item.href}
                                     aria-current={
-                                        item.current ? "page" : undefined
+                                        url === item.href ? "page" : undefined
                                     }
                                     className={classNames(
-                                        item.current
+                                        url === item.href
                                             ? "border-b border-white text-white"
                                             : "text-gray-300 hover:text-white",
                                         "rounded-none px-1 py-2 text-sm font-medium"
                                     )}
                                 >
                                     {item.name}
-                                </a>
+                                </Link>
                             ))}
                         </div>
                         <Link href="login">
