@@ -3,8 +3,8 @@ import {
     DisclosureButton,
     DisclosurePanel,
 } from "@headlessui/react";
-import { Button } from "./ui/button";
 import { Link, usePage } from "@inertiajs/react";
+import LI from "./C/LI";
 
 const navigation = [
     { name: "Home", href: "/", current: true },
@@ -18,22 +18,43 @@ function classNames(...classes: any) {
 }
 
 export default function NavbarLayout() {
-    const { url } = usePage()
-    
+    const { url } = usePage();
+
     return (
-        <Disclosure as="nav" className="fixed top-4 left-0 right-0 z-50">
-            <div className="relative mx-auto rounded-xl px-2 sm:px-6 bg-gray-900 w-[95%] lg:px-10">
-                <div className="flex h-16 flex-1 items-center justify-between">
-                    <div className="flex shrink-0 items-center space-x-4">
-                        <img
-                            alt="Your Company"
-                            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                            className="h-8 w-auto"
-                        />
-                        <h1 className="text-white">Company Name</h1>
+        <Disclosure as="nav" className="fixed top-4 left-0 right-0 z-50 font-mono">
+            <div
+                className="relative mx-auto px-3 sm:px-6 w-[95%] lg:px-10 bg-[#3c2060]"
+                style={{
+                    border: "4px solid #1a0a2e",
+                    boxShadow: "6px 6px 0 #1a0a2e",
+                }}
+            >
+                <div className="flex h-16 flex-1 items-center justify-between flex-wrap gap-y-2">
+                    <div className="flex shrink-0 items-center space-x-3">
+                        <div
+                            className="h-8 w-8 flex items-center justify-center shrink-0 bg-[#ffdd00]"
+                            style={{
+                                border: "3px solid #1a0a2e",
+                                boxShadow: "3px 3px 0 #1a0a2e",
+                            }}
+                        >
+                            <img
+                                alt="Your Company"
+                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                                className="h-5 w-auto"
+                                style={{ imageRendering: "pixelated" }}
+                            />
+                        </div>
+                        <h1
+                            className="text-white text-lg tracking-widest font-bold"
+                            style={{ textShadow: "2px 2px 0 #1a0a2e" }}
+                        >
+                            COMPANY
+                        </h1>
                     </div>
-                    <div className="flex shrink-0 items-center space-x-4">
-                        <div className="space-x-4">
+
+                    <div className="flex shrink-0 items-center space-x-5">
+                        <div className="flex items-center space-x-3 flex-wrap">
                             {navigation.map((item) => (
                                 <Link
                                     key={item.name}
@@ -43,9 +64,9 @@ export default function NavbarLayout() {
                                     }
                                     className={classNames(
                                         url === item.href
-                                            ? "border-b border-white text-white"
-                                            : "text-gray-300 hover:text-white",
-                                        "rounded-none px-1 py-2 text-sm font-medium"
+                                            ? "text-white border-b-[3px] border-[#44ddff]"
+                                            : "text-[#ddc8f0] border-b-[3px] border-transparent hover:text-[#ffdd00] hover:border-[#ff8800]",
+                                        "rounded-none px-1 py-2 text-[15px] font-bold tracking-wider uppercase"
                                     )}
                                 >
                                     {item.name}
@@ -53,19 +74,20 @@ export default function NavbarLayout() {
                             ))}
                         </div>
                         <Link href="login">
-                            <Button
-                                variant={"secondary"}
-                                className="py-2 px-4 hover:bg-white/80"
-                            >
-                                Login
-                            </Button>
+                            <LI />
                         </Link>
                     </div>
                 </div>
             </div>
 
             <DisclosurePanel className="sm:hidden">
-                <div className="space-y-1 px-2 pt-2 pb-3">
+                <div
+                    className="space-y-1 px-2 pt-2 pb-3 mt-2 bg-[#3c2060]"
+                    style={{
+                        border: "4px solid #1a0a2e",
+                        boxShadow: "6px 6px 0 #1a0a2e",
+                    }}
+                >
                     {navigation.map((item) => (
                         <DisclosureButton
                             key={item.name}
@@ -74,9 +96,9 @@ export default function NavbarLayout() {
                             aria-current={item.current ? "page" : undefined}
                             className={classNames(
                                 item.current
-                                    ? "bg-gray-950/50 text-white"
-                                    : "text-gray-300 hover:bg-white/5 hover:text-white",
-                                "block rounded-md px-3 py-2 text-base font-medium"
+                                    ? "text-white bg-[#1a0a2e]/60"
+                                    : "text-[#ddc8f0] hover:text-[#ffdd00] hover:bg-[#1a0a2e]/40",
+                                "block rounded-none px-3 py-2 text-xs font-bold tracking-wider uppercase"
                             )}
                         >
                             {item.name}
