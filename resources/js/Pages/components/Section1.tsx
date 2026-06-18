@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import dashboardwithperson from "@/asset/img/dashboardwithperson.png";
+import zeroSC from "@/asset/img/zeroSC.png";
 
 import { Sparkles } from 'lucide-react'
 import React from 'react'
@@ -18,7 +18,7 @@ export default function Section1() {
                 {/* Dashboard Image */}
                 <div>
                     <img
-                        src={dashboardwithperson}
+                        src={zeroSC}
                         alt="Dashboard"
                         className="w-full "
                     />
