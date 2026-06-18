@@ -5,6 +5,7 @@ import {
 } from "@headlessui/react";
 import { Link, usePage } from "@inertiajs/react";
 import LI from "./C/LI";
+import logo1 from "@/asset/img/logo1.jpeg";
 
 const navigation = [
     { name: "Home", href: "/", current: true },
@@ -21,7 +22,10 @@ export default function NavbarLayout() {
     const { url } = usePage();
 
     return (
-        <Disclosure as="nav" className="fixed top-4 left-0 right-0 z-50 font-mono">
+        <Disclosure
+            as="nav"
+            className="fixed top-4 left-0 right-0 z-50 font-mono"
+        >
             <div
                 className="relative mx-auto px-3 sm:px-6 w-[95%] lg:px-10 bg-[#3c2060]"
                 style={{
@@ -40,7 +44,7 @@ export default function NavbarLayout() {
                         >
                             <img
                                 alt="Your Company"
-                                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
+                                src="logo1"
                                 className="h-5 w-auto"
                                 style={{ imageRendering: "pixelated" }}
                             />
@@ -49,7 +53,7 @@ export default function NavbarLayout() {
                             className="text-white text-lg tracking-widest font-bold"
                             style={{ textShadow: "2px 2px 0 #1a0a2e" }}
                         >
-                            COMPANY
+                            GROWBIT
                         </h1>
                     </div>
 

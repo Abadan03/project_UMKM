@@ -11,8 +11,8 @@ export default function MainLayout({
             {/* Navbar ditaruh di sini sekali saja */}
             <NavbarLayout />
 
-            {/* 'children' adalah tempat masuknya konten dari Home atau Feature kontolodonasdasdsa */}
-            <main className="mt-8">{children}</main>
+            {/* 'children' adalah tempat masuknya konten dari Home atau Feature */}
+            <main>{children}</main>
         </div>
     );
 }
