@@ -7,7 +7,7 @@ export default function MainLayout({
     children: React.ReactNode;
 }) {
     return (
-        <div className="p-14">
+        <div className="p-14 a asdasdasdasd">
             {/* Navbar ditaruh di sini sekali saja */}
             <NavbarLayout />
 
