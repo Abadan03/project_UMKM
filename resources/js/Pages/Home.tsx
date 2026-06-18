@@ -1,18 +1,14 @@
 import { Head } from "@inertiajs/react";
-import NavbarLayout from "@/components/navbar";
-
-import { Sparkles } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Section1 from "./components/Section1";
+import ZeroSection from "@/Pages/components/zero";
 import MainLayout from "./MainLayout";
 
 export default function Home() {
     return (
         <>
-            <div className="p-14">
-                <Head title="Beranda"/>
+            <div>
+                <Head title="Beranda" />
                 {/* Section 1 */}
-                <Section1 />
+                <ZeroSection />
             </div>
         </>
     );
