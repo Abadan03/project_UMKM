@@ -12,15 +12,14 @@ import {
 import { type NavItem } from "@/types";
 import { Link } from "@inertiajs/react";
 import {
-    BookCheck,
-    Banknote,
-    ShelvingUnit,
-    ShoppingBasket,
-    BookCopy,
-    BookOpenText,
     LayoutGrid,
-    LibraryBig,
     User,
+    ShoppingBasket,
+    ShelvingUnit,
+    Banknote,
+    Receipt,
+    Wallet,
+    BookCheck,
 } from "lucide-react";
 import AppLogo from "./app-logo";
 
@@ -31,44 +30,45 @@ const mainNavItems: NavItem[] = [
         icon: LayoutGrid,
     },
     {
+        title: "Notes",
+        url: "/admin/notes",
+        icon: BookCheck,
+    },
+    {
         title: "Users",
         url: "/admin/users",
         icon: User,
     },
     {
         title: "Product",
-        url: "/admin/toefl",
+        url: "/admin/products",
         icon: ShoppingBasket,
     },
     {
         title: "Inventory",
-        url: "/admin/questions",
+        url: "/admin/inventory",
         icon: ShelvingUnit,
     },
     {
         title: "Sales",
-        url: "/admin/questions",
+        url: "/admin/sales",
         icon: ShelvingUnit,
     },
     {
         title: "Finance",
-        url: "/admin/attempts",
         icon: Banknote,
-    },
-    {
-        title: "Cashflow",
-        url: "/admin/attempts",
-        icon: Banknote,
-    },
-    {
-        title: "Transaction",
-        url: "/admin/attempts",
-        icon: Banknote,
-    },
-    {
-        title: "Notes",
-        url: "/admin/attempts",
-        icon: BookCheck,
+        children: [
+            {
+                title: "Cash Flow",
+                url: "/admin/finance/cashflow",
+                icon: Wallet,
+            },
+            {
+                title: "Transaction",
+                url: "/admin/finance/transactions",
+                icon: Receipt,
+            },
+        ],
     },
 ];
 
@@ -79,7 +79,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/admin/dashboard" prefetch>
+                            <Link href="#" prefetch>
                                 <AppLogo />
                             </Link>
                         </SidebarMenuButton>
@@ -92,7 +92,6 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
-                {/* <NavFooter items={footerNavItems} className="mt-auto" /> */}
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

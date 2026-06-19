@@ -50,6 +50,7 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  --color-background-dashboard: var(--background-dashboard);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -59,8 +60,40 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
+/*
+|--------------------------------------------------------------------------
+| Brand Colors
+|--------------------------------------------------------------------------
+|
+| Purple 950 : #1a0a2e
+| Purple 900 : #2e1044
+| Purple 800 : #3c2060
+| Purple 700 : #5a3888
+| Purple 500 : #8860b0
+| Purple 300 : #b898d8
+| Purple 100 : #ddc8f0
+|
+|--------------------------------------------------------------------------
+| Utility Colors
+|--------------------------------------------------------------------------
+|
+| White   : #ffffff
+| Yellow  : #ffdd00
+| Orange  : #ff8800
+| Danger  : #ff4444
+| Info    : #44ddff
+| Blue    : #2288cc
+| Success : #44cc44
+| Pink    : #ff44aa
+| Brown   : #884400
+|
+*/
+
+
+
 :root {
   --background: #f0f0f0;
+  --background-dashboard: #F7F5F0;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -84,14 +117,43 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
+  /* --sidebar: oklch(0.985 0 0); */
+  /* --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar-ring: oklch(0.708 0 0); */
+
+  /*
+
+Sidebar bg:      #2D3748
+Sidebar text:    #E2E8F0
+Sidebar muted:   #A0AEC0
+Accent/active:   #68D391
+Active bg:       rgba(104,211,145,0.15)
+Logo bg:         rgba(104,211,145,0.15)
+
+Main bg:         #F7F5F0
+Topbar bg:       #EDF2EF
+Topbar text:     #2D3748
+Card pattern:    rgba(45,55,72,0.05)
+
+ */
+
+  /* Background Sidebar */
+  --sidebar: #2D3748;
+  --sidebar-foreground: #E2E8F0;
+  /* Background CTA */
+  --sidebar-primary: rgba(104, 211, 145, 0.15);
+  --sidebar-primary-foreground: #ddc8f0;
+  /* Hover Background Sidebar */
+  --sidebar-accent: #68d3919a;
+  --sidebar-accent-foreground: #fff;
+  /* Background Sidebar */
+  --sidebar-border: rgba(104, 211, 145, 0.15);
+  --sidebar-ring: #68D391;
 }
 
 .dark {
