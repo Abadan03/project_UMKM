@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 // controllerr
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\UsersController;
 
 // =====================
@@ -44,6 +45,9 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
+    
+    Route::get('products', [\App\Http\Controllers\Products\ProductController::class, "index"])->name('products');
+    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
 });
 
 Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {
