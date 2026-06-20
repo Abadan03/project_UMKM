@@ -14,6 +14,6 @@ class UsersController extends Controller
     public function index()
     {
         // dd(Auth()->user);
-        return Inertia::render('Users/index');
+        return Inertia::render('users/Index');
     }
 }

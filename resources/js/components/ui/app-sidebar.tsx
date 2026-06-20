@@ -36,7 +36,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: "Users",
-        url: "/dashboard/users",
+        url: "/users",
         icon: User,
     },
     {

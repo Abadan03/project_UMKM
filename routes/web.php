@@ -42,11 +42,11 @@ Route::middleware('auth')->group(function () {
 // Dashboard
 // =====================
 
-Route::middleware(['auth'])->prefix('dashboard')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
 });
 
-Route::middleware(['auth', 'role:superadmin,admin'])->prefix('dashboard')->name('user.')->group(function () {
+Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {
 
     Route::resource('users', UsersController::class);
 });
