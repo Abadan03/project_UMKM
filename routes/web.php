@@ -1,9 +1,13 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Compro\ComproController;
 use Inertia\Inertia;
+use App\Http\Controllers\Compro\ComproController;
 use Illuminate\Support\Facades\Route;
+
+// controllerr
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsersController;
 
 // =====================
 // Guest Only
@@ -13,27 +17,38 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return Inertia::render('Home');
 })->name('index');
-
-// Route::get('/', [AuthController::class, 'index'])->name('redirect-default');
-Route::get('/login', [AuthController::class, 'auth'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-
-
 // COMPRO SECTION ==================
 // ===================== Feature Tab
 Route::get('/feature', [ComproController::class, 'feature'])->name('feature');
 
 // ===================== Pricing Tab
 Route::get('/pricing', [ComproController::class, 'pricing'])->name('pricing');
-
 // COMPRO SECTION END ==================
+
+// =====================
+// Authenticate
+// =====================
+Route::get('/login', [AuthController::class, 'auth'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
 // =====================
 // Authenticated
 // =====================
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+// =====================
+// Dashboard
+// =====================
+
+Route::middleware(['auth'])->prefix('dashboard')->group(function () {
+    Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
+});
+
+Route::middleware(['auth', 'role:superadmin,admin'])->prefix('dashboard')->name('user.')->group(function () {
+
+    Route::resource('users', UsersController::class);
 });
 
 // =====================
@@ -72,7 +87,6 @@ Route::middleware('auth')->group(function () {
 // Staff
 // =====================
 Route::middleware(['auth'])
-    ->prefix('staff')
     ->name('staff.')
     ->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Staff\StaffDashboard::class, 'index'])->name('dashboard');

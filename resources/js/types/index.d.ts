@@ -43,3 +43,18 @@ export interface NavItem {
     children?: any[];
     isActive?: boolean;
 }
+
+export interface PageProps {
+    auth?: {
+        user?: {
+            id: number;
+            name: string;
+            email: string;
+        };
+    };
+    flash?: {
+        success?: string;
+        error?: string;
+    };
+    errors?: Record<string, string>;
+}

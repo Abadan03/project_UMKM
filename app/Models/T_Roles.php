@@ -21,4 +21,11 @@ class T_Roles extends Model
     {
         return $this->hasOne(User::class);
     }
+
+    public function hasRole(array $roles): bool
+    {
+        return $this->roles()
+            ->whereIn('name', $roles)
+            ->exists();
+    }
 }

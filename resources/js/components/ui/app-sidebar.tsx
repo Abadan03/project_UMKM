@@ -26,32 +26,32 @@ import AppLogo from "./app-logo";
 const mainNavItems: NavItem[] = [
     {
         title: "Dashboard",
-        url: "/admin/dashboard",
+        url: "/dashboard",
         icon: LayoutGrid,
     },
     {
         title: "Notes",
-        url: "/admin/notes",
+        url: "/notes",
         icon: BookCheck,
     },
     {
         title: "Users",
-        url: "/admin/users",
+        url: "/dashboard/users",
         icon: User,
     },
     {
         title: "Product",
-        url: "/admin/products",
+        url: "/products",
         icon: ShoppingBasket,
     },
     {
         title: "Inventory",
-        url: "/admin/inventory",
+        url: "/inventory",
         icon: ShelvingUnit,
     },
     {
         title: "Sales",
-        url: "/admin/sales",
+        url: "/sales",
         icon: ShelvingUnit,
     },
     {
@@ -60,12 +60,12 @@ const mainNavItems: NavItem[] = [
         children: [
             {
                 title: "Cash Flow",
-                url: "/admin/finance/cashflow",
+                url: "/finance/cashflow",
                 icon: Wallet,
             },
             {
                 title: "Transaction",
-                url: "/admin/finance/transactions",
+                url: "/finance/transactions",
                 icon: Receipt,
             },
         ],

@@ -13,32 +13,27 @@ class AuthServices
         return Auth::attempt($credentials);
     }
 
-    public function getRedirectRoute(): string
-    {
-        $user = Auth::user();
-        // dd($user);
-        if (!$user) {
-            return route('login');
-        }
+    // public function getRedirectRoute(): string
+    // {
+    //     $user = Auth::user();
+    //     if (!$user) {
+    //         return route('login');
+    //     }
 
-        // Mengambil nama role dari tabel t_roles secara aman
-        $roleName = $user->roles ? $user->roles->name : null;
+    //     // return match ($user->roles->name) {
+    //     //     'super admin' => route('super-admin.dashboard'),
+    //     //     'admin' => route('admin.dashboard'),
+    //     //     'staff' => route('staff.dashboard'),
+    //     //     default => abort(403, 'Role tidak dikenali atau tidak memiliki akses.'),
+    //     // };
+    //     // if($user->roles->name == 'staff') {
 
-        return match($user->roles->name) {
-           'super admin' => route('super-admin.dashboard'),
-            'admin'       => route('admin.dashboard'),
-            'staff'       => route('staff.dashboard'), // <-- Hapus redirect(), cukup route() saja
-            default       => abort(403, 'Role tidak dikenali atau tidak memiliki akses.'),
-        };
-        // if($user->roles->name == 'staff') {
-            
-        //     return redirect()->route('staff.dashboard');
-        //     return Inertia::render('Auth/Login');
-        // }
+    //     //     return redirect()->route('staff.dashboard');
+    //     //     return Inertia::render('Auth/Login');
+    //     // }
 
-        // return $user->roles->name;
-        
-    }
+    //     // return $user->roles->name;
+    // }
 
     public function logout(): void
     {

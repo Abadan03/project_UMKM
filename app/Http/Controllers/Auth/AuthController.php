@@ -38,8 +38,8 @@ class AuthController extends Controller
         //     return redirect()->route('staff.dashboard');
         // }
 
-        $user = Auth::user();
-        // dd($user);
+
+        // dd(session());
 
         // 5. Pengondisian Redirect berdasarkan Role
         // Sesuaikan nama 'roles->name' dengan nama relasi & kolom di database kamu
@@ -55,7 +55,7 @@ class AuthController extends Controller
         //     return redirect()->route('staff.dashboard');
         // }
 
-        return redirect($this->authService->getRedirectRoute());
+        return redirect()->intended(route('dashboard'));
     }
 
     public function logout(Request $request)
