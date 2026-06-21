@@ -45,14 +45,28 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
-    
-    Route::get('products', [\App\Http\Controllers\Products\ProductController::class, "index"])->name('products');
+
+    Route::get('products', [ProductController::class, "index"])->name('products');
     Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
 });
 
 Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {
 
-    Route::resource('users', UsersController::class);
+    // Route::resource('users', UsersController::class);
+    Route::get('users', [UsersController::class, 'index'])
+        ->name('index');
+    Route::get('users/create', [UsersController::class, 'create'])
+        ->name('create');
+    Route::post('users', [UsersController::class, 'store'])
+        ->name('store');
+    Route::get('users/{userId}', [UsersController::class, 'show'])
+        ->name('show');
+    Route::get('users/edit/{userId}', [UsersController::class, 'edit'])
+        ->name('edit');
+    Route::put('users/{userId}', [UsersController::class, 'update'])
+        ->name('update');
+    Route::delete('users/{userId}', [UsersController::class, 'destroy'])
+        ->name('destroy');
 });
 
 // =====================
@@ -86,19 +100,6 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
 //         // Reporting
 //         Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
 //     });
-
-// =====================
-// Staff
-// =====================
-Route::middleware(['auth'])
-    ->name('staff.')
-    ->group(function () {
-        Route::get('/dashboard', [\App\Http\Controllers\Staff\StaffDashboard::class, 'index'])->name('dashboard');
-
-        // POS
-        // Route::get('/pos', [\App\Http\Controllers\Staff\PosController::class, 'index'])->name('pos.index');
-        // Route::post('/pos/transaction', [\App\Http\Controllers\Staff\PosController::class, 'store'])->name('pos.store');
-    });
 
 // Route::get('/', function () {
 //     return Inertia::render('Home', [

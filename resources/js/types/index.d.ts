@@ -13,6 +13,11 @@ export interface Auth {
     user: User;
 }
 
+export interface Roles {
+    id: number;
+    name: string;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -24,6 +29,18 @@ export interface User {
     created_at: string;
     updated_at: string;
     [key: string]: unknown;
+}
+
+export interface UserFormData {
+    id: number;
+    name: string;
+    email: string;
+    role?: "admin" | "staff";
+    roles_id: number;
+    change_password?: boolean;
+    old_password?: string;
+    password?: string;
+    password_confirmation?: string;
 }
 
 export interface BreadcrumbItem {

@@ -24,7 +24,12 @@ export const confirmDialog = async ({
         cancelButtonText: cancelText,
         reverseButtons: true,
         focusCancel: true,
+        buttonsStyling: false, // ← tambah ini
         customClass: {
+            popup: "swal-popup",
+            title: "swal-title",
+            htmlContainer: "swal-text",
+            actions: "swal-actions",
             confirmButton: "swal-confirm",
             cancelButton: "swal-cancel",
         },
@@ -48,6 +53,15 @@ export const redirectDialog = async ({
         confirmButtonText: confirmText,
         cancelButtonText: cancelText,
         reverseButtons: true,
+        buttonsStyling: false, // ← tambah ini
+        customClass: {
+            popup: "swal-popup",
+            title: "swal-title",
+            htmlContainer: "swal-text",
+            actions: "swal-actions",
+            confirmButton: "swal-confirm",
+            cancelButton: "swal-cancel",
+        },
     });
 
     return result.isConfirmed;

@@ -1,20 +1,20 @@
-import React from 'react'
-import { useForm } from '@inertiajs/react';
-import { toast } from 'sonner';
+import React from "react";
+import { useForm } from "@inertiajs/react";
+import { toast } from "sonner";
 
 interface CreateProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-export default function Create({isOpen, onClose}: CreateProps) {
-   const { data, setData, post, processing, errors, reset } = useForm({
+export default function Create({ isOpen, onClose }: CreateProps) {
+    const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         qty: "",
         pricing: "",
         description: "",
     });
- 
+
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         post("/products/store", {
@@ -22,14 +22,14 @@ export default function Create({isOpen, onClose}: CreateProps) {
             onSuccess: () => {
                 reset();
                 onClose();
-                 toast.success("Product created successfully.");
+                toast.success("Product created successfully.");
             },
             onError: () => {
                 toast.error("Failed to create product. Please check the form.");
             },
         });
     }
- 
+
     return (
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center font-mono px-4 ${isOpen ? "flex" : "hidden"}`}
@@ -47,7 +47,10 @@ export default function Create({isOpen, onClose}: CreateProps) {
                 {/* Header */}
                 <div
                     className="px-4 py-3 flex items-center justify-between"
-                    style={{ background: "#5fa080", borderBottom: "4px solid #11151f" }}
+                    style={{
+                        background: "#5fa080",
+                        borderBottom: "4px solid #11151f",
+                    }}
                 >
                     <div>
                         <h2 className="text-[#11151f] text-sm font-bold tracking-widest">
@@ -66,7 +69,7 @@ export default function Create({isOpen, onClose}: CreateProps) {
                         X
                     </button>
                 </div>
- 
+
                 {/* Body */}
                 <div className="px-4 py-5 flex flex-col gap-4">
                     {/* Name */}
@@ -91,7 +94,7 @@ export default function Create({isOpen, onClose}: CreateProps) {
                             </span>
                         )}
                     </div>
- 
+
                     {/* Qty + Pricing */}
                     <div className="flex gap-3">
                         <div className="flex flex-col gap-1.5 flex-1">
@@ -115,7 +118,7 @@ export default function Create({isOpen, onClose}: CreateProps) {
                                 </span>
                             )}
                         </div>
- 
+
                         <div className="flex flex-col gap-1.5 flex-1">
                             <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
                                 PRICING
@@ -141,7 +144,7 @@ export default function Create({isOpen, onClose}: CreateProps) {
                             )}
                         </div>
                     </div>
- 
+
                     {/* Description */}
                     <div className="flex flex-col gap-1.5">
                         <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
@@ -166,7 +169,7 @@ export default function Create({isOpen, onClose}: CreateProps) {
                             </span>
                         )}
                     </div>
- 
+
                     {/* Actions */}
                     <div className="flex justify-end gap-3 mt-2">
                         <button
@@ -178,8 +181,12 @@ export default function Create({isOpen, onClose}: CreateProps) {
                                 border: "3px solid #11151f",
                                 boxShadow: "3px 3px 0 #11151f",
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#a8455a")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "#c0566a")}
+                            onMouseEnter={(e) =>
+                                (e.currentTarget.style.background = "#a8455a")
+                            }
+                            onMouseLeave={(e) =>
+                                (e.currentTarget.style.background = "#c0566a")
+                            }
                         >
                             CANCEL
                         </button>
@@ -192,8 +199,12 @@ export default function Create({isOpen, onClose}: CreateProps) {
                                 border: "3px solid #11151f",
                                 boxShadow: "3px 3px 0 #11151f",
                             }}
-                            onMouseEnter={(e) => (e.currentTarget.style.background = "#4f8a6e")}
-                            onMouseLeave={(e) => (e.currentTarget.style.background = "#5fa080")}
+                            onMouseEnter={(e) =>
+                                (e.currentTarget.style.background = "#4f8a6e")
+                            }
+                            onMouseLeave={(e) =>
+                                (e.currentTarget.style.background = "#5fa080")
+                            }
                         >
                             {processing ? "SAVING..." : "SAVE"}
                         </button>

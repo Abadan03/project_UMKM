@@ -117,6 +117,79 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
+
+  /* Popup */
+  .swal-popup {
+    background: #1c2230 !important;
+    border: 3px solid #11151f !important;
+    box-shadow: 4px 4px 0 #11151f !important;
+    border-radius: 0 !important;
+    font-family: monospace !important;
+    padding: 1.5rem !important;
+  }
+
+  /* Title */
+  .swal-title {
+    color: #8b93a7 !important;
+    font-size: 13px !important;
+    font-weight: bold !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+  }
+
+  /* Text */
+  .swal-text {
+    color: #8b93a7 !important;
+    font-size: 12px !important;
+  }
+
+  .swal-actions {
+    gap: 120px !important;
+    /* atur jarak antar button */
+  }
+
+  /* Confirm button — green */
+  .swal-confirm {
+    background: #5fa080 !important;
+    border: 3px solid #11151f !important;
+    box-shadow: 3px 3px 0 #11151f !important;
+    border-radius: 0 !important;
+    color: #11151f !important;
+    font-family: monospace !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    letter-spacing: 0.1em !important;
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+  }
+
+  .swal-confirm:hover {
+    background: #4f8a6e !important;
+    box-shadow: 1px 1px 0 #11151f !important;
+    transform: translate(2px, 2px) !important;
+  }
+
+  /* Cancel button — red */
+  .swal-cancel {
+    background: #c0566a !important;
+    border: 3px solid #11151f !important;
+    box-shadow: 3px 3px 0 #11151f !important;
+    border-radius: 0 !important;
+    color: white !important;
+    font-family: monospace !important;
+    font-size: 10px !important;
+    font-weight: bold !important;
+    letter-spacing: 0.1em !important;
+    padding: 8px 16px !important;
+    cursor: pointer !important;
+  }
+
+  .swal-cancel:hover {
+    background: #a8455a !important;
+    box-shadow: 1px 1px 0 #11151f !important;
+    transform: translate(2px, 2px) !important;
+  }
+
   /* --sidebar: oklch(0.985 0 0); */
   /* --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -144,16 +217,37 @@ Card pattern:    rgba(45,55,72,0.05)
 
   /* Background Sidebar */
   --sidebar: #2D3748;
-  --sidebar-foreground: #E2E8F0;
+  --sidebar-foreground: #ffffff;
   /* Background CTA */
   --sidebar-primary: rgba(104, 211, 145, 0.15);
   --sidebar-primary-foreground: #ddc8f0;
   /* Hover Background Sidebar */
-  --sidebar-accent: #68d3919a;
-  --sidebar-accent-foreground: #fff;
+  --sidebar-accent: #ff8800;
+  --sidebar-accent-foreground: #1a0a2e;
   /* Background Sidebar */
-  --sidebar-border: rgba(104, 211, 145, 0.15);
+  --sidebar-border: #2288cc;
   --sidebar-ring: #68D391;
+
+  /* Old Sidebar */
+  /* Background Sidebar
+  --sidebar: #2D3748;
+  --sidebar-foreground: #E2E8F0;
+  /* Background CTA */
+  /* --sidebar-primary: rgba(104, 211, 145, 0.15);
+  --sidebar-primary-foreground: #ddc8f0; */
+  /* Hover Background Sidebar */
+  /* --sidebar-accent: #68d3919a;
+  --sidebar-accent-foreground: #fff; */
+  /* Background Sidebar */
+  /* --sidebar-border: rgba(104, 211, 145, 0.15);
+  --sidebar-ring: #68D391; */
+
+  /* New Retro Sidebar */
+  /* "--sidebar-background": "#2288cc", // Background utama biru
+    "--sidebar-foreground": "#ffffff", // Teks warna putih
+    "--sidebar-border": "#1a0a2e", // Border gelap
+    "--sidebar-accent": "#ff8800", // Warna PINK saat menu di-hover
+    "--sidebar-accent-foreground": "#1a0a2e", // Teks jadi gelap saat di-hover */
 }
 
 .dark {
