@@ -70,6 +70,11 @@ const mainNavItems: NavItem[] = [
             },
         ],
     },
+    {
+        title: "Sistem Kasir",
+        url: "/pos",
+        icon: ShelvingUnit,
+    },
 ];
 
 export function AppSidebar() {

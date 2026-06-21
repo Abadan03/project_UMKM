@@ -2,6 +2,7 @@
 
 namespace App\Services\Products;
 
+use App\Models\Inventory;
 use App\Models\Product;
 
 class ProductService
@@ -27,7 +28,18 @@ class ProductService
      */
     public function create(array $data): Product
     {
-        return Product::create($data);
+        
+        // 1. Buat produk baru
+        // dd($data);
+        $product = Product::create($data);
+
+        // 2. Buat instance Inventory baru
+        Inventory::create([
+            'products_id' => $product->id,
+            'isActive' => 'YES',
+        ]);
+
+        return $product;
     }
 
     /**

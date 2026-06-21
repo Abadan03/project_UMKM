@@ -18,4 +18,9 @@ class Product extends Model
         'pricing',
         'description',
     ];
+
+    public function inventory()
+    {
+        return $this->hasOne(Inventory::class, 'prdocuts_id');
+    }
 }

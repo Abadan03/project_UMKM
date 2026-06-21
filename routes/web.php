@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 // controllerr
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\UsersController;
 
@@ -45,9 +46,18 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
+    
+    // Inventory
+    Route::prefix('inventory')->group(function () {
+        Route::get('/', [InventoryController::class, "index"])->name('inventory');
+    });
 
-    Route::get('products', [ProductController::class, "index"])->name('products');
-    Route::post('/products/store', [ProductController::class, 'store'])->name('products.store');
+
+    // Products
+    Route::prefix('products')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Products\ProductController::class, "index"])->name('products');
+        Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+    });
 });
 
 Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {
@@ -97,6 +107,19 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
 
 //         // Reporting
 //         Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
+//     });
+
+// =====================
+// Staff
+// =====================
+// Route::middleware(['auth'])
+//     ->name('staff.')
+//     ->group(function () {
+//         Route::get('/dashboard', [\App\Http\Controllers\Staff\StaffDashboard::class, 'index'])->name('dashboard');
+
+//         POS
+//         Route::get('/pos', [\App\Http\Controllers\Staff\PosController::class, 'index'])->name('pos.index');
+//         Route::post('/pos/transaction', [\App\Http\Controllers\Staff\PosController::class, 'store'])->name('pos.store');
 //     });
 
 // Route::get('/', function () {
