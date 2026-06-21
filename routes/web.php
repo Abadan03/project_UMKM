@@ -59,8 +59,6 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
         ->name('create');
     Route::post('users', [UsersController::class, 'store'])
         ->name('store');
-    Route::get('users/{userId}', [UsersController::class, 'show'])
-        ->name('show');
     Route::get('users/edit/{userId}', [UsersController::class, 'edit'])
         ->name('edit');
     Route::put('users/{userId}', [UsersController::class, 'update'])
