@@ -11,7 +11,7 @@ import {
 import { Head, router } from "@inertiajs/react";
 import { User as UserIcon } from "lucide-react";
 import Swal from "sweetalert2";
-import { confirmDialog } from "@/Pages/utils/popupModal";
+import { confirmDialog, notifyDialog } from "@/Pages/utils/popupModal";
 import { useState } from "react";
 
 import Create from "./form/Create";
@@ -47,9 +47,9 @@ export default function UsersIndex({ users, roles }: Props) {
         router.delete(`users/${id}`, {
             preserveScroll: true,
             onSuccess: () => {
-                Swal.fire({
-                    title: "Deleted!",
-                    text: "User has been deleted.",
+                notifyDialog({
+                    title: "Deleted",
+                    text: "User account is deleted",
                     icon: "success",
                 });
             },

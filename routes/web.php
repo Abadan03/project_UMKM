@@ -46,7 +46,7 @@ Route::middleware('auth')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::get('dashboard', [DashboardController::class, "index"])->name('dashboard');
-    
+
     // Inventory
     Route::prefix('inventory')->group(function () {
         Route::get('/', [InventoryController::class, "index"])->name('inventory');
@@ -55,7 +55,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Products
     Route::prefix('products')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Products\ProductController::class, "index"])->name('products');
+        Route::get('/', [ProductController::class, "index"])->name('products');
         Route::post('/store', [ProductController::class, 'store'])->name('products.store');
     });
 });

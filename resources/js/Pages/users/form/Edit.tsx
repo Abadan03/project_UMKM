@@ -9,7 +9,6 @@ interface Props {
 }
 
 export default function EditUser({ isOpen, onClose, roles, user }: Props) {
-    console.log(user);
     return (
         <div
             className={`fixed inset-0 z-50 flex items-center justify-center font-mono px-4 ${

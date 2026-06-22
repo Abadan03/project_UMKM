@@ -8,6 +8,34 @@ type ConfirmOptions = {
     icon?: "warning" | "question" | "info" | "success" | "error";
 };
 
+export const notifyDialog = async ({
+    title = "Are you sure?",
+    text = "This action cannot be undone.",
+    confirmText = "OK",
+    icon = "info",
+}: ConfirmOptions = {}) => {
+    const result = await Swal.fire({
+        title,
+        text,
+        icon,
+        showCancelButton: true,
+        confirmButtonText: confirmText,
+        reverseButtons: true,
+        focusCancel: true,
+        buttonsStyling: false, // ← tambah ini
+        customClass: {
+            popup: "swal-popup",
+            title: "swal-title",
+            htmlContainer: "swal-text",
+            actions: "swal-actions",
+            confirmButton: "swal-confirm",
+            cancelButton: "swal-cancel",
+        },
+    });
+
+    return result.isConfirmed;
+};
+
 export const confirmDialog = async ({
     title = "Are you sure?",
     text = "This action cannot be undone.",

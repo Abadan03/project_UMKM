@@ -51,10 +51,10 @@ export default function UserForm({
                     title: "Success",
                     text:
                         method === "post"
-                            ? "Data berhasil dibuat. Apakah ingin menambah data lagi?"
-                            : "Data berhasil diperbarui. Tetap di halaman ini?",
-                    confirmText: "Stay here",
-                    cancelText: "Back to Index",
+                            ? "Success add new data. Do you want to add more data ?"
+                            : "Data updated successfully. Tetap di halaman ini?",
+                    confirmText: "Open it up",
+                    cancelText: "Close form",
                     icon: "success",
                 });
 
