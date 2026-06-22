@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\CreateRequest;
+use App\Models\T_Units;
 use App\Services\Products\ProductService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -20,9 +21,11 @@ class ProductController extends Controller
     public function index()
     {
         $products = $this->productService->all();
+        $units = T_Units::all();
 
         return Inertia::render('Products/Kontol', [
             'products' => $products,
+            'units' => $units
         ]);
     }
 
@@ -37,7 +40,7 @@ class ProductController extends Controller
     {
         $product = $this->productService->update($id, $request->validated());
 
-        if (! $product) {
+        if (!$product) {
             return redirect()->back()->with('error', 'Product not found.');
         }
 
@@ -50,7 +53,7 @@ class ProductController extends Controller
     {
         $deleted = $this->productService->delete($id);
 
-        if (! $deleted) {
+        if (!$deleted) {
             return redirect()->back()->with('error', 'Product not found.');
         }
 

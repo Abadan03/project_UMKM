@@ -76,12 +76,20 @@ export interface PageProps {
     errors?: Record<string, string>;
 }
 
+export interface UnitsProps {
+    id: string;
+    name: string;
+    code: string;
+}
+
 // 1. Buat interface untuk Product-nya juga biar rapi
 export interface ProductProps {
     id: number;
     name: string;
     qty: number;
-    pricing: number; 
+    unit_id: number;
+    unit: UnitsProps | null;
+    pricing: number;
     description: string;
     created_at?: string;
     updated_at?: string;
@@ -92,10 +100,10 @@ export interface InventoryProps {
     id: number;
     isActive: "YES" | "NO"; // Tanda '?' bisa dihapus kalau datanya selalu ada (wajib) dari DB
     products_id: number;
-    
+
     // Hasil dari relasi Laravel ->with('product') akan masuk ke sini
-    product?: ProductProps | null; 
-    
+    product?: ProductProps | null;
+
     // Bawaan dari Laravel timestamps
     created_at?: string;
     updated_at?: string;

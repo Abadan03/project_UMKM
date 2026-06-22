@@ -16,8 +16,14 @@ class Product extends Model
         'name',
         'qty',
         'pricing',
+        'unit_id',
         'description',
     ];
+
+    public function unit()
+    {
+        return $this->belongsTo(T_Units::class, 'unit_id', 'id');
+    }
 
     public function inventory()
     {

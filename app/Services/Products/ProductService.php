@@ -12,7 +12,17 @@ class ProductService
      */
     public function all()
     {
-        return Product::get();
+        return Product::with('unit')->get()->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'qty' => $item->qty,
+                'unit' => $item->unit->code,
+                'pricing' => $item->pricing,
+                'description' => $item->description,
+                'created_at' => $item->created_at
+            ];
+        });
     }
 
     /**
@@ -28,7 +38,7 @@ class ProductService
      */
     public function create(array $data): Product
     {
-        
+
         // 1. Buat produk baru
         // dd($data);
         $product = Product::create($data);
@@ -49,7 +59,7 @@ class ProductService
     {
         $product = Product::find($id);
 
-        if (! $product) {
+        if (!$product) {
             return null;
         }
 
@@ -65,7 +75,7 @@ class ProductService
     {
         $product = Product::find($id);
 
-        if (! $product) {
+        if (!$product) {
             return false;
         }
 

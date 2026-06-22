@@ -1,5 +1,4 @@
-import PageHeader from "@/components/page-header";
-import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 import AppLayout from "@/layouts/app-layout";
 import {
     PageProps,
@@ -16,6 +15,7 @@ import { useState } from "react";
 
 import Create from "./form/Create";
 import Edit from "./form/Edit";
+import { Input } from "@/components/ui/input";
 
 interface Props extends PageProps {
     users: User[];
@@ -32,6 +32,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function UsersIndex({ users, roles }: Props) {
     const [showCreate, setShowCreate] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
+    const [search, setSearch] = useState("");
 
     const [selectedUser, setSelectedUser] = useState<UserFormData | null>(null);
     const handleDelete = async (id: number) => {
@@ -101,6 +102,14 @@ export default function UsersIndex({ users, roles }: Props) {
                         <h2>User Management</h2>
                     </div>
 
+                    <div className="relative w-80">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
+                        <Input
+                            placeholder="Search user . . ."
+                            className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold uppercase text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[4px_4px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
+                    </div>
+
                     <button
                         onClick={() => handleRoute("create")}
                         className="border-4 border-[#1a0a2e] cursor-pointer bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
@@ -138,16 +147,16 @@ export default function UsersIndex({ users, roles }: Props) {
                                         key={user.id}
                                         className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
                                     >
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {user.name}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {user.email}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {String(user.role)}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {new Date(
                                                 user.created_at,
                                             ).toLocaleDateString()}

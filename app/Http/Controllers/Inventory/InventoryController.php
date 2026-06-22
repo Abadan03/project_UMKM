@@ -13,21 +13,22 @@ class InventoryController extends Controller
     //
     protected InventoryService $inventoryService;
 
-     public function __construct(InventoryService $inventoryService)
+    public function __construct(InventoryService $inventoryService)
     {
         $this->inventoryService = $inventoryService;
     }
 
-    public function index() {
+    public function index()
+    {
         $p = $this->inventoryService->all();
 
         // dd($p->first()->product);
 
-        $inventory = Inventory::with('product')->get();
+        $inventory = Inventory::with('product.unit')->get();
 
         // dd($inventory);
 
-    
+
         return Inertia::render('Inventory/Index', [
             'inventory' => $inventory
         ]);

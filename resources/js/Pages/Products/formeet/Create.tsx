@@ -1,6 +1,7 @@
 import React from "react";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 import { toast } from "sonner";
+import { UnitsProps } from "@/types";
 
 interface CreateProps {
     isOpen: boolean;
@@ -8,14 +9,17 @@ interface CreateProps {
 }
 
 export default function Create({ isOpen, onClose }: CreateProps) {
+    const Units = usePage().props.units as any;
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         qty: "",
+        unit_id: "",
         pricing: "",
         description: "",
     });
 
     function handleSubmit(e: React.FormEvent) {
+        console.log(data);
         e.preventDefault();
         post("/products/store", {
             preserveScroll: true,
@@ -96,16 +100,18 @@ export default function Create({ isOpen, onClose }: CreateProps) {
                     </div>
 
                     {/* Qty + Pricing */}
-                    <div className="flex gap-3">
+                    <div className="grid grid-cols-3 gap-2">
                         <div className="flex flex-col gap-1.5 flex-1">
                             <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
-                                QTY
+                                Stock
                             </label>
                             <input
                                 type="number"
+                                step={1}
                                 value={data.qty}
+                                min={0}
                                 onChange={(e) => setData("qty", e.target.value)}
-                                placeholder="0"
+                                placeholder="Input Stock here"
                                 className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
                                 style={{
                                     border: "3px solid #11151f",
@@ -115,6 +121,33 @@ export default function Create({ isOpen, onClose }: CreateProps) {
                             {errors.qty && (
                                 <span className="text-[#c0566a] text-[9px] tracking-wide">
                                     {errors.qty}
+                                </span>
+                            )}
+                        </div>
+                        <div className="flex flex-col gap-1.5 ">
+                            <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
+                                Unit of Product
+                            </label>
+                            <select
+                                className="font-mono w-full text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
+                                style={{
+                                    border: "3px solid #11151f",
+                                    boxShadow: "3px 3px 0 #11151f",
+                                }}
+                                value={data.unit_id}
+                                onChange={(e) =>
+                                    setData("unit_id", e.target.value)
+                                }
+                            >
+                                {Units.map((unit: UnitsProps) => (
+                                    <option key={unit.id} value={unit.id}>
+                                        {unit.name} - {unit.code}
+                                    </option>
+                                ))}
+                            </select>
+                            {errors.unit_id && (
+                                <span className="text-[#c0566a] text-[9px] tracking-wide">
+                                    {errors.unit_id}
                                 </span>
                             )}
                         </div>

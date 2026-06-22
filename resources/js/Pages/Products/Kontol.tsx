@@ -1,9 +1,9 @@
 import PageHeader from "@/components/page-header";
 // Tombol asli dari UI diganti dengan tag button standar agar styling 8-bit tidak bentrok dengan default variant UI kamu
 import AppLayout from "@/layouts/app-layout";
-import { PageProps, type BreadcrumbItem } from "@/types";
-import { Head, router } from "@inertiajs/react";
-import { Package } from "lucide-react";
+import { PageProps, UnitsProps, type BreadcrumbItem } from "@/types";
+import { Head, router, usePage } from "@inertiajs/react";
+import { Package, Search } from "lucide-react";
 import Swal from "sweetalert2";
 import { confirmDialog } from "@/Pages/utils/popupModal";
 import Create from "./formeet/Create";
@@ -11,11 +11,14 @@ import { useState } from "react";
 import { toast } from "sonner";
 // import { Button } from "@/components/ui/button";
 import { Button } from "@/components/ui/pixelact-ui/button";
+import UnitModal from "./Units/Units";
+import { Input } from "@headlessui/react";
 
 interface Product {
     id: number;
     name: string;
     qty: number;
+    unit: string;
     pricing: number;
     description: string;
     created_at: string;
@@ -23,6 +26,7 @@ interface Product {
 
 interface Props extends PageProps {
     products: Product[];
+    units: UnitsProps[];
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -32,7 +36,9 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function ProductsIndex({ products }: Props) {
+export default function ProductsIndex({ products, units }: Props) {
+    const [showUnits, setShowUnits] = useState(false);
+
     const [showCreate, setShowCreate] = useState(false);
 
     const handleDelete = async (id: number) => {
@@ -77,7 +83,7 @@ export default function ProductsIndex({ products }: Props) {
             <Head title="Products" />
 
             {/* Wrapper utama dengan tema dark purple dan font monospaced */}
-            <div className="font-mono uppercase flex h-full w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0] min-h-screen">
+            <div className="font-mono uppercase flex w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0] ">
                 {/* Modifikasi PageHeader agar cocok dengan tema, menambahkan aksen warna kuning dan hijau */}
                 <div className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 shadow-[6px_6px_0px_0px_#1a0a2e] flex justify-between items-center">
                     <div className="flex items-center gap-2 text-[#ffdd00] font-bold text-xl">
@@ -85,12 +91,29 @@ export default function ProductsIndex({ products }: Props) {
                         <h2>Products</h2>
                     </div>
 
-                    <button
-                        onClick={() => handleRoute("create")}
-                        className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
-                    >
-                        + Add Product
-                    </button>
+                    <div className="relative w-80">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
+                        <Input
+                            placeholder="Search product . . ."
+                            className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold uppercase text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[4px_4px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
+                    </div>
+
+                    <div>
+                        <button
+                            onClick={() => setShowUnits(true)}
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#ff8800] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                        >
+                            View Units
+                        </button>
+
+                        <button
+                            onClick={() => handleRoute("create")}
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                        >
+                            + Add Product
+                        </button>
+                    </div>
                 </div>
 
                 {/* Table Container dengan style 8-bit soft */}
@@ -102,14 +125,15 @@ export default function ProductsIndex({ products }: Props) {
                                     Name
                                 </th>
                                 <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
+                                    Description
+                                </th>
+                                <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
                                     Quantity
                                 </th>
                                 <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
                                     Pricing
                                 </th>
-                                <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
-                                    Description
-                                </th>
+
                                 <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
                                     Created at
                                 </th>
@@ -129,7 +153,10 @@ export default function ProductsIndex({ products }: Props) {
                                             {product.name}
                                         </td>
                                         <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                            {product.qty}
+                                            {product.description}
+                                        </td>
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                            {product.qty} {product.unit}
                                         </td>
                                         <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             Rp{" "}
@@ -137,9 +164,7 @@ export default function ProductsIndex({ products }: Props) {
                                                 "id-ID",
                                             )}
                                         </td>
-                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                            {product.description}
-                                        </td>
+
                                         <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {new Date(
                                                 product.created_at,
@@ -187,6 +212,7 @@ export default function ProductsIndex({ products }: Props) {
                 </div>
             </div>
 
+            <UnitModal isOpen={showUnits} onClose={() => setShowUnits(false)} />
             <Create isOpen={showCreate} onClose={() => setShowCreate(false)} />
         </AppLayout>
     );
