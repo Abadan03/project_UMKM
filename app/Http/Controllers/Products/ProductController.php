@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Products;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\CreateRequest;
+use Illuminate\Http\Request;
 use App\Models\T_Units;
 use App\Services\Products\ProductService;
-use Illuminate\Http\Request;
+use Illuminate\Http\Request as HttpRequest;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -27,6 +28,15 @@ class ProductController extends Controller
             'products' => $products,
             'units' => $units
         ]);
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->query('query');
+
+        return response()->json(
+            $this->productService->find($search)
+        );
     }
 
     public function store(CreateRequest $request)

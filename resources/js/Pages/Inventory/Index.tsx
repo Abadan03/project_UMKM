@@ -1,8 +1,9 @@
 import { Breadcrumbs } from "@/components/breadcrumbs";
+import { Input } from "@/components/ui/input";
 import AppLayout from "@/layouts/app-layout";
 import { InventoryProps, PageProps, type BreadcrumbItem } from "@/types";
 import { Head } from "@inertiajs/react";
-import { ShelvingUnit, UserIcon } from "lucide-react";
+import { Search, UserIcon } from "lucide-react";
 import React from "react";
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -25,6 +26,14 @@ export default function index({ inventory }: Props) {
                     <div className="flex items-center gap-2 text-[#ffdd00] font-bold text-xl">
                         <UserIcon size={28} />
                         <h2>Inventory Management</h2>
+                    </div>
+
+                    <div className="relative ">
+                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
+                        <Input
+                            placeholder="Search product . . ."
+                            className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold uppercase text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[4px_4px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
+                        />
                     </div>
 
                     <button
@@ -68,20 +77,20 @@ export default function index({ inventory }: Props) {
                                         key={item.id}
                                         className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
                                     >
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 border-r-4 border-[#1a0a2e] py-3">
                                             {item.product?.name}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {item.isActive}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {item.product?.qty}{" "}
                                             {item.product?.unit?.code}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {item.product?.pricing}
                                         </td>
-                                        <td className="px-4 py-3">
+                                        <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {item.created_at
                                                 ? new Date(
                                                       item.created_at,

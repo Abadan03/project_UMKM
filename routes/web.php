@@ -56,7 +56,10 @@ Route::middleware(['auth'])->group(function () {
     // Products
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, "index"])->name('products');
+        Route::get('/search', [ProductController::class, "search"])->name('products.search');
         Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+        Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
 });
 

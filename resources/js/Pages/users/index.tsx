@@ -102,7 +102,7 @@ export default function UsersIndex({ users, roles }: Props) {
                         <h2>User Management</h2>
                     </div>
 
-                    <div className="relative w-80">
+                    <div className="relative ">
                         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
                         <Input
                             placeholder="Search user . . ."

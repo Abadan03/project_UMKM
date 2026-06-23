@@ -82,17 +82,28 @@ export interface UnitsProps {
     code: string;
 }
 
-// 1. Buat interface untuk Product-nya juga biar rapi
+export interface Product {
+    id: number;
+    name: string;
+    qty: number;
+    unit: string;
+    pricing: number;
+    description: string;
+    created_at?: string;
+}
+
 export interface ProductProps {
     id: number;
     name: string;
     qty: number;
     unit_id: number;
     unit: UnitsProps | null;
+    unit_name?: string;
+    unit_code?: string;
     pricing: number;
     description: string;
-    created_at?: string;
-    updated_at?: string;
+    created_at: string;
+    updated_at: string;
 }
 
 // 2. Update interface Inventory kamu

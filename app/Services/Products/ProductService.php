@@ -4,6 +4,7 @@ namespace App\Services\Products;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use Request;
 
 class ProductService
 {
@@ -17,7 +18,9 @@ class ProductService
                 'id' => $item->id,
                 'name' => $item->name,
                 'qty' => $item->qty,
-                'unit' => $item->unit->code,
+                'unit_id' => $item->unit_id,
+                'unit_code' => $item->unit->code,
+                'unit_name' => $item->unit->name,
                 'pricing' => $item->pricing,
                 'description' => $item->description,
                 'created_at' => $item->created_at
@@ -28,9 +31,11 @@ class ProductService
     /**
      * Find a single product by id.
      */
-    public function find(int $id): ?Product
+    public function find(?string $search)
     {
-        return Product::find($id);
+        return Product::with('unit')
+            ->where('name', 'like', "%{$search}%")
+            ->get();
     }
 
     /**
