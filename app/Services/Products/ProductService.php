@@ -4,6 +4,7 @@ namespace App\Services\Products;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\T_Units;
 use Request;
 
 class ProductService
@@ -57,6 +58,11 @@ class ProductService
         return $product;
     }
 
+    public function unitCreate(array $data): T_Units
+    {
+        return T_Units::create($data);
+    }
+
     /**
      * Update an existing product.
      */
@@ -85,5 +91,16 @@ class ProductService
         }
 
         return (bool) $product->delete();
+    }
+
+    public function unitDelete(string $id): bool
+    {
+        $units = T_Units::find($id);
+
+        if (!$units) {
+            return false;
+        }
+
+        return (bool) $units->delete();
     }
 }

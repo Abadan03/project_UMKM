@@ -11,6 +11,8 @@ class T_Units extends Model
 
     protected $table = 't_units';
 
+    protected $primaryKey = 'id';
+
     protected $fillable = [
         'name',
         'code',

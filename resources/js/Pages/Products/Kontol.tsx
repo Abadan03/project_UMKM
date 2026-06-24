@@ -7,7 +7,7 @@ import {
     type BreadcrumbItem,
 } from "@/types";
 import { Head, router, usePage } from "@inertiajs/react";
-import { Package, Search } from "lucide-react";
+import { Package, Search, Eye } from "lucide-react";
 import Swal from "sweetalert2";
 import { confirmDialog } from "@/Pages/utils/popupModal";
 import Create from "./form/Create";
@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import UnitModal from "./Units/Units";
 import { Input } from "@headlessui/react";
 import Edit from "./form/Edit";
+import CreateUnitModal from "./Units/CreateUnit";
 
 interface Product {
     id: number;
@@ -135,25 +136,26 @@ export default function ProductsIndex({ products, units }: Props) {
             <div className="font-mono uppercase flex w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0] ">
                 {/* Modifikasi PageHeader agar cocok dengan tema, menambahkan aksen warna kuning dan hijau */}
                 <div className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 shadow-[6px_6px_0px_0px_#1a0a2e] flex justify-between items-center">
-                    <div className="flex items-center gap-2 text-[#ffdd00] font-bold text-xl">
-                        <Package size={28} />
-                        <h2>Products</h2>
-                    </div>
-
-                    <div className="relative ">
-                        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
-                        <Input
-                            placeholder="Search product . . ."
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[4px_4px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
-                        />
+                    <div className="flex items-center gap-4 text-[#ffdd00] font-bold text-xl">
+                        <div className="flex ">
+                            <Package size={28} />
+                            <h2>Products</h2>
+                        </div>
+                        <div className="relative ">
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#ffdd00]" />
+                            <Input
+                                placeholder="Search product . . ."
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                                className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[2px_2px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
+                            />
+                        </div>
                     </div>
 
                     <div>
                         <button
                             onClick={() => setShowUnits(true)}
-                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#ff8800] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
                         >
                             View Units
                         </button>
@@ -162,7 +164,7 @@ export default function ProductsIndex({ products, units }: Props) {
                             onClick={() => handleRoute("create")}
                             className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
                         >
-                            + Add Product
+                            + Product
                         </button>
                     </div>
                 </div>

@@ -54,6 +54,11 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    Route::prefix('units')->group(function () {
+        Route::post('/store', [ProductController::class, 'unitStore'])->name('units.store');
+        Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
+    });
+
     // Products
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, "index"])->name('products');

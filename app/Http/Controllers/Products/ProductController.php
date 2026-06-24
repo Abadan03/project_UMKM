@@ -7,7 +7,6 @@ use App\Http\Requests\Products\CreateRequest;
 use Illuminate\Http\Request;
 use App\Models\T_Units;
 use App\Services\Products\ProductService;
-use Illuminate\Http\Request as HttpRequest;
 use Inertia\Inertia;
 
 class ProductController extends Controller
@@ -70,5 +69,29 @@ class ProductController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Product deleted successfully.');
+    }
+
+    public function unitStore(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => ['required'],
+            'code' => ['required', 'unique:t_units,code'],
+        ]);
+
+        $this->productService->unitCreate($validated);
+
+        return back()->with('success', 'Product created successfully.');
+    }
+    public function unitDestroy(string $id)
+    {
+        $deleted = $this->productService->unitDelete($id);
+
+        if (!$deleted) {
+            return redirect()->back()->with('error', 'Unit not found.');
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Unit deleted successfully.');
     }
 }

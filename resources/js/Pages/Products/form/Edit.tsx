@@ -51,6 +51,7 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
         <ProductModal
             isOpen={isOpen}
             onClose={onClose}
+            reset={reset}
             title="UPDATE PRODUCT"
             subtitle="> FILL ALL FIELDS <"
         >
@@ -62,6 +63,7 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
                     errors={errors}
                     units={units}
                     onClose={onClose}
+                    reset={reset}
                 />
 
                 {/* tombol Save & Cancel */}

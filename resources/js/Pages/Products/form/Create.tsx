@@ -36,6 +36,7 @@ export default function Create({ isOpen, onClose }: CreateProps) {
         <ProductModal
             isOpen={isOpen}
             onClose={onClose}
+            reset={reset}
             title="CREATE PRODUCT"
             subtitle="> FILL ALL FIELDS <"
         >
@@ -43,6 +44,7 @@ export default function Create({ isOpen, onClose }: CreateProps) {
                 <ProductForm
                     data={data}
                     setData={setData}
+                    reset={reset}
                     processing={processing}
                     errors={errors}
                     units={units}

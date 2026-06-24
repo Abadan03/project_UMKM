@@ -7,6 +7,7 @@ interface ProductFormProps {
     errors: any;
     units: UnitsProps[];
     onClose: () => void;
+    reset: () => void;
 }
 
 export default function ProductForm({
@@ -14,6 +15,7 @@ export default function ProductForm({
     processing,
     setData,
     errors,
+    reset,
     units,
     onClose,
 }: ProductFormProps) {
@@ -146,7 +148,9 @@ export default function ProductForm({
             <div className="flex justify-end gap-3 mt-2">
                 <button
                     type="button"
-                    onClick={onClose}
+                    onClick={() => {
+                        (onClose(), reset);
+                    }}
                     className="font-mono text-[10px] font-bold tracking-wider px-4 py-2.5 text-white active:translate-x-[2px] active:translate-y-[2px] cursor-pointer"
                     style={{
                         background: "#c0566a",

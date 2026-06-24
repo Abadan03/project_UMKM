@@ -4,6 +4,7 @@ interface ProductModalProps {
     isOpen: boolean;
     onClose: () => void;
     title: string;
+    reset: () => void;
     subtitle: string;
     children: React.ReactNode;
 }
@@ -12,6 +13,7 @@ export default function ProductModal({
     isOpen,
     onClose,
     title,
+    reset,
     subtitle,
     children,
 }: ProductModalProps) {
@@ -51,7 +53,9 @@ export default function ProductModal({
 
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={() => {
+                            (onClose(), reset);
+                        }}
                         className="text-[#11151f] cursor-pointer text-sm font-bold w-7 h-7 flex items-center justify-center hover:bg-[#11151f] hover:text-[#5fa080]"
                         style={{
                             border: "2px solid #11151f",
