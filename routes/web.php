@@ -25,6 +25,7 @@ Route::get('/feature', [ComproController::class, 'feature'])->name('feature');
 
 // ===================== Pricing Tab
 Route::get('/pricing', [ComproController::class, 'pricing'])->name('pricing');
+Route::get('/contact', [ComproController::class, 'contact'])->name('contact');
 // COMPRO SECTION END ==================
 
 // =====================

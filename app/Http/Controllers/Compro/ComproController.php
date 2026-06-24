@@ -16,4 +16,8 @@ class ComproController extends Controller
     public function pricing() {
         return Inertia::render('components/Pricing');
     }
+
+    public function contact() {
+        return Inertia::render('components/Contact');
+    }
 }

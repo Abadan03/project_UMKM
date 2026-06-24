@@ -5,13 +5,12 @@ import {
 } from "@headlessui/react";
 import { Link, usePage } from "@inertiajs/react";
 import LI from "./C/LI";
-import logo1 from "@/asset/img/logo1.jpeg";
 
 const navigation = [
-    { name: "Home", href: "/", current: true },
-    { name: "Feature", href: "/feature", current: false },
-    { name: "Pricing", href: "/pricing", current: false },
-    { name: "Contact", href: "#", current: false },
+    { name: "Home", href: "/" },
+    { name: "Feature", href: "/feature" },
+    { name: "Pricing", href: "/pricing" },
+    { name: "Contact", href: "/contact" },
 ];
 
 function classNames(...classes: any) {
@@ -44,7 +43,7 @@ export default function NavbarLayout() {
                         >
                             <img
                                 alt="Your Company"
-                                src="logo1"
+                                src="/favicon.ico"
                                 className="h-5 w-auto"
                                 style={{ imageRendering: "pixelated" }}
                             />
@@ -77,7 +76,7 @@ export default function NavbarLayout() {
                                 </Link>
                             ))}
                         </div>
-                        <Link href="login">
+                        <Link href="/login">
                             <LI />
                         </Link>
                     </div>
@@ -97,9 +96,9 @@ export default function NavbarLayout() {
                             key={item.name}
                             as="a"
                             href={item.href}
-                            aria-current={item.current ? "page" : undefined}
+                            aria-current={url === item.href ? "page" : undefined}
                             className={classNames(
-                                item.current
+                                url === item.href
                                     ? "text-white bg-[#1a0a2e]/60"
                                     : "text-[#ddc8f0] hover:text-[#ffdd00] hover:bg-[#1a0a2e]/40",
                                 "block rounded-none px-3 py-2 text-xs font-bold tracking-wider uppercase"

@@ -297,3 +297,77 @@ Card pattern:    rgba(45,55,72,0.05)
     @apply font-sans;
   }
 }
+
+@layer utilities {
+  .retro-enter {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+    animation: retro-rise 520ms steps(8) forwards;
+  }
+
+  .retro-enter-left {
+    opacity: 0;
+    transform: translateX(-32px) scale(0.98);
+    animation: retro-slide-left 560ms steps(8) forwards;
+  }
+
+  .retro-enter-right {
+    opacity: 0;
+    transform: translateX(32px) scale(0.98);
+    animation: retro-slide-right 560ms steps(8) forwards;
+  }
+
+  .retro-pop {
+    opacity: 0;
+    transform: scale(0.92);
+    animation: retro-pop-in 420ms steps(6) forwards;
+  }
+}
+
+@keyframes retro-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes retro-slide-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-32px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes retro-slide-right {
+  0% {
+    opacity: 0;
+    transform: translateX(32px) scale(0.98);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes retro-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

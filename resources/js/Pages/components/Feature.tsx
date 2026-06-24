@@ -1,6 +1,5 @@
 import React from "react";
 import MainLayout from "../MainLayout";
-
 import {
     BadgeDollarSign,
     NotebookPen,
@@ -12,93 +11,94 @@ import {
 
 const features = [
     {
-        Module: "Report",
-        Title: "Business Summary ",
+        module: "Report",
+        title: "Business Summary",
         icon: PackageSearch,
-        Description: "Description feature 2",
+        description: "Pantau performa penjualan dan pergerakan bisnis dari panel ringkas yang mudah dipahami.",
+        accent: "bg-[#ffdd00]",
     },
     {
-        Module: "Sales",
-        Title: "Point of Sales",
+        module: "Sales",
+        title: "Point Of Sales",
         icon: BadgeDollarSign,
-        Description: "Description feature 1",
+        description: "Bantu kasir atau owner mencatat transaksi lebih cepat dengan alur yang langsung ke inti.",
+        accent: "bg-[#44ddff]",
     },
     {
-        Module: "Inventory",
-        Title: "Stock of goods",
+        module: "Inventory",
+        title: "Stock Control",
         icon: Warehouse,
-        Description: "Description feature 3",
+        description: "Lihat stok aktif, unit produk, dan status inventory tanpa harus pindah alat kerja.",
+        accent: "bg-[#44cc44]",
     },
     {
-        Module: "Finance",
-        Title: "Cash Flow",
+        module: "Finance",
+        title: "Cash Flow",
         icon: BanknoteCheck,
-        Description: "Description feature 4",
+        description: "Catat arus uang masuk dan keluar agar keputusan operasional lebih presisi.",
+        accent: "bg-[#ff8800]",
     },
     {
-        Module: "Finance",
-        Title: "Transaction",
+        module: "Finance",
+        title: "Transactions",
         icon: ReceiptText,
-        Description: "Description feature 5",
+        description: "Riwayat transaksi disusun jelas untuk audit cepat dan kontrol aktivitas bisnis.",
+        accent: "bg-[#ff44aa]",
     },
     {
-        Module: "Notes",
-        Title: "Notes / To Do",
+        module: "Notes",
+        title: "Notes / To Do",
         icon: NotebookPen,
-        Description: "Description feature 6",
+        description: "Simpan catatan kecil dan tugas operasional harian dalam satu sistem yang sama.",
+        accent: "bg-[#b898d8]",
     },
 ];
 
 export default function Feature() {
     return (
-        <>
-            <section className="min-h-screen flex flex-col items-center justify-center">
-                {/* <h1 className="text-5xl font-bold leading-tight text-center text-slate-900">
-                    Fitur Kami
-                    <br />
-                    Beberapa Fitur unggulan dan kekurangan
-                </h1> */}
-                <h1 className="text-5xl font-bold leading-tight text-center text-slate-900">
-                    Features
+        <section className="space-y-8">
+            <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] p-6 shadow-[10px_10px_0px_0px_#1a0a2e] retro-enter">
+                <p className="mb-3 font-mono text-sm font-bold uppercase tracking-[0.32em] text-[#5a3888]">
+                    Feature Deck
+                </p>
+                <h1 className="max-w-3xl font-mono text-4xl font-black uppercase leading-none text-[#1a0a2e] sm:text-5xl">
+                    Modul inti untuk bisnis kecil yang ingin kerja lebih rapi.
                 </h1>
-                <div className="mt-2 flex items-center gap-4 rounded-xl bg-slate-50 p-4">
-                    <p className="text-sm text-slate-600">
-                        Over one million Businessmen have given a 5-star review
-                        to their salesgear.
-                    </p>
-                </div>
+                <p className="mt-4 max-w-2xl font-mono text-sm leading-7 text-[#3c2060]">
+                    Semua fitur di halaman ini dirancang mengikuti gaya 8-bit yang sama dengan dashboard internal: tebal, kontras tinggi, dan langsung terbaca.
+                </p>
+            </div>
 
-                <div className="mt-12 w-2/3 grid gap-12 lg:grid-cols-3 lg:items-center">
-                    {/* Card Content */}
-                    {features.map((item) => (
-                        <article className="flex flex-col items-start justify-between border-4 border-[#283618] bg-gradient-to-b from-white via-gray-100 to-gray-200 p-6 shadow-[8px_8px_0_0_#283618] transition-transform duration-500 ease-in-out transform hover:scale-105 hover:bg-gradient-to-b hover:from-gray-200 hover:to-white shadow-[8px_8px_0_0_#283618] transition-shadow duration-500 ease-in-out hover:shadow-[12px_12px_0_0_#283618]">
-                            <div className="mb-4 flex items-center gap-x-2 text-xs">
-                                <p className="relative z-10 border-2 border-gray-900 bg-[#606C38] px-3 py-1 font-bold text-white">
-                                    {item.Module}
-                                </p>
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                {features.map((item) => (
+                    <article
+                        key={item.title}
+                        className="group border-4 border-[#1a0a2e] bg-[#3c2060] p-5 text-[#ddc8f0] shadow-[8px_8px_0px_0px_#1a0a2e] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[4px_4px_0px_0px_#1a0a2e] retro-enter"
+                        style={{
+                            animationDelay: `${features.indexOf(item) * 90 + 100}ms`,
+                        }}
+                    >
+                        <div className="mb-5 flex items-start justify-between gap-4">
+                            <div className={`border-4 border-[#1a0a2e] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.28em] text-[#1a0a2e] ${item.accent}`}>
+                                {item.module}
                             </div>
-                            <div className="group relative w-full flex flex-col items-center text-center gap-4">
-                                <h3 className="text-2xl font-black uppercase text-black">
-                                    {item.Title}
-                                </h3>
-
-                                <div className="flex justify-center">
-                                    <item.icon
-                                        size={40}
-                                        className="text-[#606C38]"
-                                    />
-                                </div>
-
-                                <p className="w-full border-l-4 border-[#BC6C25] pl-4 text-left text-gray-800">
-                                    {item.Description}
-                                </p>
+                            <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] p-3 text-[#1a0a2e]">
+                                <item.icon size={24} />
                             </div>
-                        </article>
-                    ))}
-                </div>
-            </section>
-        </>
+                        </div>
+
+                        <h3 className="mb-3 font-mono text-2xl font-black uppercase leading-tight text-white">
+                            {item.title}
+                        </h3>
+
+                        <p className="border-l-4 border-[#ffdd00] pl-4 font-mono text-sm leading-7 text-[#ddc8f0]">
+                            {item.description}
+                        </p>
+                    </article>
+                ))}
+            </div>
+        </section>
     );
 }
 
-Feature.layout = (page: React.ReactNode) => <MainLayout children={page} />;
+Feature.layout = (page: React.ReactNode) => <MainLayout>{page}</MainLayout>;
