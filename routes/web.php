@@ -74,6 +74,8 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
     // Route::resource('users', UsersController::class);
     Route::get('users', [UsersController::class, 'index'])
         ->name('index');
+    Route::get('users/search', [UsersController::class, 'search'])
+        ->name('search');
     Route::get('users/create', [UsersController::class, 'create'])
         ->name('create');
     Route::post('users', [UsersController::class, 'store'])

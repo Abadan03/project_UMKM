@@ -11,6 +11,7 @@ use App\Http\Requests\Users\UpdateUserRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Collection;
 // use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
@@ -19,22 +20,57 @@ class UsersController extends Controller
     public function index()
     {
         $roles = T_Roles::all();
-        $users = User::with('roles')->get()->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'email' => $item->email,
-                'roles_id' => $item->roles_id,
-                'role' => $item->roles->name,
-                'created_at' => $item->created_at,
-            ];
-        });
+        $users = $this->formatUsers(
+            User::with('roles')
+                ->latest()
+                ->get()
+        );
 
         return
             Inertia::render('users/Index', [
                 'users' => $users,
                 'roles' => $roles
             ]);
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = trim((string) $request->query('query'));
+
+        if ($keyword === '') {
+            return response()->json([]);
+        }
+
+        $like = '%' . addcslashes($keyword, '\%_') . '%';
+
+        $users = User::with('roles')
+            ->where(function ($query) use ($like) {
+                $query->where('name', 'like', $like)
+                    ->orWhere('email', 'like', $like)
+                    ->orWhereHas('roles', function ($roleQuery) use ($like) {
+                        $roleQuery->where('name', 'like', $like);
+                    });
+            })
+            ->latest()
+            ->limit(25)
+            ->get();
+
+        return response()->json($this->formatUsers($users));
+    }
+
+    private function formatUsers(Collection $users): Collection
+    {
+        return $users->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'email' => $item->email,
+                'roles_id' => $item->roles_id,
+                'role' => $item->roles?->name,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        });
     }
 
     public function create()

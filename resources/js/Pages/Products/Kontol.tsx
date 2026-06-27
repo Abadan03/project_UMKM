@@ -1,4 +1,3 @@
-import PageHeader from "@/components/page-header";
 import AppLayout from "@/layouts/app-layout";
 import {
     PageProps,
@@ -6,27 +5,15 @@ import {
     UnitsProps,
     type BreadcrumbItem,
 } from "@/types";
-import { Head, router, usePage } from "@inertiajs/react";
-import { Package, Search, Eye } from "lucide-react";
-import Swal from "sweetalert2";
+import { Head, router } from "@inertiajs/react";
+import { LoaderCircle, Package, Search } from "lucide-react";
 import { confirmDialog } from "@/Pages/utils/popupModal";
 import Create from "./form/Create";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import UnitModal from "./Units/Units";
 import { Input } from "@headlessui/react";
 import Edit from "./form/Edit";
-import CreateUnitModal from "./Units/CreateUnit";
-
-interface Product {
-    id: number;
-    name: string;
-    qty: number;
-    unit: string;
-    pricing: number;
-    description: string;
-    created_at?: string;
-}
 
 interface Props extends PageProps {
     products: ProductProps[];
@@ -41,10 +28,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 export default function ProductsIndex({ products, units }: Props) {
-    const controller = new AbortController();
     const [query, setQuery] = useState("");
-    const [results, setResults] = useState([]);
+    const [results, setResults] = useState<ProductProps[]>([]);
     const [loading, setLoading] = useState(false);
+    const searchRequestId = useRef(0);
     const [showUnits, setShowUnits] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ProductProps | null>(
@@ -52,7 +39,11 @@ export default function ProductsIndex({ products, units }: Props) {
     );
     const [showCreate, setShowCreate] = useState(false);
 
-    const filteredProducts = query.trim().length > 0 ? results : products;
+    const normalizedQuery = query.trim();
+    const filteredProducts = useMemo(
+        () => (normalizedQuery.length > 0 ? results : products),
+        [normalizedQuery, products, results],
+    );
 
     const handleDelete = async (id: number) => {
         const confirmed = await confirmDialog({
@@ -76,20 +67,42 @@ export default function ProductsIndex({ products, units }: Props) {
     };
 
     const fetchResults = async (search: string) => {
+        const keyword = search.trim();
+        const requestId = searchRequestId.current + 1;
+        searchRequestId.current = requestId;
+
+        if (!keyword) {
+            setResults([]);
+            setLoading(false);
+            return;
+        }
+
         setLoading(true);
 
         try {
-            const res = await fetch(`/products/search?query=${search}`, {
-                signal: controller.signal,
-            });
-            const data = await res.json();
+            const res = await fetch(
+                `/products/search?query=${encodeURIComponent(keyword)}`,
+                { headers: { Accept: "application/json" } },
+            );
 
-            setResults(data);
+            if (!res.ok) {
+                throw new Error("Failed to fetch product search results.");
+            }
+
+            const data = (await res.json()) as ProductProps[];
+
+            if (searchRequestId.current === requestId) {
+                setResults(data);
+            }
         } catch (error) {
-            console.error(error);
-            setResults([]);
+            if (searchRequestId.current === requestId) {
+                console.error(error);
+                setResults([]);
+            }
         } finally {
-            setLoading(false);
+            if (searchRequestId.current === requestId) {
+                setLoading(false);
+            }
         }
     };
 
@@ -117,11 +130,14 @@ export default function ProductsIndex({ products, units }: Props) {
     };
 
     useEffect(() => {
+        searchRequestId.current += 1;
+
         const delay = setTimeout(() => {
             if (query.length > 0) {
                 fetchResults(query);
             } else {
                 setResults([]);
+                setLoading(false);
             }
         }, 500); // 300–500ms ideal
 
@@ -172,31 +188,18 @@ export default function ProductsIndex({ products, units }: Props) {
                 {/* Table Container dengan style 8-bit soft */}
                 <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] shadow-[8px_8px_0px_0px_#1a0a2e] flex flex-col h-full">
                     {/* TABLE SECTION */}
-                    <div className="overflow-x-auto flex-1">
-                        {loading ? (
-                            <div className="flex items-center justify-center h-full">
-                                <div className="relative">
-                                    <div className="relative w-32 h-32">
-                                        <div
-                                            className="absolute w-32 h-32 rounded-full border-[4px] border-[#2D3748]/30 border-r-[#ff8800] border-b-[#ff8800] animate-spin"
-                                            style={{
-                                                animationDuration: "2.8s",
-                                            }}
-                                        ></div>
-
-                                        <div
-                                            className="absolute w-32 h-32 rounded-full border-[4px] border-[#2D3748]/30 border-t-[#68D391] animate-spin"
-                                            style={{
-                                                animationDuration: "2s",
-                                                animationDirection: "reverse",
-                                            }}
-                                        ></div>
-                                    </div>
-                                    <div className="absolute inset-0 bg-[#68D391]/10 animate-pulse rounded-full blur-md" />
+                    <div className="relative min-h-[360px] overflow-x-auto flex-1">
+                        {loading && (
+                            <div className="absolute inset-0 z-10 flex items-start justify-center bg-[#ddc8f0]/80 pt-24 backdrop-blur-[1px]">
+                                <div className="flex items-center gap-3 border-4 border-[#1a0a2e] bg-[#3c2060] px-5 py-4 text-[#ffdd00] shadow-[4px_4px_0px_0px_#1a0a2e]">
+                                    <LoaderCircle className="h-6 w-6 animate-spin" />
+                                    <span className="font-bold">
+                                        SEARCHING PRODUCTS...
+                                    </span>
                                 </div>
                             </div>
-                        ) : (
-                            <table className="w-full table-fixed text-sm text-[#1a0a2e]">
+                        )}
+                        <table className="w-full table-fixed text-sm text-[#1a0a2e]">
                                 <thead className="bg-[#44cc44] border-b-4 border-[#1a0a2e] text-[#1a0a2e]">
                                     <tr>
                                         <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
@@ -236,20 +239,22 @@ export default function ProductsIndex({ products, units }: Props) {
                                                 </td>
 
                                                 <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
-                                                    {product.unit_name}
+                                                    {product.unit_name ?? "-"}
                                                 </td>
 
                                                 <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
                                                     Rp{" "}
-                                                    {product.pricing.toLocaleString(
-                                                        "id-ID",
-                                                    )}
+                                                    {Number(
+                                                        product.pricing,
+                                                    ).toLocaleString("id-ID")}
                                                 </td>
 
                                                 <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
                                                     {new Date(
                                                         product.created_at,
-                                                    ).toLocaleDateString()}
+                                                    ).toLocaleDateString(
+                                                        "id-ID",
+                                                    )}
                                                 </td>
 
                                                 <td className="px-4 py-3 text-center flex justify-center gap-3">
@@ -290,15 +295,15 @@ export default function ProductsIndex({ products, units }: Props) {
                                         </tr>
                                     )}
                                 </tbody>
-                            </table>
-                        )}
+                        </table>
                     </div>
 
                     {/* FOOTER (ALWAYS STICK TO BOTTOM) */}
                     <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
                         <div>
                             <p className="text-sm">
-                                {products.length} of {products.length} data
+                                {filteredProducts.length} of {products.length}{" "}
+                                data
                             </p>
                         </div>
                         <div></div>

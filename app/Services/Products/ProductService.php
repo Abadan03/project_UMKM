@@ -5,7 +5,7 @@ namespace App\Services\Products;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\T_Units;
-use Request;
+use Illuminate\Support\Collection;
 
 class ProductService
 {
@@ -14,29 +14,61 @@ class ProductService
      */
     public function all()
     {
-        return Product::with('unit')->get()->map(function ($item) {
+        return $this->formatProducts(
+            Product::with('unit')
+                ->latest()
+                ->get()
+        );
+    }
+
+    /**
+     * Search products by keyword.
+     */
+    public function find(?string $search)
+    {
+        $keyword = trim((string) $search);
+
+        if ($keyword === '') {
+            return collect();
+        }
+
+        $like = '%' . addcslashes($keyword, '\%_') . '%';
+
+        return $this->formatProducts(
+            Product::with('unit')
+                ->where(function ($query) use ($like) {
+                    $query->where('name', 'like', $like)
+                        ->orWhere('description', 'like', $like)
+                        ->orWhere('qty', 'like', $like)
+                        ->orWhere('pricing', 'like', $like)
+                        ->orWhereHas('unit', function ($unitQuery) use ($like) {
+                            $unitQuery->where('name', 'like', $like)
+                                ->orWhere('code', 'like', $like);
+                        });
+                })
+                ->latest()
+                ->limit(25)
+                ->get()
+        );
+    }
+
+    private function formatProducts(Collection $products): Collection
+    {
+        return $products->map(function ($item) {
             return [
                 'id' => $item->id,
                 'name' => $item->name,
                 'qty' => $item->qty,
                 'unit_id' => $item->unit_id,
-                'unit_code' => $item->unit->code,
-                'unit_name' => $item->unit->name,
+                'unit' => $item->unit,
+                'unit_code' => $item->unit?->code,
+                'unit_name' => $item->unit?->name,
                 'pricing' => $item->pricing,
                 'description' => $item->description,
-                'created_at' => $item->created_at
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
             ];
         });
-    }
-
-    /**
-     * Find a single product by id.
-     */
-    public function find(?string $search)
-    {
-        return Product::with('unit')
-            ->where('name', 'like', "%{$search}%")
-            ->get();
     }
 
     /**
