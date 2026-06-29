@@ -14,9 +14,9 @@ class Product extends Model
 
     protected $fillable = [
         'name',
-        'qty',
-        'pricing',
         'unit_id',
+        'cost_price',
+        'sell_price',
         'description',
     ];
 
@@ -27,6 +27,6 @@ class Product extends Model
 
     public function inventory()
     {
-        return $this->hasOne(Inventory::class, 'prdocuts_id');
+        return $this->hasOne(Inventory::class, 'products_id');
     }
 }

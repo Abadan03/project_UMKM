@@ -14,18 +14,19 @@ interface EditProps {
 export default function Edit({ product, isOpen, onClose }: EditProps) {
     const units = usePage().props.units as UnitsProps[];
 
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, put, processing, errors, reset } = useForm({
         name: product?.name ?? "",
-        qty: product?.qty ?? "",
+        qty: product?.qty ?? 0,
         unit_id: product?.unit_id?.toString() ?? "",
-        pricing: product?.pricing ?? "",
+        cost_price: product?.cost_price ?? "",
+        sell_price: product?.sell_price ?? "",
         description: product?.description ?? "",
     });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        post(`/products/update/${product?.id}`, {
+        put(`/products/update/${product?.id}`, {
             preserveScroll: true,
             onSuccess: () => {
                 reset();
@@ -39,9 +40,10 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
         if (product) {
             setData({
                 name: product.name,
-                qty: product.qty.toString(),
+                qty: product.qty,
                 unit_id: product.unit_id.toString(),
-                pricing: product.pricing.toString(),
+                cost_price: product.cost_price.toString(),
+                sell_price: product.sell_price.toString(),
                 description: product.description ?? "",
             });
         }

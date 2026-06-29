@@ -87,9 +87,11 @@ export interface Product {
     name: string;
     qty: number;
     unit: string;
-    pricing: number;
+    cost_price: number;
+    sell_price: number;
     description: string;
     created_at?: string;
+    updated_at: string;
 }
 
 export interface ProductProps {
@@ -100,7 +102,9 @@ export interface ProductProps {
     unit: UnitsProps | null;
     unit_name?: string;
     unit_code?: string;
-    pricing: number;
+    cost_price: number;
+    sell_price: number;
+    inventory?: InventoryProps | null;
     description: string;
     created_at: string;
     updated_at: string;
@@ -111,6 +115,11 @@ export interface InventoryProps {
     id: number;
     isActive: "YES" | "NO"; // Tanda '?' bisa dihapus kalau datanya selalu ada (wajib) dari DB
     products_id: number;
+    qty: number;
+
+    minimum_stock: number;
+    last_stock_in: number;
+    last_stock_out: number;
 
     // Hasil dari relasi Laravel ->with('product') akan masuk ke sini
     product?: ProductProps | null;
@@ -118,4 +127,16 @@ export interface InventoryProps {
     // Bawaan dari Laravel timestamps
     created_at?: string;
     updated_at?: string;
+}
+
+export interface Logs {
+    id: string;
+    references_id: any;
+    user_id: any;
+    user: User;
+    product: ProductProps;
+    old_value: number;
+    new_value: number;
+    description: string;
+    created_at: string;
 }

@@ -19,7 +19,7 @@ class T_Roles extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class);
+        return $this->hasMany(User::class, 'roles_id');
     }
 
     public function hasRole(array $roles): bool

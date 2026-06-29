@@ -4,7 +4,10 @@ namespace App\Services\Products;
 
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\T_Logs;
+use App\Models\T_Modules;
 use App\Models\T_Units;
+use DB;
 use Illuminate\Support\Collection;
 
 class ProductService
@@ -15,7 +18,7 @@ class ProductService
     public function all()
     {
         return $this->formatProducts(
-            Product::with('unit')
+            Product::with(['unit', 'inventory'])
                 ->latest()
                 ->get()
         );
@@ -35,12 +38,15 @@ class ProductService
         $like = '%' . addcslashes($keyword, '\%_') . '%';
 
         return $this->formatProducts(
-            Product::with('unit')
+            Product::with(['unit', 'inventory'])
                 ->where(function ($query) use ($like) {
                     $query->where('name', 'like', $like)
                         ->orWhere('description', 'like', $like)
-                        ->orWhere('qty', 'like', $like)
-                        ->orWhere('pricing', 'like', $like)
+                        ->orWhere('cost_price', 'like', $like)
+                        ->orWhere('sell_price', 'like', $like)
+                        ->orWhereHas('inventory', function ($inventoryQuery) use ($like) {
+                            $inventoryQuery->where('qty', 'like', $like);
+                        })
                         ->orWhereHas('unit', function ($unitQuery) use ($like) {
                             $unitQuery->where('name', 'like', $like)
                                 ->orWhere('code', 'like', $like);
@@ -58,12 +64,14 @@ class ProductService
             return [
                 'id' => $item->id,
                 'name' => $item->name,
-                'qty' => $item->qty,
+                'qty' => $item->inventory?->qty ?? 0,
+                'inventory' => $item->inventory,
                 'unit_id' => $item->unit_id,
                 'unit' => $item->unit,
                 'unit_code' => $item->unit?->code,
                 'unit_name' => $item->unit?->name,
-                'pricing' => $item->pricing,
+                'cost_price' => $item->cost_price,
+                'sell_price' => $item->sell_price,
                 'description' => $item->description,
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
@@ -76,18 +84,37 @@ class ProductService
      */
     public function create(array $data): Product
     {
+        return DB::transaction(function () use ($data) {
 
-        // 1. Buat produk baru
-        // dd($data);
-        $product = Product::create($data);
+            $qty = $data['qty'] ?? 0;
+            unset($data['qty']);
 
-        // 2. Buat instance Inventory baru
-        Inventory::create([
-            'products_id' => $product->id,
-            'isActive' => 'YES',
-        ]);
+            $product = Product::create($data);
 
-        return $product;
+            Inventory::create([
+                'products_id' => $product->id,
+                'isActive' => 'YES',
+                'qty' => $qty,
+                'minimum_stock' => $qty,
+                'last_stock_in' => $qty,
+                'last_stock_out' => 0,
+            ]);
+
+            $module = T_Modules::firstOrCreate([
+                'name' => 'Product',
+            ]);
+
+            T_Logs::create([
+                'module_id' => $module->id,
+                'user_id' => auth()->id(),
+                'references_id' => $product->id,
+                'old_value' => 0,
+                'new_value' => $qty,
+                'description' => 'Initial stock.',
+            ]);
+
+            return $product->fresh('inventory');
+        });
     }
 
     public function unitCreate(array $data): T_Units
@@ -100,15 +127,62 @@ class ProductService
      */
     public function update(int $id, array $data): ?Product
     {
-        $product = Product::find($id);
+        $product = Product::with('inventory')->find($id);
 
         if (!$product) {
             return null;
         }
 
-        $product->update($data);
+        return DB::transaction(function () use ($product, $data) {
 
-        return $product;
+            $qty = $data['qty'];
+
+            $oldQty = $product->inventory->qty;
+            $oldCostPrice = $product->cost_price;
+
+            if ($oldCostPrice != $data['cost_price']) {
+
+                $oldHPP = $oldCostPrice * $oldQty;
+                $newHPP = $data['cost_price'] * $qty;
+
+                $newStock = $oldQty + $qty;
+
+                $data['cost_price'] = ($oldHPP + $newHPP) / $newStock;
+            }
+
+            $product->update($data);
+
+            $inventory = $product->inventory;
+
+            $stockDiff = $qty - $oldQty;
+
+            $inventory->update([
+                'qty' => $qty,
+                'isActive' => 'YES',
+                'last_stock_in' => $stockDiff > 0 ? $stockDiff : $inventory->last_stock_in,
+                'last_stock_out' => $stockDiff < 0 ? abs($stockDiff) : $inventory->last_stock_out,
+            ]);
+
+            if ($stockDiff != 0) {
+
+                $module = T_Modules::firstOrCreate([
+                    'name' => 'Product',
+                ]);
+
+                T_Logs::create([
+                    'module_id' => $module->id,
+                    'user_id' => auth()->id(),
+                    'references_id' => $product->id,
+                    'old_value' => $oldQty,
+                    'new_value' => $qty,
+                    'description' => $stockDiff > 0
+                        ? "Stock added ({$stockDiff})"
+                        : "Stock reduced (" . abs($stockDiff) . ")",
+                ]);
+            }
+
+            return $product->fresh(['inventory', 'unit']);
+        });
     }
 
     /**

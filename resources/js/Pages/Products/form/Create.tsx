@@ -13,9 +13,10 @@ export default function Create({ isOpen, onClose }: CreateProps) {
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
-        qty: "",
+        qty: 0,
         unit_id: "",
-        pricing: "",
+        cost_price: "",
+        sell_price: "",
         description: "",
     });
 

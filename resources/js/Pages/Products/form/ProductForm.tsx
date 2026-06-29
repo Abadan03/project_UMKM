@@ -44,8 +44,8 @@ export default function ProductForm({
                 )}
             </div>
 
-            {/* Qty + Pricing */}
-            <div className="grid grid-cols-3 gap-2">
+            {/* Qty + Prices */}
+            <div className="grid grid-cols-2 gap-1">
                 <div className="flex flex-col gap-1.5 flex-1">
                     <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
                         Stock
@@ -95,16 +95,18 @@ export default function ProductForm({
                         </span>
                     )}
                 </div>
+            </div>
 
+            <div className="grid grid-cols-2 gap-1">
                 <div className="flex flex-col gap-1.5 flex-1">
                     <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
-                        PRICING
+                        COST PRICE
                     </label>
                     <input
                         type="number"
                         step="0.01"
-                        value={data.pricing}
-                        onChange={(e) => setData("pricing", e.target.value)}
+                        value={data.cost_price}
+                        onChange={(e) => setData("cost_price", e.target.value)}
                         placeholder="0.00"
                         min={0}
                         className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
@@ -113,9 +115,33 @@ export default function ProductForm({
                             boxShadow: "3px 3px 0 #11151f",
                         }}
                     />
-                    {errors.pricing && (
+                    {errors.cost_price && (
                         <span className="text-[#c0566a] text-[9px] tracking-wide">
-                            {errors.pricing}
+                            {errors.cost_price}
+                        </span>
+                    )}
+                </div>
+
+                <div className="flex flex-col gap-1.5 flex-1">
+                    <label className="text-[#8b93a7] text-[10px] font-bold tracking-wider">
+                        SELL PRICE
+                    </label>
+                    <input
+                        type="number"
+                        step="0.01"
+                        value={data.sell_price}
+                        onChange={(e) => setData("sell_price", e.target.value)}
+                        placeholder="0.00"
+                        min={0}
+                        className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
+                        style={{
+                            border: "3px solid #11151f",
+                            boxShadow: "3px 3px 0 #11151f",
+                        }}
+                    />
+                    {errors.sell_price && (
+                        <span className="text-[#c0566a] text-[9px] tracking-wide">
+                            {errors.sell_price}
                         </span>
                     )}
                 </div>

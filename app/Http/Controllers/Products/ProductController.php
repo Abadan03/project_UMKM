@@ -40,6 +40,8 @@ class ProductController extends Controller
 
     public function store(CreateRequest $request)
     {
+        $request['qty'] ?? 0;
+
         $this->productService->create($request->validated());
 
         return back()->with('success', 'Product created successfully.');

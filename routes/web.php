@@ -51,6 +51,8 @@ Route::middleware(['auth'])->group(function () {
     // Inventory
     Route::prefix('inventory')->group(function () {
         Route::get('/', [InventoryController::class, "index"])->name('inventory');
+        Route::put('/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
+        Route::get('/view/{id}', [InventoryController::class, 'viewLogs'])->name('inventory.view');
     });
 
 

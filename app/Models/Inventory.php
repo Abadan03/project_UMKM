@@ -16,6 +16,10 @@ class Inventory extends Model
     protected $fillable = [
         'products_id',
         'isActive',
+        'qty',
+        'minimum_stock',
+        'last_stock_in',
+        'last_stock_out',
     ];
 
     public function product()

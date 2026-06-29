@@ -153,7 +153,7 @@ export default function ProductsIndex({ products, units }: Props) {
                 {/* Modifikasi PageHeader agar cocok dengan tema, menambahkan aksen warna kuning dan hijau */}
                 <div className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 shadow-[6px_6px_0px_0px_#1a0a2e] flex justify-between items-center">
                     <div className="flex items-center gap-4 text-[#ffdd00] font-bold text-xl">
-                        <div className="flex ">
+                        <div className="flex gap-2">
                             <Package size={28} />
                             <h2>Products</h2>
                         </div>
@@ -163,7 +163,7 @@ export default function ProductsIndex({ products, units }: Props) {
                                 placeholder="Search product . . ."
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
-                                className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none shadow-[2px_2px_0px_0px_#1a0a2e] focus-visible:ring-0 focus-visible:ring-offset-0"
+                                className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
                             />
                         </div>
                     </div>
@@ -200,101 +200,109 @@ export default function ProductsIndex({ products, units }: Props) {
                             </div>
                         )}
                         <table className="w-full table-fixed text-sm text-[#1a0a2e]">
-                                <thead className="bg-[#44cc44] border-b-4 border-[#1a0a2e] text-[#1a0a2e]">
-                                    <tr>
-                                        <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
-                                            Name
-                                        </th>
-                                        <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
-                                            Description
-                                        </th>
-                                        <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
-                                            Unit of Product
-                                        </th>
-                                        <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
-                                            Pricing
-                                        </th>
-                                        <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
-                                            Created at
-                                        </th>
-                                        <th className="px-4 py-4 text-center">
-                                            Action
-                                        </th>
-                                    </tr>
-                                </thead>
+                            <thead className="bg-[#44cc44] border-b-4 border-[#1a0a2e] text-[#1a0a2e]">
+                                <tr>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Name
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Description
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Unit of Product
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        HPP
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Sell Price
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Last Update at
+                                    </th>
+                                    <th className="px-4 py-4 text-center">
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
 
-                                <tbody>
-                                    {filteredProducts.length > 0 ? (
-                                        filteredProducts.map((product) => (
-                                            <tr
-                                                key={product.id}
-                                                className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
-                                            >
-                                                <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                                    {product.name}
-                                                </td>
+                            <tbody>
+                                {filteredProducts.length > 0 ? (
+                                    filteredProducts.map((product) => (
+                                        <tr
+                                            key={product.id}
+                                            className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
+                                        >
+                                            <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                                {product.name}
+                                            </td>
 
-                                                <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                                    {product.description}
-                                                </td>
+                                            <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                                {product.description}
+                                            </td>
 
-                                                <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
-                                                    {product.unit_name ?? "-"}
-                                                </td>
+                                            <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
+                                                {product.unit_name ?? "-"}
+                                            </td>
 
-                                                <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
-                                                    Rp{" "}
-                                                    {Number(
-                                                        product.pricing,
-                                                    ).toLocaleString("id-ID")}
-                                                </td>
+                                            <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
+                                                Rp{" "}
+                                                {Number(
+                                                    product.cost_price,
+                                                ).toLocaleString("id-ID")}
+                                            </td>
 
-                                                <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
-                                                    {new Date(
-                                                        product.created_at,
-                                                    ).toLocaleDateString(
-                                                        "id-ID",
-                                                    )}
-                                                </td>
+                                            <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
+                                                Rp{" "}
+                                                {Number(
+                                                    product.sell_price,
+                                                ).toLocaleString("id-ID")}
+                                            </td>
 
-                                                <td className="px-4 py-3 text-center flex justify-center gap-3">
-                                                    <button
-                                                        onClick={() =>
-                                                            handleRoute(
-                                                                "edit",
-                                                                product.id,
-                                                            )
-                                                        }
-                                                        className="border-2 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#2288cc]"
-                                                    >
-                                                        EDIT
-                                                    </button>
+                                            <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
+                                                {new Date(
+                                                    product.updated_at,
+                                                ).toLocaleString("id-ID")}
+                                            </td>
 
-                                                    <button
-                                                        onClick={() =>
-                                                            handleRoute(
-                                                                "delete",
-                                                                product.id,
-                                                            )
-                                                        }
-                                                        className="border-2 cursor-pointer border-[#1a0a2e] bg-[#ff44aa] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#ff4444]"
-                                                    >
-                                                        DELETE
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))
-                                    ) : (
-                                        <tr>
-                                            <td
-                                                colSpan={6}
-                                                className="px-4 py-8 text-center text-[#5a3888] font-bold"
-                                            >
-                                                NO PRODUCTS FOUND.
+                                            <td className="px-4 py-3 text-center flex justify-center gap-3">
+                                                <button
+                                                    onClick={() =>
+                                                        handleRoute(
+                                                            "edit",
+                                                            product.id,
+                                                        )
+                                                    }
+                                                    className="border-2 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#2288cc]"
+                                                >
+                                                    EDIT
+                                                </button>
+
+                                                <button
+                                                    onClick={() =>
+                                                        handleRoute(
+                                                            "delete",
+                                                            product.id,
+                                                        )
+                                                    }
+                                                    className="border-2 cursor-pointer border-[#1a0a2e] bg-[#ff44aa] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#ff4444]"
+                                                >
+                                                    DELETE
+                                                </button>
                                             </td>
                                         </tr>
-                                    )}
-                                </tbody>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td
+                                            colSpan={7}
+                                            className="px-4 py-8 text-center text-[#5a3888] font-bold"
+                                        >
+                                            NO PRODUCTS FOUND.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
                         </table>
                     </div>
 

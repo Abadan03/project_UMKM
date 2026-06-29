@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers\Inventory;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Inventory;
+use App\Http\Requests\Inventory\UpdateInventoryRequest;
 use App\Services\Inventory\InventoryService;
 use Inertia\Inertia;
 
@@ -20,17 +19,27 @@ class InventoryController extends Controller
 
     public function index()
     {
-        $p = $this->inventoryService->all();
-
-        // dd($p->first()->product);
-
-        $inventory = Inventory::with('product.unit')->get();
-
-        // dd($inventory);
-
-
         return Inertia::render('Inventory/Index', [
-            'inventory' => $inventory
+            'inventory' => $this->inventoryService->all(),
+            'logs' => $this->inventoryService->getLogs()
         ]);
+    }
+
+    public function update(UpdateInventoryRequest $request, int $id)
+    {
+        $inventory = $this->inventoryService->update($id, $request->validated());
+
+        if (!$inventory) {
+            return redirect()->back()->with('error', 'Inventory not found.');
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', 'Inventory updated successfully.');
+    }
+
+    public function viewLogs($id)
+    {
+        return $this->inventoryService->viewLogs($id);
     }
 }

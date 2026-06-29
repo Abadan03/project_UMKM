@@ -24,9 +24,10 @@ class CreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'qty' => 'required|integer|min:0',
+            'qty' => 'integer|min:0',
             'unit_id' => 'required|string',
-            'pricing' => 'required|numeric|min:0',
+            'cost_price' => 'required|numeric|min:0',
+            'sell_price' => 'required|numeric|min:0',
             'description' => 'required|string',
         ];
     }
@@ -38,15 +39,19 @@ class CreateRequest extends FormRequest
             'name.string' => 'Product name must be text.',
             'name.max' => 'Product name is too long (max 255 characters).',
 
-            'qty.required' => 'Quantity is required.',
+            // 'qty.required' => 'Quantity is required.',
             'qty.integer' => 'Quantity is not valid.',
             'qty.min' => 'Quantity cannot be negative.',
 
             'unit_id.required' => 'Unit is required.',
 
-            'pricing.required' => 'Pricing is required.',
-            'pricing.numeric' => 'Pricing must be a number.',
-            'pricing.min' => 'Pricing cannot be negative.',
+            'cost_price.required' => 'Cost price is required.',
+            'cost_price.numeric' => 'Cost price must be a number.',
+            'cost_price.min' => 'Cost price cannot be negative.',
+
+            'sell_price.required' => 'Sell price is required.',
+            'sell_price.numeric' => 'Sell price must be a number.',
+            'sell_price.min' => 'Sell price cannot be negative.',
 
             'description.required' => 'Description cannot be empty.',
             'description.string' => 'Description must be text.',
