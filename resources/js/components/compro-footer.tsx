@@ -10,7 +10,7 @@ const footerLinks = [
 
 export default function ComproFooter() {
     return (
-        <footer className="mx-auto mt-12 w-full max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
+        <footer className="mx-auto mt-12 w-full  px-4 pb-10 sm:px-6 lg:px-8">
             <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] p-5 shadow-[10px_10px_0px_0px_#1a0a2e] retro-enter">
                 <div className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
                     <div>
@@ -21,7 +21,9 @@ export default function ComproFooter() {
                             Growbit for modern UMKM with retro soul.
                         </h2>
                         <p className="mt-3 max-w-2xl font-mono text-sm leading-7 text-[#3c2060]">
-                            Company profile, product management, inventory, dan user access disatukan dalam identitas visual 8-bit yang tegas dan mudah diingat.
+                            Company profile, product management, inventory, dan
+                            user access disatukan dalam identitas visual 8-bit
+                            yang tegas dan mudah diingat.
                         </p>
                     </div>
 
@@ -31,7 +33,9 @@ export default function ComproFooter() {
                                 key={item.label}
                                 href={item.href}
                                 className="border-4 border-[#1a0a2e] bg-[#3c2060] px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.24em] text-[#ddc8f0] shadow-[6px_6px_0px_0px_#1a0a2e] transition-transform hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_#1a0a2e] retro-pop"
-                                style={{ animationDelay: `${index * 90 + 120}ms` }}
+                                style={{
+                                    animationDelay: `${index * 90 + 120}ms`,
+                                }}
                             >
                                 {item.label}
                             </Link>
