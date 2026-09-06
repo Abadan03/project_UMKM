@@ -74,13 +74,16 @@ export default function Edit({
                     <button
                         type="button"
                         onClick={closeModal}
-                        className="border-2 border-[#1a0a2e] px-2 py-1 font-bold"
+                        className="border-2 cursor-pointer border-[#1a0a2e] px-2 py-1 font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e]"
                     >
                         X
                     </button>
                 </div>
 
-                <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4">
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col gap-4 p-4"
+                >
                     <div className="grid grid-cols-2 gap-3">
                         <div className="flex flex-col gap-1">
                             <label className="text-xs font-bold text-[#ffdd00]">
@@ -116,7 +119,7 @@ export default function Edit({
                                         Number(e.target.value),
                                     )
                                 }
-                                className="border-4 border-[#1a0a2e] bg-[#ddc8f0] px-3 py-2 text-[#1a0a2e] outline-none"
+                                className="border-4 border-[#1a0a2e] bg-[#ddc8f0] px-3 py-2 text-[#1a0a2e] outline-none "
                             />
                             {errors.minimum_stock && (
                                 <span className="text-xs text-[#ff88aa]">
@@ -151,14 +154,14 @@ export default function Edit({
                         <button
                             type="button"
                             onClick={closeModal}
-                            className="border-4 border-[#1a0a2e] bg-[#ff44aa] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e]"
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#ff44aa] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e]"
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             disabled={processing}
-                            className="border-4 border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] disabled:opacity-60"
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] disabled:opacity-60"
                         >
                             {processing ? "Saving..." : "Save"}
                         </button>

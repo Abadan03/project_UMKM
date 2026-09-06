@@ -6,12 +6,14 @@ import MainLayout from "../MainLayout";
 const highlights = [
     {
         title: "Pixel-Precise",
-        description: "Antarmuka tebal, jelas, dan mudah dibaca di toko maupun kantor.",
+        description:
+            "Antarmuka tebal, jelas, dan mudah dibaca di toko maupun kantor.",
         icon: Sparkles,
     },
     {
         title: "Retail Ready",
-        description: "Cocok untuk stok, transaksi, dan operasional UMKM harian.",
+        description:
+            "Cocok untuk stok, transaksi, dan operasional UMKM harian.",
         icon: Boxes,
     },
     {
@@ -30,27 +32,32 @@ export default function Section1() {
                     Retro UMKM Toolkit
                 </div>
 
-                <div className="space-y-4 border-4 border-[#1a0a2e] bg-[#ddc8f0] p-6 shadow-[10px_10px_0px_0px_#1a0a2e] retro-enter" style={{ animationDelay: "90ms" }}>
+                <div
+                    className="space-y-4 border-4 border-[#1a0a2e] bg-[#ddc8f0] p-6 shadow-[10px_10px_0px_0px_#1a0a2e] retro-enter"
+                    style={{ animationDelay: "90ms" }}
+                >
                     <p className="font-mono text-sm font-bold uppercase tracking-[0.35em] text-[#5a3888]">
                         Growbit
                     </p>
                     <h1 className="max-w-xl font-mono text-4xl font-black uppercase leading-none text-[#1a0a2e] sm:text-6xl">
-                        Sistem UMKM dengan rasa arcade lama.
+                        Sistem UMKM dengan rasa arcade lama
                     </h1>
                     <p className="max-w-xl font-mono text-sm leading-7 text-[#3c2060]">
-                        Platform untuk mengelola produk, inventory, user, dan tampilan company profile dalam satu paket visual 8-bit yang kuat, tegas, dan berbeda.
+                        Platform untuk mengelola produk, inventory, user, dan
+                        tampilan company profile dalam satu paket visual 8-bit
+                        yang kuat, tegas, dan berbeda.
                     </p>
                     <div className="flex flex-wrap gap-3">
                         <Link
                             href="/login"
-                            className="inline-flex items-center gap-2 border-4 border-[#1a0a2e] bg-[#44cc44] px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.24em] text-[#1a0a2e] shadow-[6px_6px_0px_0px_#1a0a2e]"
+                            className="inline-flex items-center gap-2 border-4 border-[#1a0a2e] bg-[#44cc44] px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.24em] text-[#1a0a2e] shadow-[6px_6px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_#1a0a2e]"
                         >
                             Masuk Dashboard
                             <ArrowRight size={16} />
                         </Link>
                         <Link
                             href="/feature"
-                            className="inline-flex items-center gap-2 border-4 border-[#1a0a2e] bg-[#ff8800] px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.24em] text-[#1a0a2e] shadow-[6px_6px_0px_0px_#1a0a2e]"
+                            className="inline-flex items-center gap-2 border-4 border-[#1a0a2e] bg-[#ff8800] px-4 py-3 font-mono text-xs font-black uppercase tracking-[0.24em] text-[#1a0a2e] shadow-[6px_6px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[3px_3px_0px_0px_#1a0a2e]"
                         >
                             Lihat Fitur
                         </Link>
@@ -63,11 +70,13 @@ export default function Section1() {
                             key={item.title}
                             className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 text-[#ddc8f0] shadow-[6px_6px_0px_0px_#1a0a2e] retro-pop"
                             style={{
-                                animationDelay:
-                                    `${highlights.indexOf(item) * 120 + 140}ms`,
+                                animationDelay: `${highlights.indexOf(item) * 120 + 140}ms`,
                             }}
                         >
-                            <item.icon className="mb-3 text-[#ffdd00]" size={22} />
+                            <item.icon
+                                className="mb-3 text-[#ffdd00]"
+                                size={22}
+                            />
                             <h3 className="mb-2 font-mono text-sm font-black uppercase tracking-[0.2em]">
                                 {item.title}
                             </h3>

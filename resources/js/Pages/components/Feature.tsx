@@ -11,45 +11,54 @@ import {
 
 const features = [
     {
-        module: "Report",
-        title: "Business Summary",
-        icon: PackageSearch,
-        description: "Pantau performa penjualan dan pergerakan bisnis dari panel ringkas yang mudah dipahami.",
-        accent: "bg-[#ffdd00]",
+        module: "Inventory",
+        title: "Stock Control",
+        icon: Warehouse,
+        description:
+            "Lihat stok aktif, unit produk, dan status inventory tanpa harus pindah alat kerja.",
+        accent: "bg-[#44cc44]",
     },
+    {
+        module: "Sales",
+        title: "Transactions",
+        icon: ReceiptText,
+        description:
+            "Riwayat transaksi disusun jelas untuk audit cepat dan kontrol aktivitas bisnis.",
+        accent: "bg-[#44ddff]",
+    },
+
     {
         module: "Sales",
         title: "Point Of Sales",
         icon: BadgeDollarSign,
-        description: "Bantu kasir atau owner mencatat transaksi lebih cepat dengan alur yang langsung ke inti.",
+        description:
+            "Bantu kasir atau owner mencatat transaksi lebih cepat dengan alur yang langsung ke inti.",
         accent: "bg-[#44ddff]",
     },
+
     {
-        module: "Inventory",
-        title: "Stock Control",
-        icon: Warehouse,
-        description: "Lihat stok aktif, unit produk, dan status inventory tanpa harus pindah alat kerja.",
-        accent: "bg-[#44cc44]",
-    },
-    {
-        module: "Finance",
+        module: "Report",
         title: "Cash Flow",
         icon: BanknoteCheck,
-        description: "Catat arus uang masuk dan keluar agar keputusan operasional lebih presisi.",
-        accent: "bg-[#ff8800]",
+        description:
+            "Catat arus uang masuk dan keluar agar keputusan operasional lebih presisi.",
+        accent: "bg-[#ffdd00]",
     },
     {
-        module: "Finance",
-        title: "Transactions",
-        icon: ReceiptText,
-        description: "Riwayat transaksi disusun jelas untuk audit cepat dan kontrol aktivitas bisnis.",
-        accent: "bg-[#ff44aa]",
+        module: "Report",
+        title: "Business Summary",
+        icon: PackageSearch,
+        description:
+            "Pantau performa penjualan dan pergerakan bisnis dari panel ringkas yang mudah dipahami.",
+        accent: "bg-[#ffdd00]",
     },
+
     {
         module: "Notes",
         title: "Notes / To Do",
         icon: NotebookPen,
-        description: "Simpan catatan kecil dan tugas operasional harian dalam satu sistem yang sama.",
+        description:
+            "Simpan catatan kecil dan tugas operasional harian dalam satu sistem yang sama.",
         accent: "bg-[#b898d8]",
     },
 ];
@@ -65,7 +74,9 @@ export default function Feature() {
                     Modul inti untuk bisnis kecil yang ingin kerja lebih rapi.
                 </h1>
                 <p className="mt-4 max-w-2xl font-mono text-sm leading-7 text-[#3c2060]">
-                    Semua fitur di halaman ini dirancang mengikuti gaya 8-bit yang sama dengan dashboard internal: tebal, kontras tinggi, dan langsung terbaca.
+                    Semua fitur di halaman ini dirancang mengikuti gaya 8-bit
+                    yang sama dengan dashboard internal: tebal, kontras tinggi,
+                    dan langsung terbaca.
                 </p>
             </div>
 
@@ -79,7 +90,9 @@ export default function Feature() {
                         }}
                     >
                         <div className="mb-5 flex items-start justify-between gap-4">
-                            <div className={`border-4 border-[#1a0a2e] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.28em] text-[#1a0a2e] ${item.accent}`}>
+                            <div
+                                className={`border-4 border-[#1a0a2e] px-3 py-2 font-mono text-[10px] font-black uppercase tracking-[0.28em] text-[#1a0a2e] ${item.accent}`}
+                            >
                                 {item.module}
                             </div>
                             <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] p-3 text-[#1a0a2e]">
