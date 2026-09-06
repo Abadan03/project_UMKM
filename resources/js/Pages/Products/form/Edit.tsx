@@ -66,6 +66,7 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
                     units={units}
                     onClose={onClose}
                     reset={reset}
+                    showPriceEditToggle={true}
                 />
 
                 {/* tombol Save & Cancel */}

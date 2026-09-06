@@ -25,7 +25,7 @@ class ProductController extends Controller
 
         return Inertia::render('Products/Kontol', [
             'products' => $products,
-            'units' => $units
+            'units' => $units,
         ]);
     }
 

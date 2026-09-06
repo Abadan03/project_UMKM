@@ -1,5 +1,8 @@
 import { UnitsProps } from "@/types";
 
+import CheckboxCP from "@/components/checkboxCP";
+import { useState } from "react";
+
 interface ProductFormProps {
     data: any;
     setData: any;
@@ -8,6 +11,7 @@ interface ProductFormProps {
     units: UnitsProps[];
     onClose: () => void;
     reset: () => void;
+    showPriceEditToggle?: boolean;
 }
 
 export default function ProductForm({
@@ -18,7 +22,16 @@ export default function ProductForm({
     reset,
     units,
     onClose,
+    showPriceEditToggle = false,
 }: ProductFormProps) {
+    const [isCP, setIsCP] = useState(false);
+    const canEditPrice = !showPriceEditToggle || isCP;
+    const priceInputClassName = `font-mono text-xs px-3 py-2 outline-none placeholder:text-[#9aa3b5] ${
+        canEditPrice
+            ? "bg-white text-[#1c2230] focus:bg-[#eef1f6]"
+            : "bg-[#e5e7eb] text-[#7b8496] cursor-not-allowed"
+    }`;
+
     return (
         <div className="px-4 py-5 flex flex-col gap-4">
             {/* Name */}
@@ -96,6 +109,10 @@ export default function ProductForm({
                     )}
                 </div>
             </div>
+            {showPriceEditToggle && (
+                <CheckboxCP checked={isCP} onChange={setIsCP} />
+            )}
+
 
             <div className="grid grid-cols-2 gap-1">
                 <div className="flex flex-col gap-1.5 flex-1">
@@ -109,7 +126,8 @@ export default function ProductForm({
                         onChange={(e) => setData("cost_price", e.target.value)}
                         placeholder="0.00"
                         min={0}
-                        className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
+                        disabled={!canEditPrice}
+                        className={priceInputClassName}
                         style={{
                             border: "3px solid #11151f",
                             boxShadow: "3px 3px 0 #11151f",
@@ -133,7 +151,8 @@ export default function ProductForm({
                         onChange={(e) => setData("sell_price", e.target.value)}
                         placeholder="0.00"
                         min={0}
-                        className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
+                        disabled={!canEditPrice}
+                        className={priceInputClassName}
                         style={{
                             border: "3px solid #11151f",
                             boxShadow: "3px 3px 0 #11151f",

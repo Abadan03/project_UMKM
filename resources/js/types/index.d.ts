@@ -139,4 +139,5 @@ export interface Logs {
     new_value: number;
     description: string;
     created_at: string;
+    old_hpp: number;
 }

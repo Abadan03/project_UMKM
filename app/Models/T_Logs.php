@@ -24,6 +24,7 @@ class T_Logs extends Model
         'old_value',
         'new_value',
         'description',
+        'old_hpp'
     ];
 
     public function module()

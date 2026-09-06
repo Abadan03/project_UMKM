@@ -163,9 +163,7 @@ class ProductService
                 'last_stock_out' => $stockDiff < 0 ? abs($stockDiff) : $inventory->last_stock_out,
             ]);
 
-            if ($stockDiff != 0) {
-
-                $module = T_Modules::firstOrCreate([
+            $module = T_Modules::firstOrCreate([
                     'name' => 'Product',
                 ]);
 
@@ -178,8 +176,8 @@ class ProductService
                     'description' => $stockDiff > 0
                         ? "Stock added ({$stockDiff})"
                         : "Stock reduced (" . abs($stockDiff) . ")",
+                    'old_hpp' => $oldCostPrice
                 ]);
-            }
 
             return $product->fresh(['inventory', 'unit']);
         });

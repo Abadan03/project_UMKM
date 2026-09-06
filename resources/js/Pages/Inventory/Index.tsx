@@ -239,6 +239,10 @@ export default function index({ inventory, logs, auth }: Props) {
                                     Description
                                 </th>
 
+                                <th className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                    Old Cost Price/HPP
+                                </th>
+
                                 <th className="px-4 py-3">Date</th>
                             </tr>
                         </thead>
@@ -273,6 +277,13 @@ export default function index({ inventory, logs, auth }: Props) {
 
                                         <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                             {item.description}
+                                        </td>
+
+                                        <td className="px-4 py-3 text-right border-r-4 border-[#1a0a2e]">
+                                            Rp{" "}
+                                                {Number(
+                                                    item.old_hpp,
+                                                ).toLocaleString("id-ID")}
                                         </td>
 
                                         <td className="px-4 py-3">

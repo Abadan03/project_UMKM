@@ -34,6 +34,7 @@ export default function ProductsIndex({ products, units }: Props) {
     const searchRequestId = useRef(0);
     const [showUnits, setShowUnits] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [isCP, setIsCP] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ProductProps | null>(
         null,
     );
@@ -325,6 +326,7 @@ export default function ProductsIndex({ products, units }: Props) {
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
                 product={selectedProduct}
+                isCP={isCP}
             />
         </AppLayout>
     );

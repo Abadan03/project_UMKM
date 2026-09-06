@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->unsignedInteger("old_value")->nullable();
             $table->unsignedInteger("new_value")->nullable();
             $table->string("description");
+            $table->string("old_hpp")->nullable();
             $table->timestamps();
 
         });
