@@ -23,7 +23,7 @@ class ProductController extends Controller
         $products = $this->productService->all();
         $units = T_Units::all();
 
-        return Inertia::render('Products/Kontol', [
+        return Inertia::render('Products/Products', [
             'products' => $products,
             'units' => $units,
         ]);

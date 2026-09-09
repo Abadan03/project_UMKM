@@ -129,6 +129,44 @@ export interface InventoryProps {
     updated_at?: string;
 }
 
+export interface Sale {
+    id: number;
+    invoice_id: string;
+    customer_name: string;
+    total_price: number;
+    total_payment: number;
+    total_change: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface SaleProps {
+    id: number;
+    invoice_id: string;
+    customer_name: string;
+    subtotal: number;
+    discount: number;
+    tax: number;
+    total: number;
+    transaction_date: string;
+    payment_method: string;
+    payment_status: "PAID" | "UNPAID" | "CANCELLED";
+    status: "COMPLETED" | "PENDING" | "CANCELLED";
+    updated_at: string;
+    items?: SaleItemProps[];
+}
+
+export interface SaleItemProps {
+    id: number;
+    sale_id: number;
+    product_id: number;
+    product?: ProductProps | null; // Relasi ke Product
+    qty: number;
+    price: number;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface Logs {
     id: string;
     references_id: any;

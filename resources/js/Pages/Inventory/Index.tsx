@@ -187,7 +187,6 @@ export default function index({ inventory, logs, auth }: Props) {
                                         data
                                     </p>
                                 </div>
-                                <div></div>
                             </div>
                         </tbody>
                     </table>
@@ -281,9 +280,11 @@ export default function index({ inventory, logs, auth }: Props) {
 
                                         <td className="px-4 py-3 text-right border-r-4 border-[#1a0a2e]">
                                             Rp{" "}
-                                                {Number(
-                                                    item.old_hpp,
-                                                ).toLocaleString("id-ID")}
+                                            {Number.isNaN(Number(item.old_hpp))
+                                                ? "-"
+                                                : Number(
+                                                      item.old_hpp,
+                                                  ).toLocaleString("id-ID")}
                                         </td>
 
                                         <td className="px-4 py-3">

@@ -42,13 +42,30 @@ export const mainNavItems = [
     },
 
     {
-        label: "Master Data",
+        label: "Users",
         items: [
             {
                 title: "Users",
-                url: "/users",
                 icon: User,
+                children: [
+                    {
+                        title: "User Management",
+                        url: "/users",
+                        icon: User,
+                    },
+                    {
+                        title: "Staff Management",
+                        url: "/Staff",
+                        icon: User,
+                    },
+                ],
             },
+        ],
+    },
+
+    {
+        label: "Master Data",
+        items: [
             {
                 title: "Product",
                 url: "/products",
@@ -76,32 +93,11 @@ export const mainNavItems = [
                 url: "/sales",
                 icon: Receipt,
             },
+
             {
                 title: "Cashier",
                 url: "/pos",
                 icon: ShoppingCart,
-            },
-        ],
-    },
-
-    {
-        label: "Finance",
-        items: [
-            {
-                title: "Finance",
-                icon: Banknote,
-                children: [
-                    {
-                        title: "Cash Flow",
-                        url: "/finance/cashflow",
-                        icon: Wallet,
-                    },
-                    {
-                        title: "Transaction",
-                        url: "/finance/transactions",
-                        icon: Receipt,
-                    },
-                ],
             },
         ],
     },

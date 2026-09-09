@@ -27,7 +27,7 @@ class UsersController extends Controller
         );
 
         return
-            Inertia::render('users/index', [
+            Inertia::render('users/Index', [
                 'users' => $users,
                 'roles' => $roles
             ]);

@@ -72,7 +72,7 @@ class ProductService
                 'unit_name' => $item->unit?->name,
                 'cost_price' => $item->cost_price,
                 'sell_price' => $item->sell_price,
-                'description' => $item->description,
+                'description' => $item->description ?? "-",
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
             ];
@@ -164,20 +164,20 @@ class ProductService
             ]);
 
             $module = T_Modules::firstOrCreate([
-                    'name' => 'Product',
-                ]);
+                'name' => 'Product',
+            ]);
 
-                T_Logs::create([
-                    'module_id' => $module->id,
-                    'user_id' => auth()->id(),
-                    'references_id' => $product->id,
-                    'old_value' => $oldQty,
-                    'new_value' => $qty,
-                    'description' => $stockDiff > 0
-                        ? "Stock added ({$stockDiff})"
-                        : "Stock reduced (" . abs($stockDiff) . ")",
-                    'old_hpp' => $oldCostPrice
-                ]);
+            T_Logs::create([
+                'module_id' => $module->id,
+                'user_id' => auth()->id(),
+                'references_id' => $product->id,
+                'old_value' => $oldQty,
+                'new_value' => $qty,
+                'description' => $stockDiff > 0
+                    ? "Stock added ({$stockDiff})"
+                    : "Stock reduced (" . abs($stockDiff) . ")",
+                'old_hpp' => $oldCostPrice
+            ]);
 
             return $product->fresh(['inventory', 'unit']);
         });

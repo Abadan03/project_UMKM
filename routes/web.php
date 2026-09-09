@@ -9,6 +9,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Products\ProductController;
+use App\Http\Controllers\Sales\SalesController;
 use App\Http\Controllers\UsersController;
 
 // =====================
@@ -55,7 +56,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/view/{id}', [InventoryController::class, 'viewLogs'])->name('inventory.view');
     });
 
-
+    // units
     Route::prefix('units')->group(function () {
         Route::post('/store', [ProductController::class, 'unitStore'])->name('units.store');
         Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
@@ -88,6 +89,12 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
         ->name('update');
     Route::delete('users/{userId}', [UsersController::class, 'destroy'])
         ->name('destroy');
+
+    // sales
+    Route::get('sales', [SalesController::class, 'index'])
+        ->name('sales.index');
+    Route::get('sales/search', [SalesController::class, 'search'])
+        ->name('sales.search');
 });
 
 // =====================

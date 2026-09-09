@@ -28,7 +28,7 @@ class CreateRequest extends FormRequest
             'unit_id' => 'required|string',
             'cost_price' => 'required|numeric|min:0',
             'sell_price' => 'required|numeric|min:0',
-            'description' => 'required|string',
+            'description' => 'nullable|string',
         ];
     }
 
