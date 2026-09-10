@@ -55,7 +55,7 @@ export const mainNavItems = [
                     },
                     {
                         title: "Staff Management",
-                        url: "/Staff",
+                        url: "/staff",
                         icon: User,
                     },
                 ],

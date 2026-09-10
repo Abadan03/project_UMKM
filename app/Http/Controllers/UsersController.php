@@ -20,7 +20,7 @@ class UsersController extends Controller
     public function index()
     {
         $roles = T_Roles::all();
-        $users = $this->formatUsers(
+        $users = formatUsers(
             User::with('roles')
                 ->latest()
                 ->get()
@@ -55,22 +55,7 @@ class UsersController extends Controller
             ->limit(25)
             ->get();
 
-        return response()->json($this->formatUsers($users));
-    }
-
-    private function formatUsers(Collection $users): Collection
-    {
-        return $users->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name,
-                'email' => $item->email,
-                'roles_id' => $item->roles_id,
-                'role' => $item->roles?->name,
-                'created_at' => $item->created_at,
-                'updated_at' => $item->updated_at,
-            ];
-        });
+        return response()->json(formatUsers($users));
     }
 
     public function create()

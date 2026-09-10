@@ -90,6 +90,23 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
     Route::delete('users/{userId}', [UsersController::class, 'destroy'])
         ->name('destroy');
 
+
+        // Staff Management
+    Route::get('staff', [\App\Http\Controllers\Staff\StaffController::class, 'index'])
+        ->name('staff.index');
+    // Route::get('staff/search', [\App\Http\Controllers\StaffController::class, 'search'])
+    //     ->name('staff.search');
+    // Route::get('staff/create', [\App\Http\Controllers\StaffController::class, 'create'])
+    //     ->name('staff.create');
+    Route::post('staff', [\App\Http\Controllers\Staff\StaffController::class, 'store'])
+        ->name('staff.store');
+    // Route::get('staff/edit/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'edit'])
+    //     ->name('staff.edit');
+    Route::put('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'update'])
+        ->name('staff.update');
+    Route::delete('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'destroy'])
+        ->name('staff.destroy');
+
     // sales
     Route::get('sales', [SalesController::class, 'index'])
         ->name('sales.index');

@@ -179,3 +179,31 @@ export interface Logs {
     created_at: string;
     old_hpp: number;
 }
+
+
+
+// STAFF MANAGEMENT
+export interface T_Staff {
+    id: number;
+    name: string;
+    pin: string;
+    users_id: number;
+    roles_id: number;
+    user?: User | null; // Relasi ke User
+    roles?: Roles | null; // Relasi ke Roles
+    created_at?: string;
+    updated_at?: string;
+}
+
+    
+export interface StaffFormData {
+    id: number;
+    name: string;
+    pin: string;
+    old_pin?: string;
+    users_id: number;
+    roles_id: number;
+    // user?: User | null; // Relasi ke User
+    // roles?: Roles | null;
+    // role
+}
