@@ -18,6 +18,11 @@ export interface Roles {
     name: string;
 }
 
+export interface ModuleProps {
+    id: number;
+    name: string;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -41,6 +46,26 @@ export interface UserFormData {
     old_password?: string;
     password?: string;
     password_confirmation?: string;
+}
+
+export interface PaginationProps<T> {
+    data: T[];
+    current_page: number;
+    first_page_url: string;
+    from: number | null;
+    last_page: number;
+    last_page_url: string;
+    links: {
+        url: string | null;
+        label: string;
+        active: boolean;
+    }[];
+    next_page_url: string | null;
+    path: string;
+    per_page: number;
+    prev_page_url: string | null;
+    to: number | null;
+    total: number;
 }
 
 export interface BreadcrumbItem {
@@ -129,31 +154,36 @@ export interface InventoryProps {
     updated_at?: string;
 }
 
-export interface Sale {
+export interface Sales {
     id: number;
-    invoice_id: string;
-    customer_name: string;
-    total_price: number;
-    total_payment: number;
-    total_change: number;
+    invoice_number: string;
+    transaction_type: string;
+    cashier_id: number;
+    customer_name?: string;
+    subtotal: number;
+    discount?: number;
+    tax?: number;
+    transaction_date: string;
+    payment_method: string;
+    status: string;
     created_at: string;
     updated_at: string;
 }
 
-export interface SaleProps {
+export interface SalesProps {
     id: number;
-    invoice_id: string;
-    customer_name: string;
+    invoice_number: string;
+    cashier_id?: number;
+    cashier_name?: string;
     subtotal: number;
-    discount: number;
-    tax: number;
-    total: number;
+    discount?: number;
+    tax?: number;
     transaction_date: string;
-    payment_method: string;
-    payment_status: "PAID" | "UNPAID" | "CANCELLED";
-    status: "COMPLETED" | "PENDING" | "CANCELLED";
     updated_at: string;
     items?: SaleItemProps[];
+    notes?: string;
+    product?: Product[];
+    transactions?: TransactionProps[];
 }
 
 export interface SaleItemProps {
@@ -161,14 +191,31 @@ export interface SaleItemProps {
     sale_id: number;
     product_id: number;
     product?: ProductProps | null; // Relasi ke Product
-    qty: number;
-    price: number;
+    quantity: number;
+    unit_price: number;
+    discount?: number;
+    subtotal: number;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface TransactionProps {
+    id: number;
+    sale_id: number;
+    transaction_type: string; // e.g., "payment", "refund"
+    amount: number;
+    payment_method: string; // e.g., "cash", "credit_card"
+    reference_number?: string; // Optional, for payment gateway reference
+    processed_at?: string; // Optional, timestamp of processing
+    status: string; // e.g., "pending", "completed", "failed", "canceled"
+    notes?: string; // Optional, any additional notes
     created_at: string;
     updated_at: string;
 }
 
 export interface Logs {
     id: string;
+    module: ModuleProps;
     references_id: any;
     user_id: any;
     user: User;
@@ -179,8 +226,6 @@ export interface Logs {
     created_at: string;
     old_hpp: number;
 }
-
-
 
 // STAFF MANAGEMENT
 export interface T_Staff {
@@ -195,7 +240,6 @@ export interface T_Staff {
     updated_at?: string;
 }
 
-    
 export interface StaffFormData {
     id: number;
     name: string;

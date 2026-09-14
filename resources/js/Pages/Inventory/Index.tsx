@@ -173,7 +173,7 @@ export default function index({ inventory, logs, auth }: Props) {
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={7}
+                                        colSpan={8}
                                         className="px-4 py-8 text-center text-[#5a3888] font-bold"
                                     >
                                         NO PRODUCT STOCK FOUND.
@@ -202,10 +202,16 @@ export default function index({ inventory, logs, auth }: Props) {
                 {/*  Inventory Movement  */}
                 <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] shadow-[8px_8px_0px_0px_#1a0a2e]">
                     {/* Header */}
-                    <div className="bg-[#ff8800] border-b-4 border-[#1a0a2e] p-2">
+                    <div className="flex justify-between bg-[#ff8800] border-b-4 border-[#1a0a2e] p-2">
                         <h3 className="font-bold text-[#1a0a2e] text-lg">
                             Stock Movement Log
                         </h3>
+                        <button
+                            onClick={() => setLogsInventory(logs)}
+                            className="border-2 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[2px_2px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#2288cc]"
+                        >
+                            Reset
+                        </button>
                     </div>
 
                     <table className="w-full table-fixed text-sm text-[#1a0a2e]">
@@ -287,7 +293,7 @@ export default function index({ inventory, logs, auth }: Props) {
                                                   ).toLocaleString("id-ID")}
                                         </td>
 
-                                        <td className="px-4 py-3">
+                                        <td className="text-right px-4 py-3">
                                             {item.created_at &&
                                                 new Date(
                                                     item.created_at,
@@ -298,7 +304,7 @@ export default function index({ inventory, logs, auth }: Props) {
                             ) : (
                                 <tr>
                                     <td
-                                        colSpan={7}
+                                        colSpan={9}
                                         className="px-4 py-8 text-center text-[#5a3888] font-bold"
                                     >
                                         NO LOGS STOCK FOUND.

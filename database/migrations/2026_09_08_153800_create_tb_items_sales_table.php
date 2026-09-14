@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('t_items_sales', function (Blueprint $table) {
+        Schema::create('t_sale_items', function (Blueprint $table) {
             $table->id();
 
             $table->foreignId('sale_id')
@@ -21,11 +21,12 @@ return new class extends Migration {
                 ->constrained('t_products')
                 ->restrictOnDelete();
 
-            $table->decimal('quantity', 15, 2);
+            $table->decimal('quantity', 15, 3);
 
-            $table->decimal('price', 15, 2);
+            $table->decimal('unit_price', 15, 2);
 
-            $table->decimal('discount', 15, 2)->default(0);
+            $table->decimal('discount', 15, 2)
+                ->default(0);
 
             $table->decimal('subtotal', 15, 2);
 

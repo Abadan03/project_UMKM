@@ -14,13 +14,14 @@ class T_Sales extends Model
     protected $table = 't_sales';
 
     protected $fillable = [
-        'invoice_id',
-        // 'cashier_id',
+        'invoice_number',
+        'cashier_id',
+        'cashier_name',
         'transaction_date',
         'subtotal',
         'discount',
         'tax',
-        'total',
+        'grand_total',
         'payment_method',
         'payment_status',
         'status',
@@ -37,7 +38,15 @@ class T_Sales extends Model
     public function items(): HasMany
     {
         return $this->hasMany(
-            T_Items_Sales::class,
+            T_Sale_Items::class,
+            'sale_id'
+        );
+    }
+
+    public function transactions(): HasMany
+    {
+        return $this->HasMany(
+            T_transaction::class,
             'sale_id'
         );
     }
@@ -45,7 +54,7 @@ class T_Sales extends Model
     public function cashier(): BelongsTo
     {
         return $this->belongsTo(
-            User::class,
+            T_Staff::class,
             'cashier_id'
         );
     }

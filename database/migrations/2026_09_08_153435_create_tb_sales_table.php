@@ -13,29 +13,34 @@ return new class extends Migration {
         Schema::create('t_sales', function (Blueprint $table) {
             $table->id();
 
-            $table->string('invoice_id')->unique();
-
-            // next migration will add foreign key for cashier_id (user)
-            // $table->foreignId('cashier_id')
-            //     ->constrained('users')
-            //     ->restrictOnDelete();
+            $table->string('invoice_number')->unique();
 
             $table->timestamp('transaction_date');
 
             $table->decimal('subtotal', 15, 2);
-            $table->decimal('discount', 15, 2)->default(0);
-            $table->decimal('tax', 15, 2)->default(0);
-            $table->decimal('total', 15, 2);
 
-            $table->string('payment_method');
-            $table->string('payment_status');
+            $table->decimal('discount', 15, 2)
+                ->default(0);
 
-            $table->string('status')->default('completed');
+            $table->decimal('tax', 15, 2)
+                ->default(0);
+
+            $table->decimal('grand_total', 15, 2);
+
+            $table->enum('status', [
+                'pending',
+                'completed',
+                'cancelled',
+            ])->default('pending');
+
+            $table->text('notes')->nullable();
 
             $table->timestamps();
 
+            // $table->index('cashier_id');
+            $table->index('invoice_number');
             $table->index('transaction_date');
-            $table->index('payment_method');
+            $table->index('status');
         });
     }
 

@@ -2,13 +2,20 @@ import { DatePickerWithRange } from "@/components/datepicker";
 import { BadgePercent, LoaderCircle, Receipt } from "lucide-react";
 import AppLayout from "@/layouts/app-layout";
 import { format } from "date-fns";
-import { PageProps, SaleProps, type BreadcrumbItem } from "@/types";
+import {
+    PageProps,
+    PaginationProps,
+    SalesProps,
+    type BreadcrumbItem,
+} from "@/types";
 import { Input } from "@headlessui/react";
 import { Head, router } from "@inertiajs/react";
 import { useState } from "react";
 import { DateRange } from "react-day-picker";
 import { confirmDialog } from "../utils/popupModal";
 import { toast } from "sonner";
+import Edit from "./form/Edit";
+import View from "./form/Preview";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -18,13 +25,14 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 interface Props extends PageProps {
-    sales: SaleProps[];
+    sales: PaginationProps<SalesProps>;
 }
 
 export default function SalesIndex({ sales }: Props) {
     const [loading, setLoading] = useState(false);
+    const [selectedSales, setSelectedSales] = useState<SalesProps | null>(null);
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
-    const [showCreate, setShowCreate] = useState(false);
+    const [showPreview, setshowPreview] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [paramsQuery, setparamsQuery] = useState("");
@@ -106,18 +114,77 @@ export default function SalesIndex({ sales }: Props) {
         });
     };
 
+    // trial
+    const data = {
+        invoice_number: "INV-00002",
+        cashier_id: 1,
+        cashier_name: "Budi",
+        transaction_date: "2026-09-13 01:30:00",
+
+        subtotal: 50000,
+        discount: 5000,
+        tax: 4500,
+        grand_total: 49500,
+
+        payment_method: "cash",
+        payment_status: "paid",
+        status: "completed",
+
+        items: [
+            {
+                product_id: 1,
+                quantity: 2,
+                price: 25000,
+                discount: 0,
+                subtotal: 50000,
+            },
+        ],
+
+        transaction: {
+            transaction_type: "payment",
+            amount: 49500,
+            payment_method: "cash",
+            reference_number: null,
+            processed_at: "2026-09-13 01:30:00",
+            status: "completed",
+            notes: null,
+        },
+    };
+
     const handleRoute = (
-        mode: "create" | "edit" | "search" | "delete",
+        mode: "create" | "preview" | "search" | "delete",
         id?: number,
     ) => {
+        const selectedSale = sales.data.find((sale) => sale.id === id) ?? null;
         switch (mode) {
             case "create":
-                setShowCreate(true);
+                router.post("/sales/storeTry", data, {
+                    preserveScroll: true,
+
+                    onError: (errors) => {
+                        console.log("Validation errors:", errors);
+                    },
+
+                    onSuccess: () => {
+                        console.log("Sales berhasil dibuat");
+                    },
+                });
+                break;
+            case "preview":
+                if (selectedSale === undefined) {
+                    return;
+                }
+                setSelectedSales(selectedSale);
+                setshowPreview(true);
                 break;
 
-            case "edit":
-                setIsEditOpen(true);
-                break;
+            // case "edit":
+            //     if (id === undefined) {
+            //         return;
+            //     }
+
+            //     setIsEditOpen(true);
+            //     break;
 
             case "search":
                 const searchParams = getSearchParams();
@@ -146,7 +213,6 @@ export default function SalesIndex({ sales }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Sales" />
-
             {/* Wrapper utama dengan tema dark purple dan font monospaced */}
             <div className="font-mono uppercase flex w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0] ">
                 {/* Modifikasi PageHeader agar cocok dengan tema, menambahkan aksen warna kuning dan hijau */}
@@ -162,6 +228,7 @@ export default function SalesIndex({ sales }: Props) {
                             </label>
                             <select
                                 name="filter"
+                                value={""}
                                 id="filter"
                                 onChange={(e) => {
                                     setparamsQuery(e.target.value);
@@ -169,9 +236,11 @@ export default function SalesIndex({ sales }: Props) {
                                 }}
                                 className="rounded-none cursor-pointer text-sm border-2 border-[#1a0a2e] bg-[#ddc8f0] px-2 py-1 text-[#1a0a2e] font-bold shadow-[3px_3px_0px_0px_#1a0a2e]"
                             >
+                                <option value="">Choose Filter</option>
                                 <option value="invoice">invoice</option>
                                 <option value="date">date</option>
                                 <option value="cashier">cashier</option>
+                                <option value="transaction">transaction</option>
                                 <option value="payment">payment</option>
                             </select>
                             {paramsQuery && (
@@ -202,6 +271,12 @@ export default function SalesIndex({ sales }: Props) {
                                 </>
                             )}
                         </div>
+                        {/* <button
+                            onClick={() => handleRoute("create")}
+                            className="cursor-pointer rounded-none text-lg border-2 border-[#1a0a2e] bg-[#3c2060] px-2 py-1 text-[#ffdd00] font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:bg-[#ffdd00] hover:text-[#1a0a2e]"
+                        >
+                            Create
+                        </button> */}
                     </div>
                 </div>
 
@@ -243,6 +318,9 @@ export default function SalesIndex({ sales }: Props) {
                                         Invoice
                                     </th>
                                     <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Transaction Type
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
                                         Date
                                     </th>
                                     <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
@@ -264,52 +342,61 @@ export default function SalesIndex({ sales }: Props) {
                             </thead>
 
                             <tbody>
-                                {sales.length > 0 ? (
-                                    sales.map((sale) => (
+                                {sales.data?.length > 0 ? (
+                                    sales.data.map((sale) => (
                                         <tr
                                             key={sale.id}
                                             className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
                                         >
-                                            <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                                {sale.invoice_id}
+                                            <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
+                                                {sale.invoice_number}
                                             </td>
 
-                                            <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
+                                            <td className="px-4 text-center py-3 border-r-4 border-[#1a0a2e]">
+                                                {
+                                                    sale.transactions?.[0]
+                                                        ?.transaction_type
+                                                }
+                                            </td>
+                                            <td className="px-4 text-center py-3 border-r-4 border-[#1a0a2e]">
                                                 {new Date(
                                                     sale.transaction_date,
                                                 ).toLocaleString("id-ID")}
                                             </td>
 
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
-                                                {/* {sale.cashier_name ?? "-"} */}
+                                                {sale.cashier_name ?? "-"}
                                             </td>
 
                                             <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
-                                                {sale.payment_method}
+                                                {
+                                                    sale.transactions?.[0]
+                                                        ?.payment_method
+                                                }
                                             </td>
 
                                             <td className="px-4 text-right py-3 border-r-4 border-[#1a0a2e]">
                                                 Rp{" "}
                                                 {Number(
-                                                    sale.total,
+                                                    sale.subtotal,
                                                 ).toLocaleString("id-ID")}
                                             </td>
 
                                             <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
-                                                {sale.status}
+                                                {sale.transactions?.[0]?.status}
                                             </td>
 
                                             <td className="px-4 py-3 text-center flex justify-center gap-3">
                                                 <button
                                                     onClick={() =>
                                                         handleRoute(
-                                                            "edit",
+                                                            "preview",
                                                             sale.id,
                                                         )
                                                     }
                                                     className="border-2 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#2288cc]"
                                                 >
-                                                    EDIT
+                                                    View
                                                 </button>
 
                                                 <button
@@ -329,7 +416,7 @@ export default function SalesIndex({ sales }: Props) {
                                 ) : (
                                     <tr>
                                         <td
-                                            colSpan={7}
+                                            colSpan={8}
                                             className="px-4 py-8 text-center text-[#5a3888] font-bold"
                                         >
                                             NO SALES FOUND.
@@ -344,14 +431,18 @@ export default function SalesIndex({ sales }: Props) {
                     <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
                         <div>
                             <p className="text-sm">
-                                {/* {filteredProducts.length} of {products.length}{" "} */}
-                                data
+                                {sales.data.length} of {sales.total} data
                             </p>
                         </div>
-                        <div></div>
                     </div>
                 </div>
             </div>
+
+            <View
+                isOpen={showPreview}
+                onClose={() => setshowPreview(false)}
+                sales={selectedSales}
+            />
         </AppLayout>
     );
 }

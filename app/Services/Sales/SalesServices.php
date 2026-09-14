@@ -1,15 +1,16 @@
 <?php
 namespace App\Services\Sales;
 
-use App\Models\Sale;
 use App\Models\T_Sales;
+use App\Models\T_Staff;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class SalesServices
 {
     public function search(array $params)
     {
-        $query = T_Sales::query();
+        $query = T_Sales::query()->with('items', 'transactions');
 
         switch ($params['search_by'] ?? null) {
 
@@ -67,5 +68,53 @@ class SalesServices
         if ($dateTo) {
             $query->whereDate('created_at', '<=', $dateTo);
         }
+    }
+
+    public function create(array $data): T_Sales
+    {
+        return DB::transaction(function () use ($data) {
+
+            $cashier = T_Staff::findOrFail(
+                $data['cashier_id']
+            );
+
+            $sale = T_Sales::create([
+                'invoice_number' => $data['invoice_number'],
+                'cashier_id' => $cashier->id,
+                'cashier_name' => $cashier->name,
+                'transaction_date' => $data['transaction_date'],
+                'subtotal' => $data['subtotal'],
+                'discount' => $data['discount'],
+                'tax' => $data['tax'],
+                'grand_total' => $data['grand_total'],
+                'status' => $data['status'],
+            ]);
+
+            foreach ($data['items'] as $item) {
+                $sale->items()->create([
+                    'product_id' => $item['product_id'],
+                    'quantity' => $item['quantity'],
+                    'unit_price' => $item['price'],
+                    'discount' => $item['discount'],
+                    'subtotal' => $item['subtotal'],
+                ]);
+            }
+
+            $sale->transactions()->create([
+                'transaction_type' => $data['transaction']['transaction_type'],
+                'amount' => $data['transaction']['amount'],
+                'payment_method' => $data['transaction']['payment_method'],
+                'reference_number' => $data['transaction']['reference_number'] ?? null,
+                'processed_at' => $data['transaction']['processed_at'],
+                'status' => $data['transaction']['status'],
+                'notes' => $data['transaction']['notes'] ?? null,
+            ]);
+
+            return $sale->fresh([
+                'items',
+                'transactions',
+                'cashier',
+            ]);
+        });
     }
 }

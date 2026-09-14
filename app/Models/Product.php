@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -28,5 +29,12 @@ class Product extends Model
     public function inventory()
     {
         return $this->hasOne(Inventory::class, 'products_id');
+    }
+    public function salesItem(): HasOne
+    {
+        return $this->HasOne(
+            T_Sale_Items::class,
+            'product_id'
+        );
     }
 }

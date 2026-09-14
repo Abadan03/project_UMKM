@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\T_Logs;
 use App\Models\T_Modules;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class InventoryService
@@ -40,7 +41,7 @@ class InventoryService
         return Inventory::find($id);
     }
 
-    public function viewLogs($id)
+    public function viewLogs(int $id)
     {
         $logs = T_Logs::with('module', 'user')
             ->whereHas('module', function ($query) {
@@ -75,7 +76,7 @@ class InventoryService
         return DB::transaction(function () use ($inventory, $data) {
             $oldQty = $inventory->qty;
             $newQty = $data['qty'];
-            $userId = $data['user_id'] ?? auth()->id();
+            $userId = $data['user_id'] ?? Auth::id();
 
             unset($data['user_id']);
 

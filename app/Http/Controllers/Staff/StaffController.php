@@ -26,7 +26,6 @@ class StaffController extends Controller
     public function index()
     {
         $roles = T_Roles::all();
-        $filtered = T_Staff::with('user', 'roles')->latest()->get();
         $staff = formatStaff(
             T_Staff::with('user', 'roles')
                 ->latest()
@@ -71,7 +70,7 @@ class StaffController extends Controller
     //     ]);
     // }
 
-    public function update(CreateStaffRequest $request, $staffId)
+    public function update(CreateStaffRequest $request, int $staffId)
     {
         $staff = $this->staffRepository->findById($staffId);
 
@@ -88,7 +87,7 @@ class StaffController extends Controller
         }
     }
 
-    public function destroy($staffId)
+    public function destroy(int $staffId)
     {
         // $staff = $this->staffRepository->findById($staffId);
 

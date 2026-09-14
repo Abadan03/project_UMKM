@@ -91,7 +91,7 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
         ->name('destroy');
 
 
-        // Staff Management
+    // Staff Management
     Route::get('staff', [\App\Http\Controllers\Staff\StaffController::class, 'index'])
         ->name('staff.index');
     // Route::get('staff/search', [\App\Http\Controllers\StaffController::class, 'search'])
@@ -107,11 +107,20 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
     Route::delete('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'destroy'])
         ->name('staff.destroy');
 
+
     // sales
     Route::get('sales', [SalesController::class, 'index'])
         ->name('sales.index');
     Route::get('sales/search', [SalesController::class, 'search'])
         ->name('sales.search');
+    Route::get('sales/view/{id}', [SalesController::class, 'view'])
+        ->name('sales.view');
+    Route::post('sales/store', [SalesController::class, 'store'])
+        ->name('sales.store');
+    Route::post('sales/storeTry', [SalesController::class, 'store'])
+        ->name('sales.storeTry');
+    Route::delete('sales/destroy/{id}', [SalesController::class, 'destroy'])
+        ->name('sales.destroy');
 });
 
 // =====================

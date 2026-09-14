@@ -7,7 +7,7 @@ import {
     UserFormData,
     type BreadcrumbItem,
     T_Staff,
-    StaffFormData
+    StaffFormData,
 } from "@/types";
 import { Head, router } from "@inertiajs/react";
 import { User as UserIcon } from "lucide-react";
@@ -39,7 +39,9 @@ export default function UsersIndex({ staffs, roles }: Props) {
     const [loading, setLoading] = useState(false);
     const searchRequestId = useRef(0);
 
-    const [selectedUser, setSelectedUser] = useState<StaffFormData | null>(null);
+    const [selectedUser, setSelectedUser] = useState<StaffFormData | null>(
+        null,
+    );
     const normalizedSearch = search.trim();
     const filteredStaff = useMemo(
         () => (normalizedSearch.length > 0 ? results : staffs),
@@ -207,7 +209,7 @@ export default function UsersIndex({ staffs, roles }: Props) {
                                         Name
                                     </th>
                                     <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
-                                        Email
+                                        Pin Number
                                     </th>
                                     <th className="px-4 py-4 text-left border-r-4 border-[#1a0a2e]">
                                         Role
@@ -235,13 +237,17 @@ export default function UsersIndex({ staffs, roles }: Props) {
                                             </td>
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                                 {/* {String(staff.roles_id)} */}
-                                                {staff.roles && staff.roles.name}
+                                                {staff.roles &&
+                                                    staff.roles.name}
                                             </td>
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                                 {/* {new Date(
                                                     staff.created_at,
                                                 ).toLocaleDateString()} */}
-                                                {staff.created_at && new Date(staff.created_at).toLocaleDateString()}
+                                                {staff.created_at &&
+                                                    new Date(
+                                                        staff.created_at,
+                                                    ).toLocaleDateString()}
                                             </td>
                                             <td className="px-4 py-3 text-center flex justify-center gap-3">
                                                 <button

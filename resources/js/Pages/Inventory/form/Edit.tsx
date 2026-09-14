@@ -66,15 +66,17 @@ export default function Edit({
             <div className="w-full max-w-md border-4 border-[#1a0a2e] bg-[#3c2060] shadow-[8px_8px_0px_0px_#1a0a2e]">
                 <div className="flex items-center justify-between border-b-4 border-[#1a0a2e] bg-[#ff8800] px-4 py-3 text-[#1a0a2e]">
                     <div>
-                        <h3 className="font-bold">EDIT INVENTORY</h3>
+                        <h3 className="font-bold">
+                            EDIT INVENTORY PRODUCT {inventory.product?.name}
+                        </h3>
                         <p className="text-xs font-bold">
-                            {inventory.product?.name}
+                            {"> fill all fields <"}
                         </p>
                     </div>
                     <button
                         type="button"
                         onClick={closeModal}
-                        className="border-2 cursor-pointer border-[#1a0a2e] px-2 py-1 font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e]"
+                        className="border-2 cursor-pointer border-[#1a0a2e] text-[#1a0a2e] px-2 py-1 font-bold hover:bg-[#1a0a2e] hover:text-[#ff8800]"
                     >
                         X
                     </button>

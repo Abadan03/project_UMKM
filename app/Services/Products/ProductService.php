@@ -190,11 +190,23 @@ class ProductService
     {
         $product = Product::find($id);
 
+        $module = T_Modules::firstOrCreate([
+            'name' => 'Product',
+        ]);
+
         if (!$product) {
             return false;
         }
 
-        return (bool) $product->delete();
+        $productDeleted = $product->delete();
+
+        if ($productDeleted) {
+            T_Logs::where('module_id', $module->id)
+                ->where('references_id', $id)
+                ->delete();
+        }
+
+        return (bool) $productDeleted;
     }
 
     public function unitDelete(string $id): bool

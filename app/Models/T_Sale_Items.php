@@ -6,17 +6,17 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class T_Items_Sales extends Model
+class T_Sale_Items extends Model
 {
     use HasFactory;
 
-    protected $table = 't_items_sales';
+    protected $table = 'T_Sale_Items';
 
     protected $fillable = [
         'sale_id',
         'product_id',
         'quantity',
-        'price',
+        'unit_price',
         'discount',
         'subtotal',
     ];
