@@ -10,12 +10,13 @@ import {
 } from "@/types";
 import { Input } from "@headlessui/react";
 import { Head, router } from "@inertiajs/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import { confirmDialog } from "../utils/popupModal";
 import { toast } from "sonner";
 import Edit from "./form/Edit";
 import View from "./form/Preview";
+import PaginationWrapper from "@/components/pagination";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -29,18 +30,21 @@ interface Props extends PageProps {
 }
 
 export default function SalesIndex({ sales }: Props) {
-    const [loading, setLoading] = useState(false);
     const [selectedSales, setSelectedSales] = useState<SalesProps | null>(null);
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
     const [showPreview, setshowPreview] = useState(false);
-    const [isEditOpen, setIsEditOpen] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
     const [paramsQuery, setparamsQuery] = useState("");
     const [query, setQuery] = useState("");
 
-    console.log("paramsQuery:", paramsQuery);
-    console.log("query:", query);
-    console.log("dateRange:", dateRange);
+    useEffect(() => {
+        const timer = window.setTimeout(() => {
+            setIsInitialLoading(false);
+        }, 400);
+
+        return () => window.clearTimeout(timer);
+    }, []);
 
     const statsData = [
         {
@@ -116,7 +120,7 @@ export default function SalesIndex({ sales }: Props) {
 
     // trial
     const data = {
-        invoice_number: "INV-00002",
+        invoice_number: "INV-110020221",
         cashier_id: 1,
         cashier_name: "Budi",
         transaction_date: "2026-09-13 01:30:00",
@@ -129,6 +133,7 @@ export default function SalesIndex({ sales }: Props) {
         payment_method: "cash",
         payment_status: "paid",
         status: "completed",
+        notes: "eko 1 2 3",
 
         items: [
             {
@@ -152,7 +157,7 @@ export default function SalesIndex({ sales }: Props) {
     };
 
     const handleRoute = (
-        mode: "create" | "preview" | "search" | "delete",
+        mode: "create" | "preview" | "search" | "delete" | "reset",
         id?: number,
     ) => {
         const selectedSale = sales.data.find((sale) => sale.id === id) ?? null;
@@ -175,16 +180,9 @@ export default function SalesIndex({ sales }: Props) {
                     return;
                 }
                 setSelectedSales(selectedSale);
+                console.log("selected sales :", selectedSale);
                 setshowPreview(true);
                 break;
-
-            // case "edit":
-            //     if (id === undefined) {
-            //         return;
-            //     }
-
-            //     setIsEditOpen(true);
-            //     break;
 
             case "search":
                 const searchParams = getSearchParams();
@@ -204,9 +202,17 @@ export default function SalesIndex({ sales }: Props) {
 
                 break;
 
-            case "delete":
-                handleDelete(id!);
-                break;
+            // case "delete":
+            //     handleDelete(id!);
+            //     break;
+
+            case "reset":
+                setIsSearching(true);
+                router.visit("/sales", {
+                    replace: true,
+                    preserveScroll: true,
+                    onFinish: () => setIsSearching(false),
+                });
         }
     };
 
@@ -268,6 +274,13 @@ export default function SalesIndex({ sales }: Props) {
                                     >
                                         Search
                                     </button>
+                                    <button
+                                        onClick={() => handleRoute("reset")}
+                                        disabled={isSearching}
+                                        className="cursor-pointer rounded-none text-lg border-2 border-[#1a0a2e] bg-[#3c2060] px-2 py-1 text-[#ffdd00] font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:bg-[#ffdd00] hover:text-[#1a0a2e]"
+                                    >
+                                        Reset
+                                    </button>
                                 </>
                             )}
                         </div>
@@ -301,12 +314,12 @@ export default function SalesIndex({ sales }: Props) {
                 <div className="border-4 border-[#1a0a2e] bg-[#ddc8f0] shadow-[8px_8px_0px_0px_#1a0a2e] flex flex-col h-full">
                     {/* TABLE SECTION */}
                     <div className="relative min-h-[360px] overflow-x-auto flex-1">
-                        {loading && (
+                        {(isSearching || isInitialLoading) && (
                             <div className="absolute inset-0 z-10 flex items-start justify-center bg-[#ddc8f0]/80 pt-24 backdrop-blur-[1px]">
                                 <div className="flex items-center gap-3 border-4 border-[#1a0a2e] bg-[#3c2060] px-5 py-4 text-[#ffdd00] shadow-[4px_4px_0px_0px_#1a0a2e]">
                                     <LoaderCircle className="h-6 w-6 animate-spin" />
                                     <span className="font-bold">
-                                        SEARCHING PRODUCTS...
+                                        LOADING SALES . . .
                                     </span>
                                 </div>
                             </div>
@@ -348,7 +361,7 @@ export default function SalesIndex({ sales }: Props) {
                                             key={sale.id}
                                             className="border-b-4 border-[#1a0a2e] hover:bg-[#b898d8]"
                                         >
-                                            <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
+                                            <td className="px-4 py-3  border-r-4 border-[#1a0a2e]">
                                                 {sale.invoice_number}
                                             </td>
 
@@ -364,7 +377,7 @@ export default function SalesIndex({ sales }: Props) {
                                                 ).toLocaleString("id-ID")}
                                             </td>
 
-                                            <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                            <td className="px-4 py-3 text-center border-r-4 border-[#1a0a2e]">
                                                 {sale.cashier_name ?? "-"}
                                             </td>
 
@@ -399,7 +412,7 @@ export default function SalesIndex({ sales }: Props) {
                                                     View
                                                 </button>
 
-                                                <button
+                                                {/* <button
                                                     onClick={() =>
                                                         handleRoute(
                                                             "delete",
@@ -409,7 +422,7 @@ export default function SalesIndex({ sales }: Props) {
                                                     className="border-2 cursor-pointer border-[#1a0a2e] bg-[#ff44aa] px-3 py-1 text-sm font-bold text-[#1a0a2e] shadow-[3px_3px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[1px_1px_0px_0px_#1a0a2e] active:bg-[#ff4444]"
                                                 >
                                                     DELETE
-                                                </button>
+                                                </button> */}
                                             </td>
                                         </tr>
                                     ))
@@ -429,10 +442,27 @@ export default function SalesIndex({ sales }: Props) {
 
                     {/* FOOTER (ALWAYS STICK TO BOTTOM) */}
                     <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
-                        <div>
+                        <div className="w-1/4 my-auto">
                             <p className="text-sm">
-                                {sales.data.length} of {sales.total} data
+                                {sales.data.length} of {sales.total} data sales
                             </p>
+                        </div>
+                        <div>
+                            <PaginationWrapper
+                                currentPage={sales.current_page}
+                                totalPages={sales.last_page}
+                                onPageChange={(page) =>
+                                    router.get(
+                                        `/sales?page=${page}`,
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    )
+                                }
+                                getPageHref={(page) => `/sales?page=${page}`}
+                            />
                         </div>
                     </div>
                 </div>

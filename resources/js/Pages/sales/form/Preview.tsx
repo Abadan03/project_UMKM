@@ -1,7 +1,7 @@
 import SalesModal from "./SalesModal";
 import SalesForm from "./SalesForm";
-import { useForm, usePage } from "@inertiajs/react";
-import { SalesProps, UnitsProps } from "@/types";
+import { useForm } from "@inertiajs/react";
+import { SalesProps } from "@/types";
 import { useEffect } from "react";
 
 interface ViewProps {
@@ -55,6 +55,7 @@ export default function View({ sales, isOpen, onClose }: ViewProps) {
                 discount: sales.discount,
                 tax: sales.tax,
                 transaction_date: sales.transaction_date,
+                notes: sales.notes ?? "",
                 items:
                     sales?.items?.map((item) => ({
                         product_id: item.product_id,

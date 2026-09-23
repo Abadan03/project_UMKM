@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Services\Products;
+namespace App\Repositories\Products;
 
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\T_Logs;
 use App\Models\T_Modules;
-use App\Models\T_Units;
-use DB;
-use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
-class ProductService
+class ProductRepository
 {
-    /**
-     * Get all products.
-     */
-    public function all()
+
+    public function getAll()
     {
         return formatProducts(
             Product::with(['unit', 'inventory'])
@@ -23,43 +20,6 @@ class ProductService
         );
     }
 
-    /**
-     * Search products by keyword.
-     */
-    public function find(?string $search)
-    {
-        $keyword = trim((string) $search);
-
-        if ($keyword === '') {
-            return collect();
-        }
-
-        $like = '%' . addcslashes($keyword, '\%_') . '%';
-
-        return formatProducts(
-            Product::with(['unit', 'inventory'])
-                ->where(function ($query) use ($like) {
-                    $query->where('name', 'like', $like)
-                        ->orWhere('description', 'like', $like)
-                        ->orWhere('cost_price', 'like', $like)
-                        ->orWhere('sell_price', 'like', $like)
-                        ->orWhereHas('inventory', function ($inventoryQuery) use ($like) {
-                            $inventoryQuery->where('qty', 'like', $like);
-                        })
-                        ->orWhereHas('unit', function ($unitQuery) use ($like) {
-                            $unitQuery->where('name', 'like', $like)
-                                ->orWhere('code', 'like', $like);
-                        });
-                })
-                ->paginate(10)
-        );
-    }
-
-
-
-    /**
-     * Save a new product to the database.
-     */
     public function create(array $data): Product
     {
         return DB::transaction(function () use ($data) {
@@ -95,14 +55,6 @@ class ProductService
         });
     }
 
-    public function unitCreate(array $data): T_Units
-    {
-        return T_Units::create($data);
-    }
-
-    /**
-     * Update an existing product.
-     */
     public function update(int $id, array $data): ?Product
     {
         $product = Product::with('inventory')->find($id);
@@ -187,14 +139,32 @@ class ProductService
         return (bool) $productDeleted;
     }
 
-    public function unitDelete(string $id): bool
+    public function find(?string $search)
     {
-        $units = T_Units::find($id);
+        $keyword = trim((string) $search);
 
-        if (!$units) {
-            return false;
+        if ($keyword === '') {
+            return collect();
         }
 
-        return (bool) $units->delete();
+        $like = '%' . addcslashes($keyword, '\%_') . '%';
+
+        return formatProducts(
+            Product::with(['unit', 'inventory'])
+                ->where(function ($query) use ($like) {
+                    $query->where('name', 'like', $like)
+                        ->orWhere('description', 'like', $like)
+                        ->orWhere('cost_price', 'like', $like)
+                        ->orWhere('sell_price', 'like', $like)
+                        ->orWhereHas('inventory', function ($inventoryQuery) use ($like) {
+                            $inventoryQuery->where('qty', 'like', $like);
+                        })
+                        ->orWhereHas('unit', function ($unitQuery) use ($like) {
+                            $unitQuery->where('name', 'like', $like)
+                                ->orWhere('code', 'like', $like);
+                        });
+                })
+                ->paginate(10)
+        );
     }
 }

@@ -1,21 +1,47 @@
 <?php
 
-namespace App\Services\Inventory;
+namespace App\Repositories\Inventory;
 
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\T_Logs;
 use App\Models\T_Modules;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
-class InventoryService
+
+class InventoryRepository
 {
-    /**
-     * Get all Inventorys.
-     */
-    public function all(?int $productId = null)
+    // formater product logs in inventory
+    private function attachProductsToLogs($logs)
+    {
+        $products = Product::whereIn(
+            'id',
+            $logs->pluck('references_id')
+        )->get()->keyBy('id');
+
+        $logs->each(function ($log) use ($products) {
+            $log->product = $products->get($log->references_id);
+        });
+
+        return $logs;
+    }
+
+    // set desc into t_logs modules inventory
+    private function stockLogDescription(int $stockDiff): string
+    {
+        if ($stockDiff > 0) {
+            return 'Inventory stock in.';
+        }
+
+        if ($stockDiff < 0) {
+            return 'Inventory stock out.';
+        }
+
+        return 'Inventory product updated.';
+    }
+
+    public function getAll(?int $productId = null)
     {
         return Inventory::with('product.unit')
             ->when($productId, function ($query) use ($productId) {
@@ -40,14 +66,6 @@ class InventoryService
         return $this->attachProductsToLogs($logs);
     }
 
-    /**
-     * Find a single Inventory by id.
-     */
-    public function find(int $id): ?Inventory
-    {
-        return Inventory::find($id);
-    }
-
     public function viewLogs(int $id)
     {
         $logs = T_Logs::with('module', 'user')
@@ -58,14 +76,6 @@ class InventoryService
             ->paginate(10);
 
         return $this->attachProductsToLogs($logs);
-    }
-
-    /**
-     * Save a new Inventory to the database.
-     */
-    public function create(array $data): Inventory
-    {
-        return Inventory::create($data);
     }
 
     /**
@@ -121,44 +131,10 @@ class InventoryService
         });
     }
 
-    private function stockLogDescription(int $stockDiff): string
+    public function getLowStock()
     {
-        if ($stockDiff > 0) {
-            return 'Inventory stock in.';
-        }
-
-        if ($stockDiff < 0) {
-            return 'Inventory stock out.';
-        }
-
-        return 'Inventory product updated.';
-    }
-
-    private function attachProductsToLogs($logs)
-    {
-        $products = Product::whereIn(
-            'id',
-            $logs->pluck('references_id')
-        )->get()->keyBy('id');
-
-        $logs->each(function ($log) use ($products) {
-            $log->product = $products->get($log->references_id);
-        });
-
-        return $logs;
-    }
-
-    /**
-     * Delete a Inventory.
-     */
-    public function delete(int $id): bool
-    {
-        $Inventory = Inventory::find($id);
-
-        if (!$Inventory) {
-            return false;
-        }
-
-        return (bool) $Inventory->delete();
+        return Inventory::with("product")
+            ->whereColumn('qty', '<=', 'minimum_stock')
+            ->paginate(10);
     }
 }

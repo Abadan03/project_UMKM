@@ -88,6 +88,7 @@ class SalesServices
                 'tax' => $data['tax'],
                 'grand_total' => $data['grand_total'],
                 'status' => $data['status'],
+                'notes' => $data['notes']
             ]);
 
             foreach ($data['items'] as $item) {

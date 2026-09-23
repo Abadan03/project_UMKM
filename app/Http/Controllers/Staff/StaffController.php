@@ -28,8 +28,7 @@ class StaffController extends Controller
         $roles = T_Roles::all();
         $staff = formatStaff(
             T_Staff::with('user', 'roles')
-                ->latest()
-                ->get()
+                ->paginate(10)
         );
 
         return
@@ -38,6 +37,8 @@ class StaffController extends Controller
                 'roles' => $roles
             ]);
     }
+
+
 
     public function store(CreateStaffRequest $request)
     {
@@ -53,22 +54,6 @@ class StaffController extends Controller
             return redirect()->back()->with('error', 'Failed to create staff: ' . $e->getMessage());
         }
     }
-
-    // public function edit($staffId)
-    // {
-    //     $staff = $this->staffRepository->findById($staffId);
-
-    //     if (!$staff) {
-    //         return redirect()->back()->with('error', 'Staff not found.');
-    //     }
-
-    //     $roles = T_Roles::all();
-
-    //     return Inertia::render('staff/form/Edit', [
-    //         'staff' => $staff,
-    //         'roles' => $roles
-    //     ]);
-    // }
 
     public function update(CreateStaffRequest $request, int $staffId)
     {
@@ -102,5 +87,18 @@ class StaffController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to delete staff: ' . $e->getMessage());
         }
+    }
+
+    public function search(Request $request)
+    {
+        $keyword = trim((string) $request->query('query'));
+
+        if ($keyword === '') {
+            return response()->json([]);
+        }
+
+        return response()->json(
+            formatStaff($this->staffRepository->search($keyword))
+        );
     }
 }

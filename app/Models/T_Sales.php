@@ -25,6 +25,7 @@ class T_Sales extends Model
         'payment_method',
         'payment_status',
         'status',
+        'notes'
     ];
 
     protected $casts = [

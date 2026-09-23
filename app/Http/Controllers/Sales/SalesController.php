@@ -4,28 +4,22 @@ namespace App\Http\Controllers\Sales;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Sales\CreateSalesRequest;
-use App\Models\Product;
-use App\Models\T_Sales;
-use App\Services\Sales\SalesServices;
+use App\Repositories\Sales\SalesRepository;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class SalesController extends Controller
 {
-    protected SalesServices $salesService;
+    protected SalesRepository $salesRepository;
 
-    public function __construct(SalesServices $salesService)
+    public function __construct(SalesRepository $salesRepository)
     {
-        $this->salesService = $salesService;
+        $this->salesRepository = $salesRepository;
     }
 
     public function index()
     {
-        $sales = T_Sales::with('items.product', 'transactions')
-            ->latest()
-            ->paginate(10)
-            ->withQueryString(
-            );
+        $sales = $this->salesRepository->getAll();
 
         return Inertia::render('sales/Index', [
             'sales' => $sales,
@@ -34,7 +28,7 @@ class SalesController extends Controller
 
     public function search(Request $request)
     {
-        $sales = $this->salesService->search(
+        $sales = $this->salesRepository->search(
             $request->all()
         );
 
@@ -46,15 +40,10 @@ class SalesController extends Controller
     public function store(
         CreateSalesRequest $request,
     ) {
-        $sales = $this->salesService->create($request->validated());
+        $this->salesRepository->create($request->validated());
 
 
         return redirect()->route('user.sales.index');
     }
 
-    // public function create()
-    // {
-    //     $sales = $this->salesService->create();
-    //     return Inertia::render('Sales/Sales');
-    // }
 }

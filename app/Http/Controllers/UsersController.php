@@ -22,8 +22,7 @@ class UsersController extends Controller
         $roles = T_Roles::all();
         $users = formatUsers(
             User::with('roles')
-                ->latest()
-                ->get()
+                ->paginate(10)
         );
 
         return
@@ -51,9 +50,7 @@ class UsersController extends Controller
                         $roleQuery->where('name', 'like', $like);
                     });
             })
-            ->latest()
-            ->limit(25)
-            ->get();
+            ->paginate(10);
 
         return response()->json(formatUsers($users));
     }
@@ -65,10 +62,6 @@ class UsersController extends Controller
             Inertia::render('users/form/Create', [
                 'roles' => $roles
             ]);
-    }
-    public function show()
-    {
-        return Inertia::render('users/form/Create');
     }
 
     public function store(CreateUserRequest $request)

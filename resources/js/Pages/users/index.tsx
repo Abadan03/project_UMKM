@@ -6,6 +6,7 @@ import {
     Roles,
     UserFormData,
     type BreadcrumbItem,
+    PaginationProps,
 } from "@/types";
 import { Head, router } from "@inertiajs/react";
 import { User as UserIcon } from "lucide-react";
@@ -16,9 +17,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Create from "./form/Create";
 import Edit from "./form/Edit";
 import { Input } from "@/components/ui/input";
+import PaginationWrapper from "@/components/pagination";
 
 interface Props extends PageProps {
-    users: User[];
+    users: PaginationProps<User>;
     roles: Roles[];
 }
 
@@ -40,8 +42,8 @@ export default function UsersIndex({ users, roles }: Props) {
     const [selectedUser, setSelectedUser] = useState<UserFormData | null>(null);
     const normalizedSearch = search.trim();
     const filteredUsers = useMemo(
-        () => (normalizedSearch.length > 0 ? results : users),
-        [normalizedSearch, results, users],
+        () => (normalizedSearch.length > 0 ? results : users.data),
+        [normalizedSearch, results, users.data],
     );
 
     const handleDelete = async (id: number) => {
@@ -80,7 +82,9 @@ export default function UsersIndex({ users, roles }: Props) {
                 break;
 
             case "edit":
-                const user = [...users, ...results].find((u) => u.id === id);
+                const user = [...users.data, ...results].find(
+                    (u) => u.id === id,
+                );
 
                 if (user) {
                     setSelectedUser({
@@ -124,7 +128,11 @@ export default function UsersIndex({ users, roles }: Props) {
                 throw new Error("Failed to fetch user search results.");
             }
 
-            const data = (await res.json()) as User[];
+            const payload = (await res.json()) as User[] | { data?: User[] };
+
+            const data = Array.isArray(payload)
+                ? payload
+                : (payload?.data ?? []);
 
             if (searchRequestId.current === requestId) {
                 setResults(data);
@@ -279,10 +287,27 @@ export default function UsersIndex({ users, roles }: Props) {
                         </table>
                     </div>
 
-                    <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
+                    <div className="flex shrink-0 items-center justify-between border-t-4 border-[#1a0a2e] bg-[#ddc8f0] px-4 py-3 text-black">
                         <p className="text-sm">
-                            {filteredUsers.length} of {users.length} data
+                            {filteredUsers.length} of {users.data.length} data
                         </p>
+                        <div>
+                            <PaginationWrapper
+                                currentPage={users.current_page}
+                                totalPages={users.last_page}
+                                onPageChange={(page) =>
+                                    router.get(
+                                        `/users?page=${page}`,
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    )
+                                }
+                                getPageHref={(page) => `/users?page=${page}`}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

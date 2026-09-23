@@ -1,6 +1,7 @@
 import AppLayout from "@/layouts/app-layout";
 import {
     PageProps,
+    PaginationProps,
     ProductProps,
     UnitsProps,
     type BreadcrumbItem,
@@ -14,9 +15,10 @@ import { toast } from "sonner";
 import UnitModal from "./Units/Units";
 import { Input } from "@headlessui/react";
 import Edit from "./form/Edit";
+import PaginationWrapper from "@/components/pagination";
 
 interface Props extends PageProps {
-    products: ProductProps[];
+    products: PaginationProps<ProductProps>;
     units: UnitsProps[];
 }
 
@@ -34,7 +36,6 @@ export default function ProductsIndex({ products, units }: Props) {
     const searchRequestId = useRef(0);
     const [showUnits, setShowUnits] = useState(false);
     const [isEditOpen, setIsEditOpen] = useState(false);
-    const [isCP, setIsCP] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<ProductProps | null>(
         null,
     );
@@ -42,8 +43,8 @@ export default function ProductsIndex({ products, units }: Props) {
 
     const normalizedQuery = query.trim();
     const filteredProducts = useMemo(
-        () => (normalizedQuery.length > 0 ? results : products),
-        [normalizedQuery, products, results],
+        () => (normalizedQuery.length > 0 ? results : products.data),
+        [normalizedQuery, products.data, results],
     );
 
     const handleDelete = async (id: number) => {
@@ -90,7 +91,13 @@ export default function ProductsIndex({ products, units }: Props) {
                 throw new Error("Failed to fetch product search results.");
             }
 
-            const data = (await res.json()) as ProductProps[];
+            const payload = (await res.json()) as
+                | ProductProps[]
+                | { data?: ProductProps[] };
+
+            const data = Array.isArray(payload)
+                ? payload
+                : (payload?.data ?? []);
 
             if (searchRequestId.current === requestId) {
                 setResults(data);
@@ -114,7 +121,7 @@ export default function ProductsIndex({ products, units }: Props) {
                 break;
 
             case "edit":
-                const product = products.find((item) => item.id === id);
+                const product = products?.data.find((item) => item.id === id);
                 if (!product) {
                     toast.error("Failed to find data product.");
                     return;
@@ -153,8 +160,8 @@ export default function ProductsIndex({ products, units }: Props) {
             <div className="font-mono uppercase flex w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0] ">
                 {/* Modifikasi PageHeader agar cocok dengan tema, menambahkan aksen warna kuning dan hijau */}
                 <div className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 shadow-[6px_6px_0px_0px_#1a0a2e] flex justify-between items-center">
-                    <div className="flex items-center gap-4 text-[#ffdd00] font-bold text-xl">
-                        <div className="flex gap-2">
+                    <div className="flex items-center gap-4 text-[#ffdd00] font-bold">
+                        <div className="flex gap-2 text-xl">
                             <Package size={28} />
                             <h2>Products</h2>
                         </div>
@@ -164,7 +171,7 @@ export default function ProductsIndex({ products, units }: Props) {
                                 placeholder="Search product . . ."
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
-                                className="h-11 border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] rounded-none focus-visible:ring-0 focus-visible:ring-offset-0"
+                                className="rounded-none border-4 border-[#1a0a2e] bg-[#3c2060] pl-10 font-bold text-[#ddc8f0] placeholder:text-[#a88cc7] focus-visible:ring-0 focus-visible:ring-offset-0"
                             />
                         </div>
                     </div>
@@ -308,14 +315,30 @@ export default function ProductsIndex({ products, units }: Props) {
                     </div>
 
                     {/* FOOTER (ALWAYS STICK TO BOTTOM) */}
-                    <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
+                    <div className="flex shrink-0 items-center justify-between border-t-4 border-[#1a0a2e] bg-[#ddc8f0] px-4 py-3 text-black">
                         <div>
                             <p className="text-sm">
-                                {filteredProducts.length} of {products.length}{" "}
-                                data
+                                {filteredProducts.length} of{" "}
+                                {products.data.length} data
                             </p>
                         </div>
-                        <div></div>
+                        <div>
+                            <PaginationWrapper
+                                currentPage={products.current_page}
+                                totalPages={products.last_page}
+                                onPageChange={(page) =>
+                                    router.get(
+                                        `/products?page=${page}`,
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    )
+                                }
+                                getPageHref={(page) => `/products?page=${page}`}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -326,7 +349,6 @@ export default function ProductsIndex({ products, units }: Props) {
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
                 product={selectedProduct}
-                isCP={isCP}
             />
         </AppLayout>
     );

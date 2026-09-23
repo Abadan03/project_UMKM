@@ -1,4 +1,4 @@
-import { LoaderCircle, Search } from "lucide-react";
+import { IdCardLanyard, LoaderCircle, Search } from "lucide-react";
 import AppLayout from "@/layouts/app-layout";
 import {
     PageProps,
@@ -8,6 +8,7 @@ import {
     type BreadcrumbItem,
     T_Staff,
     StaffFormData,
+    PaginationProps,
 } from "@/types";
 import { Head, router } from "@inertiajs/react";
 import { User as UserIcon } from "lucide-react";
@@ -18,9 +19,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Create from "./form/Create";
 import Edit from "./form/Edit";
 import { Input } from "@/components/ui/input";
+import PaginationWrapper from "@/components/pagination";
 
 interface Props extends PageProps {
-    staffs: T_Staff[];
+    staffs: PaginationProps<T_Staff>;
     roles: Roles[];
 }
 
@@ -31,7 +33,7 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function UsersIndex({ staffs, roles }: Props) {
+export default function StaffIndex({ staffs, roles }: Props) {
     const [showCreate, setShowCreate] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [search, setSearch] = useState("");
@@ -44,8 +46,8 @@ export default function UsersIndex({ staffs, roles }: Props) {
     );
     const normalizedSearch = search.trim();
     const filteredStaff = useMemo(
-        () => (normalizedSearch.length > 0 ? results : staffs),
-        [normalizedSearch, results, staffs],
+        () => (normalizedSearch.length > 0 ? results : staffs.data),
+        [normalizedSearch, results, staffs.data],
     );
 
     const handleDelete = async (id: number) => {
@@ -84,7 +86,9 @@ export default function UsersIndex({ staffs, roles }: Props) {
                 break;
 
             case "edit":
-                const staff = [...staffs, ...results].find((s) => s.id === id);
+                const staff = [...staffs.data, ...results].find(
+                    (s) => s.id === id,
+                );
 
                 if (staff) {
                     setSelectedUser({
@@ -129,7 +133,13 @@ export default function UsersIndex({ staffs, roles }: Props) {
                 throw new Error("Failed to fetch staff search results.");
             }
 
-            const data = (await res.json()) as T_Staff[];
+            const payload = (await res.json()) as
+                | T_Staff[]
+                | { data?: T_Staff[] };
+
+            const data = Array.isArray(payload)
+                ? payload
+                : (payload?.data ?? []);
 
             if (searchRequestId.current === requestId) {
                 setResults(data);
@@ -167,7 +177,7 @@ export default function UsersIndex({ staffs, roles }: Props) {
             <div className="font-mono uppercase flex h-full w-full flex-1 flex-col gap-6 rounded-none p-6 bg-[#2e1044] text-[#ddc8f0]">
                 <div className="border-4 border-[#1a0a2e] bg-[#3c2060] p-4 shadow-[6px_6px_0px_0px_#1a0a2e] flex justify-between items-center">
                     <div className="flex items-center gap-2 text-[#ffdd00] font-bold text-xl">
-                        <UserIcon size={28} />
+                        <IdCardLanyard size={28} />
                         <h2>Staff Management</h2>
                     </div>
 
@@ -289,11 +299,30 @@ export default function UsersIndex({ staffs, roles }: Props) {
                             </tbody>
                         </table>
                     </div>
-
-                    <div className="px-4 py-3 border-t-2 border-[#1a0a2e] bg-[#ddc8f0] text-black flex justify-between">
-                        <p className="text-sm">
-                            {/* {filteredStaff.length} of {staffs.length} data */}
-                        </p>
+                    <div className="flex shrink-0 items-center justify-between border-t-4 border-[#1a0a2e] bg-[#ddc8f0] px-4 py-3 text-black">
+                        <div>
+                            <p className="text-sm">
+                                {filteredStaff.length} of {staffs.data.length}{" "}
+                                data
+                            </p>
+                        </div>
+                        <div>
+                            <PaginationWrapper
+                                currentPage={staffs.current_page}
+                                totalPages={staffs.last_page}
+                                onPageChange={(page) =>
+                                    router.get(
+                                        `/staff?page=${page}`,
+                                        {},
+                                        {
+                                            preserveState: true,
+                                            preserveScroll: true,
+                                        },
+                                    )
+                                }
+                                getPageHref={(page) => `/staff?page=${page}`}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>

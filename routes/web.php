@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Inventory\InventoryController;
+use App\Http\Controllers\Notes\NotesController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Sales\SalesController;
 use App\Http\Controllers\UsersController;
@@ -52,6 +53,7 @@ Route::middleware(['auth'])->group(function () {
     // Inventory
     Route::prefix('inventory')->group(function () {
         Route::get('/', [InventoryController::class, "index"])->name('inventory');
+        Route::get('/logs', [InventoryController::class, 'logs'])->name('inventory.logs');
         Route::put('/update/{id}', [InventoryController::class, 'update'])->name('inventory.update');
         Route::get('/view/{id}', [InventoryController::class, 'viewLogs'])->name('inventory.view');
     });
@@ -94,8 +96,8 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
     // Staff Management
     Route::get('staff', [\App\Http\Controllers\Staff\StaffController::class, 'index'])
         ->name('staff.index');
-    // Route::get('staff/search', [\App\Http\Controllers\StaffController::class, 'search'])
-    //     ->name('staff.search');
+    Route::get('staff/search', [\App\Http\Controllers\Staff\StaffController::class, 'search'])
+        ->name('staff.search');
     // Route::get('staff/create', [\App\Http\Controllers\StaffController::class, 'create'])
     //     ->name('staff.create');
     Route::post('staff', [\App\Http\Controllers\Staff\StaffController::class, 'store'])
@@ -121,6 +123,11 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
         ->name('sales.storeTry');
     Route::delete('sales/destroy/{id}', [SalesController::class, 'destroy'])
         ->name('sales.destroy');
+
+    // notes 
+
+    route::get("notes", [NotesController::class, "index"])->name
+    ('notex.index');
 });
 
 // =====================

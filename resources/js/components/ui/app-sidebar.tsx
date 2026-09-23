@@ -21,6 +21,8 @@ import {
     Wallet,
     BookCheck,
     ShoppingCart,
+    NotebookTabsIcon,
+    IdCardLanyard,
 } from "lucide-react";
 import AppLogo from "./app-logo";
 
@@ -36,7 +38,7 @@ export const mainNavItems = [
             {
                 title: "Notes",
                 url: "/notes",
-                icon: BookCheck,
+                icon: NotebookTabsIcon,
             },
         ],
     },
@@ -56,7 +58,7 @@ export const mainNavItems = [
                     {
                         title: "Staff Management",
                         url: "/staff",
-                        icon: User,
+                        icon: IdCardLanyard,
                     },
                 ],
             },
@@ -64,19 +66,13 @@ export const mainNavItems = [
     },
 
     {
-        label: "Master Data",
+        label: "Master",
         items: [
             {
                 title: "Product",
                 url: "/products",
                 icon: ShoppingBasket,
             },
-        ],
-    },
-
-    {
-        label: "Inventory",
-        items: [
             {
                 title: "Inventory",
                 url: "/inventory",
@@ -108,28 +104,66 @@ export function AppSidebar() {
         <Sidebar
             collapsible="icon"
             variant="inset"
-            // Meng-override CSS variables bawaan shadcn sidebar dengan warna dari paletmu
             style={
                 {
-                    "--sidebar-background": "#2288cc", // Background utama biru
-                    "--sidebar-foreground": "#ffffff", // Teks warna putih
-                    "--sidebar-border": "#1a0a2e", // Border gelap
-                    "--sidebar-accent": "#ff8800", // Warna PINK saat menu di-hover
-                    "--sidebar-accent-foreground": "#1a0a2e", // Teks jadi gelap saat di-hover
+                    "--sidebar-background": "#2288cc",
+                    "--sidebar-foreground": "#ffffff",
+                    "--sidebar-border": "#1a0a2e",
+                    "--sidebar-accent": "#ff8800",
+                    "--sidebar-accent-foreground": "#1a0a2e",
                 } as React.CSSProperties
             }
-            // Tambahkan font-mono, uppercase, border tebal, dan paksa semua elemen di dalamnya (a, button) jadi kotak (rounded-none)
-            className="font-mono uppercase border-r-4 border-[#1a0a2e] shadow-[4px_0px_0px_0px_#1a0a2e] z-20 [&_a]:rounded-none [&_button]:rounded-none [&_svg]:stroke-2"
+            className="
+        font-mono
+        uppercase
+        border-r-4
+        border-[#1a0a2e]
+        shadow-[4px_0px_0px_0px_#1a0a2e]
+        z-20
+
+        [&_a]:rounded-none
+        [&_button]:rounded-none
+        [&_svg]:stroke-2
+
+        /* collapsed */
+        group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]]:justify-center
+        group-data-[collapsible=icon]:[&_[data-sidebar=menu-button]]:px-0
+    "
         >
-            {/* Header Area - Aksen Kuning */}
-            <SidebarHeader className="border-b-4 border-[#1a0a2e] bg-[#44cc44] p-4">
+            {/* HEADER */}
+            <SidebarHeader
+                className="
+            border-b-4
+            border-[#1a0a2e]
+            bg-[#44cc44]
+            p-4
+
+            group-data-[collapsible=icon]:p-2
+        "
+            >
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             size="lg"
                             asChild
-                            // Styling khusus tombol logo
-                            className="bg-transparent text-[#1a0a2e] hover:bg-[#ff8800] hover:text-[#1a0a2e] border-2 border-transparent hover:border-[#1a0a2e] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all"
+                            className="
+                        bg-transparent
+                        text-[#1a0a2e]
+
+                        hover:bg-[#ff8800]
+                        hover:text-[#1a0a2e]
+
+                        border-2
+                        border-transparent
+
+                        hover:border-[#1a0a2e]
+                        hover:shadow-[2px_2px_0px_0px_#1a0a2e]
+
+                        transition-all
+
+                        group-data-[collapsible=icon]:justify-center
+                        group-data-[collapsible=icon]:px-0
+                    "
                         >
                             <Link href="#" prefetch>
                                 <AppLogo />
@@ -139,13 +173,38 @@ export function AppSidebar() {
                 </SidebarMenu>
             </SidebarHeader>
 
-            {/* Content Area - Otomatis mengikuti background Biru dan aksen Pink berkat CSS Variables di atas */}
-            <SidebarContent className="p-3 gap-2 [&_a:hover]:border-2 [&_a:hover]:border-[#1a0a2e] [&_a:hover]:shadow-[2px_2px_0px_0px_#1a0a2e] [&_a:hover]:-translate-y-[1px] [&_a:hover]:-translate-x-[1px] [&_a]:transition-all">
+            {/* CONTENT */}
+            <SidebarContent
+                className="
+                    p-3
+                    gap-2
+
+                    group-data-[collapsible=icon]:p-2
+
+                    [&_a]:transition-all
+
+                    [&_a:hover]:border-2
+                    [&_a:hover]:border-[#1a0a2e]
+                    [&_a:hover]:shadow-[2px_2px_0px_0px_#1a0a2e]
+                    [&_a:hover]:-translate-y-[1px]
+                    [&_a:hover]:-translate-x-[1px]
+                "
+            >
                 <NavMain groups={mainNavItems} />
             </SidebarContent>
 
-            {/* Footer Area - Aksen Hijau Terang */}
-            <SidebarFooter className="border-t-4 border-[#1a0a2e] bg-[#44cc44] p-4 text-[#1a0a2e]">
+            {/* FOOTER */}
+            <SidebarFooter
+                className="
+            border-t-4
+            border-[#1a0a2e]
+            bg-[#44cc44]
+            p-4
+            text-[#1a0a2e]
+
+            group-data-[collapsible=icon]:p-2
+        "
+            >
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

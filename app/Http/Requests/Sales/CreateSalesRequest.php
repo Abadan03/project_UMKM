@@ -32,17 +32,17 @@ class CreateSalesRequest extends FormRequest
                 'max:255',
             ],
 
-            // 'cashier_id' => [
-            //     'required',
-            //     'integer',
-            //     'exists:t_staff,id',
-            // ],
+            'cashier_id' => [
+                'required',
+                'integer',
+                'exists:t_staff,id',
+            ],
 
-            // 'cashier_name' => [
-            //     'required',
-            //     'string',
-            //     'max:255',
-            // ],
+            'cashier_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
 
             'transaction_date' => [
                 'required',
@@ -87,6 +87,12 @@ class CreateSalesRequest extends FormRequest
 
             'status' => [
                 'required',
+                'string',
+                'max:255',
+            ],
+
+            'notes' => [
+                'nullable',
                 'string',
                 'max:255',
             ],
