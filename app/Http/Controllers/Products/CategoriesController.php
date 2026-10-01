@@ -33,7 +33,7 @@ class CategoriesController extends Controller
     }
 
 
-    public function store(CategoriesRequest $request): JsonResponse
+    public function store(CategoriesRequest $request)
     {
         try {
 
@@ -41,7 +41,8 @@ class CategoriesController extends Controller
                 $request->validated()
             );
 
-            return response()->json($result);
+            // return response()->json($result);
+            return back()->with('success', 'Product created successfully.');
 
         } catch (\Throwable $e) {
 

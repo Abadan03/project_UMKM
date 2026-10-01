@@ -58,7 +58,7 @@ export default function Index({ store }: Props) {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route('store-management.profile.update'), {
+    post('storeManagement/profile-stores', {
       forceFormData: true,
       preserveScroll: true,
     })

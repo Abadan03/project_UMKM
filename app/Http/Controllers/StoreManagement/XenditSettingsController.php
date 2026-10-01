@@ -183,7 +183,7 @@ class XenditSettingsController extends Controller
 
             foreach ($saleItems as $saleItem) {
 
-                $product = Product::find($saleItem->product_id);
+                $product = Product::findOrFail($saleItem->product_id);
 
                 if (!$product) {
                     throw new \Exception(

@@ -17,9 +17,10 @@ class ProductService
      */
     public function all()
     {
-        return formatProducts(
+        return $this->formatProducts(
             Product::with(['unit', 'inventory', 'categories'])
-                ->paginate(10)
+                ->latest()
+                ->get()
         );
     }
 
@@ -51,8 +52,32 @@ class ProductService
                                 ->orWhere('code', 'like', $like);
                         });
                 })
-                ->paginate(10)
+                ->latest()
+                ->limit(25)
+                ->get()
         );
+    }
+
+    private function formatProducts(Collection $products): Collection
+    {
+        return $products->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name,
+                'qty' => $item->inventory?->qty ?? 0,
+                'inventory' => $item->inventory,
+                'unit_id' => $item->unit_id,
+                'unit' => $item->unit,
+                'unit_code' => $item->unit?->code,
+                'categories_id' => $item->categories_id,
+                'unit_name' => $item->unit?->name,
+                'cost_price' => $item->cost_price,
+                'sell_price' => $item->sell_price,
+                'description' => $item->description ?? "-",
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+            ];
+        });
     }
 
 

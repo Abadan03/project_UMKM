@@ -111,7 +111,9 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('storeManagement')->group(function () {
         Route::get('/', [StoreProfileController::class, 'index'])->name('StoreManage');
         Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store.taxsettings');
-
+        
+        // PROFILE TOKO
+        Route::post('/profile-stores', [StoreProfileController::class, 'index'])->name('store-management.profile.update');
 
         // XENDIT
         Route::get('/xenditSettings', [XenditSettingsController::class, 'index'])->name('store-management.xendit-settings');
