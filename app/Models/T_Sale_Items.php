@@ -10,7 +10,7 @@ class T_Sale_Items extends Model
 {
     use HasFactory;
 
-    protected $table = 'T_Sale_Items';
+    protected $table = 'T_sale_items';
 
     protected $fillable = [
         'sale_id',

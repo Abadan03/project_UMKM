@@ -12,6 +12,12 @@ use App\Http\Controllers\Notes\NotesController;
 use App\Http\Controllers\Products\ProductController;
 use App\Http\Controllers\Sales\SalesController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\POS\CashierController;
+use App\Http\Controllers\Products\CategoriesController;
+use App\Http\Controllers\StoreManagement\StoreManagementController;
+use App\Http\Controllers\StoreManagement\StoreProfileController;
+use App\Http\Controllers\StoreManagement\TaxSettingsController;
+use App\Http\Controllers\StoreManagement\XenditSettingsController;
 
 // =====================
 // Guest Only
@@ -44,6 +50,16 @@ Route::middleware('auth')->group(function () {
 });
 
 // =====================
+// Webhooks Xendit
+// =====================
+Route::post('/xenditSettings-handle/{storeId}', [XenditSettingsController::class, 'handle'])->name('webhooks.xendit');
+
+// =====================
+// POS Payment Redirect
+// =====================
+Route::get('/pos/payment/success',[CashierController::class, 'paymentSuccess'])->name('pos.payment.success');
+
+// =====================
 // Dashboard
 // =====================
 
@@ -72,6 +88,39 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
         Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
     });
+
+    // Categories
+    Route::prefix('categories')->group(function () {
+        Route::post('/store', [CategoriesController::class, 'store'])->name('categories.store');
+        // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
+    });
+    
+    // Cashier
+    Route::prefix('pos')->group(function () {
+        Route::get('/', [CashierController::class, "index"])->name('cashier');
+        Route::post('/checkout', [CashierController::class, 'store'])->name('pos.checkout');
+        
+
+        Route::get(
+            '/payment/status/{invoice}',
+            [CashierController::class, 'paymentStatus']
+        )->name('pos.payment.status');
+    });
+        
+    // Store Management
+    Route::prefix('storeManagement')->group(function () {
+        Route::get('/', [StoreProfileController::class, 'index'])->name('StoreManage');
+        Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store.taxsettings');
+
+
+        // XENDIT
+        Route::get('/xenditSettings', [XenditSettingsController::class, 'index'])->name('store-management.xendit-settings');
+        Route::post('/xenditSettings-test', [XenditSettingsController::class, 'test'])->name('store-management.xendit-settings.test');
+        Route::post('/xenditSettings', [XenditSettingsController::class, 'update'])
+        ->name('store-management.xendit-settings.update');
+        // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
+    });
+
 });
 
 Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {

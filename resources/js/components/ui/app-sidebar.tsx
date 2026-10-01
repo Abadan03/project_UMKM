@@ -23,6 +23,7 @@ import {
     ShoppingCart,
     NotebookTabsIcon,
     IdCardLanyard,
+    Store,
 } from "lucide-react";
 import AppLogo from "./app-logo";
 
@@ -95,6 +96,26 @@ export const mainNavItems = [
                 url: "/pos",
                 icon: ShoppingCart,
             },
+        ],
+    },
+    {
+        label: "Store Management",
+        items: [
+            {
+                title: "Store Profile",
+                url: "/storeManagement",
+                icon: Store,
+            },
+            {
+                title: "Tax Settings",
+                url: "/storeManagement/taxSettings",
+                icon: Store,
+            },
+            {
+                title: "Xendit Settings",
+                url: "/storeManagement/xenditSettings",
+                icon: Store,
+            }
         ],
     },
 ];

@@ -10,6 +10,7 @@ import { Head, router } from "@inertiajs/react";
 import { LoaderCircle, Package, Search } from "lucide-react";
 import { confirmDialog } from "@/Pages/utils/popupModal";
 import Create from "./form/Create";
+import CreateCategories from "./form/CreateCategories"
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import UnitModal from "./Units/Units";
@@ -40,6 +41,7 @@ export default function ProductsIndex({ products, units }: Props) {
         null,
     );
     const [showCreate, setShowCreate] = useState(false);
+    const [ShowCreateCategories, setShowCreateCategories] = useState(false);
 
     const normalizedQuery = query.trim();
     const filteredProducts = useMemo(
@@ -114,7 +116,7 @@ export default function ProductsIndex({ products, units }: Props) {
         }
     };
 
-    const handleRoute = (mode: "create" | "edit" | "delete", id?: number) => {
+    const handleRoute = (mode: "create" | "edit" | "delete" | "createCategories", id?: number) => {
         switch (mode) {
             case "create":
                 setShowCreate(true);
@@ -129,6 +131,10 @@ export default function ProductsIndex({ products, units }: Props) {
 
                 setSelectedProduct(product);
                 setIsEditOpen(true);
+                break;
+
+            case "createCategories":
+                setShowCreateCategories(true);
                 break;
 
             case "delete":
@@ -177,18 +183,24 @@ export default function ProductsIndex({ products, units }: Props) {
                     </div>
 
                     <div>
-                        <button
-                            onClick={() => setShowUnits(true)}
-                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
-                        >
-                            View Units
-                        </button>
 
+                        <button
+                            onClick={() => handleRoute("createCategories")}
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                        >
+                            + Categories
+                        </button>
                         <button
                             onClick={() => handleRoute("create")}
                             className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
                         >
                             + Product
+                        </button>
+                        <button
+                            onClick={() => setShowUnits(true)}
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                        >
+                            View Units
                         </button>
                     </div>
                 </div>
@@ -243,6 +255,8 @@ export default function ProductsIndex({ products, units }: Props) {
                                         >
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                                 {product.name}
+                                                {product.id}
+
                                             </td>
 
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
@@ -345,6 +359,7 @@ export default function ProductsIndex({ products, units }: Props) {
 
             <UnitModal isOpen={showUnits} onClose={() => setShowUnits(false)} />
             <Create isOpen={showCreate} onClose={() => setShowCreate(false)} />
+            <CreateCategories isOpen={ShowCreateCategories} onClose={() => setShowCreateCategories(false)} />
             <Edit
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}

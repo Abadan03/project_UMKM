@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Inventory\InventoryStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +12,6 @@ class Inventory extends Model
     use HasFactory;
 
     protected $table = 't_inventory';
-    // protected $with = 't_products';
 
     protected $fillable = [
         'products_id',
@@ -20,6 +20,10 @@ class Inventory extends Model
         'minimum_stock',
         'last_stock_in',
         'last_stock_out',
+    ];
+
+    protected $casts = [
+        'isActive' => InventoryStatus::class
     ];
 
     public function product()

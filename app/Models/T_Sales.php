@@ -22,8 +22,8 @@ class T_Sales extends Model
         'discount',
         'tax',
         'grand_total',
-        'payment_method',
-        'payment_status',
+        // 'payment_method',
+        // 'payment_status',
         'status',
         'notes'
     ];

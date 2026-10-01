@@ -284,12 +284,12 @@ export default function SalesIndex({ sales }: Props) {
                                 </>
                             )}
                         </div>
-                        {/* <button
+                        <button
                             onClick={() => handleRoute("create")}
                             className="cursor-pointer rounded-none text-lg border-2 border-[#1a0a2e] bg-[#3c2060] px-2 py-1 text-[#ffdd00] font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:bg-[#ffdd00] hover:text-[#1a0a2e]"
                         >
                             Create
-                        </button> */}
+                        </button>
                     </div>
                 </div>
 

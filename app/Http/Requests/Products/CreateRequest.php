@@ -29,6 +29,7 @@ class CreateRequest extends FormRequest
             'cost_price' => 'required|numeric|min:0',
             'sell_price' => 'required|numeric|min:0',
             'description' => 'nullable|string',
+            'categories_id' => 'required|numeric',
         ];
     }
 

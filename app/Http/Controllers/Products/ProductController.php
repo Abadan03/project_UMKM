@@ -10,27 +10,33 @@ use App\Repositories\Products\ProductRepository;
 use App\Repositories\Products\UnitRepository;
 use Inertia\Inertia;
 
+// Repository
+use App\Repositories\Product\CategoriesRepository;
+
 class ProductController extends Controller
 {
-    protected ProductRepository $productRepository;
-    protected UnitRepository $unitRepository;
+    protected ProductRepository $ProductRepository;
+    protected CategoriesRepository $CategoriesRepository;
 
-    public function __construct(
-        ProductRepository $productRepository,
-        UnitRepository $unitRepository,
-    ) {
-        $this->productRepository = $productRepository;
-        $this->unitRepository = $unitRepository;
+    public function __construct(ProductRepository $ProductRepository, CategoriesRepository $CategoriesRepository)
+    {
+        $this->ProductRepository = $ProductRepository;
+        $this->CategoriesRepository = $CategoriesRepository;
     }
 
     public function index()
     {
-        $products = $this->productRepository->getAll();
+        $products = $this->ProductRepository->getAll();
         $units = T_Units::all();
+
+        $getCategories = $this->CategoriesRepository->getAll();
+        // dd($getCategories);
+
 
         return Inertia::render('Products/Products', [
             'products' => $products,
             'units' => $units,
+            'categories' => $getCategories
         ]);
     }
 
@@ -39,7 +45,7 @@ class ProductController extends Controller
         $search = $request->query('query');
 
         return response()->json(
-            $this->productRepository->find($search)
+            $this->ProductRepository->find($search)
         );
     }
 
@@ -47,14 +53,14 @@ class ProductController extends Controller
     {
         $request['qty'] ?? 0;
 
-        $this->productRepository->create($request->validated());
+        $this->ProductRepository->create($request->validated());
 
         return back()->with('success', 'Product created successfully.');
     }
 
     public function update(CreateRequest $request, int $id)
     {
-        $product = $this->productRepository->update($id, $request->validated());
+        $product = $this->ProductRepository->update($id, $request->validated());
 
         if (!$product) {
             return redirect()->back()->with('error', 'Product not found.');
@@ -67,7 +73,7 @@ class ProductController extends Controller
 
     public function destroy(int $id)
     {
-        $deleted = $this->productRepository->delete($id);
+        $deleted = $this->ProductRepository->delete($id);
 
         if (!$deleted) {
             return redirect()->back()->with('error', 'Product not found.');

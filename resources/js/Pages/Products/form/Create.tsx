@@ -1,7 +1,7 @@
 import ProductModal from "./ProductModal";
 import ProductForm from "./ProductForm";
 import { useForm, usePage } from "@inertiajs/react";
-import { UnitsProps } from "@/types";
+import { ProductProps, UnitsProps } from "@/types";
 import { toast } from "sonner";
 interface CreateProps {
     isOpen: boolean;
@@ -10,11 +10,14 @@ interface CreateProps {
 
 export default function Create({ isOpen, onClose }: CreateProps) {
     const units = usePage().props.units as UnitsProps[];
+    const categories = usePage().props.categories as ProductProps[];
+    const testing = usePage();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
         qty: 0,
         unit_id: "",
+        categories_id: "",
         cost_price: "",
         sell_price: "",
         description: "",
@@ -50,6 +53,7 @@ export default function Create({ isOpen, onClose }: CreateProps) {
                     errors={errors}
                     units={units}
                     onClose={onClose}
+                    categories={categories}
                 />
 
                 {/* tombol Save & Cancel */}

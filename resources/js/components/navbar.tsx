@@ -4,7 +4,7 @@ import {
     DisclosurePanel,
 } from "@headlessui/react";
 import { Link, usePage } from "@inertiajs/react";
-import LI from "./C/LI";
+import ComponentLogin from "./CompanyProfile/ComponentLogin";
 
 const navigation = [
     { name: "Home", href: "/" },
@@ -77,7 +77,7 @@ export default function NavbarLayout() {
                             ))}
                         </div>
                         <Link href="/login">
-                            <LI />
+                            <ComponentLogin />
                         </Link>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components';
 
-export default function LI() {
+export default function ComponentLogin() {
   return (
     <StyledWrapper>
       <div className="book">

@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
         // Daftarkan baris ini untuk Spatie Permission
             'role' => \App\Http\Middleware\CheckRole::class,
+            $middleware->validateCsrfTokens(except: [
+                'xenditSettings-handle/*',
+            ])
         ]);
 
     })

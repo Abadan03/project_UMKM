@@ -51,4 +51,14 @@
         {
             return $this->belongsTo(T_Roles::class, 'roles_id');
         }
+
+        public function store()
+        {
+            return $this->belongsTo(T_Stores::class, 'store_id');
+        }
+
+        public function staff()
+        {
+            return $this->hasOne(T_Staff::class, 'users_id');
+        }
     }

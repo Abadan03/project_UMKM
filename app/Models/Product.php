@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
@@ -19,6 +21,7 @@ class Product extends Model
         'cost_price',
         'sell_price',
         'description',
+        'categories_id'
     ];
 
     public function unit()
@@ -36,5 +39,10 @@ class Product extends Model
             T_Sale_Items::class,
             'product_id'
         );
+    }
+
+    public function categories(): BelongsTo 
+    {
+        return $this->BelongsTo(T_Categories::class, 'categories_id', 'id');
     }
 }

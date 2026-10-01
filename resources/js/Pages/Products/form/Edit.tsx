@@ -1,7 +1,7 @@
 import ProductModal from "./ProductModal";
 import ProductForm from "./ProductForm";
 import { useForm, usePage } from "@inertiajs/react";
-import { ProductProps, UnitsProps } from "@/types";
+import { CategoriesProps, ProductProps, UnitsProps,  } from "@/types";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
@@ -13,15 +13,18 @@ interface EditProps {
 
 export default function Edit({ product, isOpen, onClose }: EditProps) {
     const units = usePage().props.units as UnitsProps[];
+    const categories = usePage().props.categories as CategoriesProps[];
 
     const { data, setData, put, processing, errors, reset } = useForm({
         name: product?.name ?? "",
         qty: product?.qty ?? 0,
         unit_id: product?.unit_id?.toString() ?? "",
+        categories_id: product?.categories_id ?? "",
         cost_price: product?.cost_price ?? "",
         sell_price: product?.sell_price ?? "",
         description: product?.description ?? "",
     });
+
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -42,6 +45,7 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
                 name: product.name,
                 qty: product.qty,
                 unit_id: product.unit_id.toString(),
+                categories_id: product.categories_id.toString() ?? "",
                 cost_price: product.cost_price.toString(),
                 sell_price: product.sell_price.toString(),
                 description: product.description ?? "",
@@ -66,6 +70,7 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
                     units={units}
                     onClose={onClose}
                     reset={reset}
+                    categories={categories}
                     showPriceEditToggle={true}
                 />
 

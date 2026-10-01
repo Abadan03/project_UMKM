@@ -107,6 +107,12 @@ export interface UnitsProps {
     code: string;
 }
 
+export interface CategoriesProps {
+    id: number;
+    name: string;
+    description: string;
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -129,6 +135,8 @@ export interface ProductProps {
     unit_code?: string;
     cost_price: number;
     sell_price: number;
+    categories_id: number;
+    categories?: CategoriesProps | null;
     inventory?: InventoryProps | null;
     description: string;
     created_at: string;
@@ -251,3 +259,5 @@ export interface StaffFormData {
     // roles?: Roles | null;
     // role
 }
+
+
