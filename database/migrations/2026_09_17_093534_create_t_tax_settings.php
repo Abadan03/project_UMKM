@@ -15,9 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('store_id')->constrained('t_stores')->cascadeOnDelete();
             $table->string('name')->default('PPN');
-            $table->decimal('percentage', 5, 2)->default(0);
+            $table->integer('percentage')->default(0);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_inclusive')->default(false);
+            $table->dateTime('effective_at');
             $table->timestamps();
         });
     }

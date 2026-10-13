@@ -115,6 +115,11 @@ export const mainNavItems = [
                 title: "Xendit Settings",
                 url: "/storeManagement/xenditSettings",
                 icon: Store,
+            },
+            {
+                title: "Token Settings",
+                url: "/storeManagement/tokenSettings",
+                icon: Store,
             }
         ],
     },

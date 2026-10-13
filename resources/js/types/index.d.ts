@@ -261,3 +261,11 @@ export interface StaffFormData {
 }
 
 
+export interface TaxSettingForm {
+  taxSetting?: {
+    name: string
+    percentage: number
+    is_active: number
+    is_inclusive: number
+  }
+}

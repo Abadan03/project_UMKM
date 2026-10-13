@@ -13,8 +13,16 @@ class T_TaxSettings extends Model
         'name', 
         'percentage', 
         'is_active', 
-        'is_inclusive'
+        'is_inclusive',
+        'effective_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'effective_at' => 'datetime',
+        ];
+    }
 
     public function store()
     {

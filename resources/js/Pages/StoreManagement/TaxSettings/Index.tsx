@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { FormEventHandler, useMemo } from 'react'
 import { cn } from '@/lib/utils'
+import { toast } from 'sonner'
 
 interface TaxSettingForm {
   name: string
@@ -73,9 +74,13 @@ export default function Index({ taxSetting }: Props) {
 
   const submit: FormEventHandler = (e) => {
     e.preventDefault()
-    post(route('store-management.tax-settings.update'), {
+    post('/storeManagement/taxSettings'), {
       preserveScroll: true,
-    })
+    }
+  }
+
+  if(recentlySuccessful) {
+    toast.success('Pengaturan pajak berhasil disimpan.');
   }
 
   return (
@@ -162,6 +167,7 @@ export default function Index({ taxSetting }: Props) {
               <Switch
                 checked={data.is_inclusive}
                 onCheckedChange={(checked) => setData('is_inclusive', checked)}
+                disabled={true}
               />
             </div>
           </div>

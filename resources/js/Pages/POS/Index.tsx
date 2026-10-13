@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import axios from "axios";
 import {
   ProductProps,
+  TaxSettingForm,
   type BreadcrumbItem,
 } from "@/types";
 import { Plus, Minus, Trash2, Search, Receipt, X, CheckCircle2, RotateCcw, Wallet } from "lucide-react";
@@ -26,7 +27,6 @@ const breadcrumbs: BreadcrumbItem[] = [
   },
 ];
 
-const TAX_RATE = 0.11;
 const QUICK_CASH = [20000, 50000, 100000, 200000];
 const PAYMENT_METHOD = ["CASH", "E-PAYMENT"];
 
@@ -42,7 +42,7 @@ const rupiahFormatterNumberInput = (n) =>
     maximumFractionDigits: 2,
   });
 
-export default function index() {
+export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
   const mountXenditPayment = async (sdkKey: string) => {
     try {
       const components = new XenditComponents({
@@ -265,6 +265,10 @@ export default function index() {
   const [processing, setProcessing] = useState(false);
 
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnum>(PaymentMethodEnum.CASH);
+
+  const TAX_RATE = taxSetting?.percentage ? taxSetting.percentage / 100 : 0;
+  // const TAX__RATE_INCLUSIVE = taxSetting?.percentage - PRODUCTS?.map();
+
 
   // paymentMethodEnum
 
@@ -565,7 +569,8 @@ export default function index() {
                       <span className="font-mono">{rupiah(subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-[#5A6B60]">
-                      <span>Pajak (11%)</span>
+                      <span>Pajak ({taxSetting?.percentage}%)</span>
+                      {/* <span>Pajak {{ (taxSetting) }}%</span> */}
                       <span className="font-mono">{rupiah(tax)}</span>
                     </div>
                   </div>
@@ -775,7 +780,7 @@ function ReceiptView({ receipt, onNew }) {
             <span className="font-mono">{rupiah(receipt.subtotal)}</span>
           </div>
           <div className="flex justify-between text-[#5A6B60]">
-            <span>Pajak (11%)</span>
+            <span>Pajak ({taxSetting?.percentage}%)</span>
             <span className="font-mono">{rupiah(receipt.tax)}</span>
           </div>
           <div className="flex justify-between font-semibold">

@@ -43,7 +43,7 @@ export default function Index({ xenditSetting }: Props) {
     useForm<XenditSettingForm>({
       environment: xenditSetting?.environment ?? 'sandbox',
       api_key: '',
-    //   webhook_token: '',
+    //   webhook_token: ''
     })
 
   const isConnected = xenditSetting?.is_connected ?? false

@@ -15,23 +15,30 @@ use App\Http\Requests\POS\POSRequest;
 use App\Models\T_transaction;
 // Repository
 use App\Repositories\POS\POSRepository;
+use App\Repositories\Tax\TaxRepository;
 
 class CashierController extends Controller
 {
     //
 
     protected $POSRepository;
+    protected $TaxRepository;
 
-    public function __construct(POSRepository $POSRepository)
+    public function __construct(POSRepository $POSRepository, TaxRepository $TaxRepository)
     {
         $this->POSRepository = $POSRepository;
+        $this->TaxRepository = $TaxRepository;
     }
 
     public function index () {
         $getAll = $this->POSRepository->getAll();
 
+        $getTaxSettings = $this->TaxRepository->getTaxSettings();
+        // dd($getTaxSettings);
+
         return Inertia::render('POS/Index', [
             'products' => fn () => $getAll,
+            'taxSetting' => $getTaxSettings,
         ]);
     }
 

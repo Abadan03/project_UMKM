@@ -17,6 +17,7 @@ use App\Http\Controllers\Products\CategoriesController;
 use App\Http\Controllers\StoreManagement\StoreManagementController;
 use App\Http\Controllers\StoreManagement\StoreProfileController;
 use App\Http\Controllers\StoreManagement\TaxSettingsController;
+use App\Http\Controllers\StoreManagement\TokenController;
 use App\Http\Controllers\StoreManagement\XenditSettingsController;
 
 // =====================
@@ -120,6 +121,18 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/xenditSettings-test', [XenditSettingsController::class, 'test'])->name('store-management.xendit-settings.test');
         Route::post('/xenditSettings', [XenditSettingsController::class, 'update'])
         ->name('store-management.xendit-settings.update');
+
+        // TOKEN
+        Route::get('/tokenSettings', [TokenController::class, 'tokenSettings'])->name('store-management.token-settings');
+        Route::post('/tokenSettings', [TokenController::class, 'updateTokenSettings'])->name('store-management.token-settings.update');
+
+
+        // TAX SETTINGS
+        Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store-management.tax-settings');
+        Route::post('/taxSettings', [TaxSettingsController::class, 'update'])->name('store-management.tax-settings.update');
+        
+        
+        // Route::post('/tokenSettings', [TokenController::class, 'updateTokenSettings'])->name('store-management.token-settings.update');
         // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
     });
 

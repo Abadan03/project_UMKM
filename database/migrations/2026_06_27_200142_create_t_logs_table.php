@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->uuid("id")->primary();
             $table->uuid('module_id');
             $table->string('user_id', 32);
-            $table->unsignedBigInteger("references_id");
+            $table->unsignedBigInteger("store_references_id");
             $table->unsignedInteger("old_value")->nullable();
             $table->unsignedInteger("new_value")->nullable();
             $table->string("description");

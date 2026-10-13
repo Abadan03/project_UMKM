@@ -15,7 +15,7 @@ class ProductRepository
     public function getAll()
     {
         return formatProducts(
-            Product::with(['unit', 'inventory'])
+            Product::with(['unit', 'inventory', 'categories'])
                 ->paginate(10)
         );
     }

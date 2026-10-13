@@ -49,6 +49,8 @@ if (!function_exists('formatProducts')) {
                 'unit_code' => $item->unit?->code,
                 'unit_name' => $item->unit?->name,
                 'cost_price' => $item->cost_price,
+                'categories_id' => $item->categories_id,
+                'categories' => $item->categories,
                 'sell_price' => $item->sell_price,
                 'description' => $item->description ?? "-",
                 'created_at' => $item->created_at,
