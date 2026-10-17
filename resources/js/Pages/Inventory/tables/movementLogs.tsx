@@ -8,7 +8,18 @@ export default function MovementLogs({
     selectedLogsInventory,
 }: MovementLogsProps) {
     return (
-        <table className="w-full min-w-[1200px] table-fixed text-sm text-[#1a0a2e]">
+        <table className="w-full min-w-[1400px] table-fixed text-sm text-[#1a0a2e]">
+            <colgroup>
+                <col className="w-[14%]" />
+                <col className="w-[12%]" />
+                <col className="w-[9%]" />
+                <col className="w-[7%]" />
+                <col className="w-[7%]" />
+                <col className="w-[7%]" />
+                <col className="w-[20%]" />
+                <col className="w-[10%]" />
+                <col className="w-[14%]" />
+            </colgroup>
             <thead className="sticky top-0 z-[1] border-b-4 border-[#1a0a2e] bg-[#44cc44]">
                 <tr>
                     <th className="border-r-4 border-[#1a0a2e] px-4 py-3">
@@ -43,7 +54,7 @@ export default function MovementLogs({
                         Old Cost Price/HPP
                     </th>
 
-                    <th colSpan={2} className="px-4 py-3">
+                    <th className="px-4 py-3">
                         Date
                     </th>
                 </tr>
@@ -80,7 +91,7 @@ export default function MovementLogs({
                                 {item.new_value}
                             </td>
 
-                            <td className="border-r-4 border-[#1a0a2e] px-4 py-3">
+                            <td className="break-words border-r-4 border-[#1a0a2e] px-4 py-3">
                                 {item.description}
                             </td>
 
@@ -93,7 +104,7 @@ export default function MovementLogs({
                                       )}
                             </td>
 
-                            <td colSpan={2} className="px-4 py-3 text-right">
+                            <td className="px-4 py-3 text-right">
                                 {item.created_at &&
                                     new Date(item.created_at).toLocaleString(
                                         "id-ID",

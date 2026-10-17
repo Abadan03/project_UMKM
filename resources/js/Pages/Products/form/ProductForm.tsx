@@ -12,8 +12,7 @@ interface ProductFormProps {
     onClose: () => void;
     reset: () => void;
     showPriceEditToggle?: boolean;
-    categories: CategoriesProps[],
-
+    categories: CategoriesProps[];
 }
 
 export default function ProductForm({
@@ -34,7 +33,6 @@ export default function ProductForm({
             ? "bg-white text-[#1c2230] focus:bg-[#eef1f6]"
             : "bg-[#e5e7eb] text-[#7b8496] cursor-not-allowed"
     }`;
-
 
     return (
         <div className="px-4 py-5 flex flex-col gap-4">
@@ -72,7 +70,16 @@ export default function ProductForm({
                         step={1}
                         value={data.qty}
                         min={0}
-                        onChange={(e) => setData("qty", e.target.value)}
+                        onChange={(e) => {
+                            const value = e.target.value;
+
+                            if (value === "") {
+                                setData("qty", "");
+                                return;
+                            }
+
+                            setData("qty", Math.max(0, Number(value)));
+                        }}
                         placeholder="Input Stock here"
                         className="font-mono text-xs text-[#1c2230] bg-white px-3 py-2 outline-none placeholder:text-[#9aa3b5] focus:bg-[#eef1f6]"
                         style={{
@@ -124,7 +131,9 @@ export default function ProductForm({
                             boxShadow: "3px 3px 0 #11151f",
                         }}
                         value={data.categories_id}
-                        onChange={(e) => setData("categories_id", e.target.value)}
+                        onChange={(e) =>
+                            setData("categories_id", e.target.value)
+                        }
                     >
                         <option>Select Category</option>
                         {categories.data.map((category: CategoriesProps) => (
@@ -133,9 +142,9 @@ export default function ProductForm({
                             </option>
                         ))}
                     </select>
-                    {errors.unit_id && (
+                    {errors.categories_id && (
                         <span className="text-[#c0566a] text-[9px] tracking-wide">
-                            {errors.unit_id}
+                            {errors.categories_id}
                         </span>
                     )}
                 </div>
@@ -143,7 +152,6 @@ export default function ProductForm({
             {showPriceEditToggle && (
                 <CheckboxCP checked={isCP} onChange={setIsCP} />
             )}
-
 
             <div className="grid grid-cols-2 gap-1">
                 <div className="flex flex-col gap-1.5 flex-1">

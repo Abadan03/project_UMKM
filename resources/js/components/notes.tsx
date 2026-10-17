@@ -1,4 +1,10 @@
-import { Field, FieldContent, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import {
+    Field,
+    FieldContent,
+    FieldDescription,
+    FieldGroup,
+    FieldLabel,
+} from "@/components/ui/field";
 import { Checkbox } from "./ui/checkbox";
 
 interface CheckboxCPProps {
@@ -14,11 +20,12 @@ export default function Notes() {
                 className="flex items-start gap-3 rounded-lg bg-[#f2c879] px-4 py-3"
             >
                 <FieldContent>
-                    <FieldLabel htmlFor="edit-price-checkbox" className="">
-                        Tambahkan Categories agar anda dapat menambahkan <strong>produk</strong>
+                    <FieldLabel htmlFor="edit-price-checkbox">
+                        Tambahkan Categories agar anda dapat menambahkan{" "}
+                        <strong>produk</strong>
                     </FieldLabel>
                     <FieldDescription>
-                        Contoh categories 
+                        Contoh categories
                         <br />
                         Nama : Makanan
                         <br />

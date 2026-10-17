@@ -1,16 +1,17 @@
-import ProductModal from "./ProductModal";
-import ProductForm from "./ProductForm";
+import CategoriesModal from "./CategoriesModal";
 import { useForm, usePage } from "@inertiajs/react";
-import { UnitsProps } from "@/types";
 import { toast } from "sonner";
-import CategoriesForm from "./CategoriesForm";
+import CreateCategory from "./CreateCategoryForm";
+import ListCategory from "./ListCategory";
+import type { CategoriesProps, PaginationProps } from "@/types";
 interface CreateProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
 export default function CreateCategories({ isOpen, onClose }: CreateProps) {
-    const categories = usePage().props.categories as any;
+    const categories = usePage().props
+        .categories as PaginationProps<CategoriesProps>;
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",
@@ -31,26 +32,24 @@ export default function CreateCategories({ isOpen, onClose }: CreateProps) {
     }
 
     return (
-        <ProductModal
+        <CategoriesModal
             isOpen={isOpen}
             onClose={onClose}
-            reset={reset}
             title="CREATE CATEGORIES"
             subtitle="> FILL ALL FIELDS <"
-        >
-            <form onSubmit={handleSubmit}>
-                <CategoriesForm
-                    data={data}
-                    setData={setData}
-                    reset={reset}
-                    processing={processing}
-                    errors={errors}
-                    // units={units}
-                    onClose={onClose}
-                />
-
-                {/* tombol Save & Cancel */}
-            </form>
-        </ProductModal>
+            createContent={
+                <form onSubmit={handleSubmit}>
+                    <CreateCategory
+                        data={data}
+                        setData={setData}
+                        reset={reset}
+                        processing={processing}
+                        errors={errors}
+                        onClose={onClose}
+                    />
+                </form>
+            }
+            listContent={<ListCategory categories={categories.data} />}
+        />
     );
 }

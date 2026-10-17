@@ -120,7 +120,7 @@ export const mainNavItems = [
                 title: "Token Settings",
                 url: "/storeManagement/tokenSettings",
                 icon: Store,
-            }
+            },
         ],
     },
 ];

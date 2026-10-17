@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Services\AuthServices;
-// use App\Services\AuthService;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -28,8 +28,9 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
         if (!$this->authService->attempt($request->only('email', 'password'))) {
-            $response = 'Kredensial tidak valid';
-            return response()->json($response);
+            throw ValidationException::withMessages([
+                'email' => 'Email atau password tidak sesuai.',
+            ]);
         }
 
         $request->session()->regenerate();

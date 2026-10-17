@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace App\Repositories\POS;
 
 use App\Enums\Inventory\InventoryStatus;
@@ -8,6 +8,8 @@ use App\Models\Product;
 use App\Models\T_Sale_Items;
 use App\Models\T_Sales;
 use App\Models\T_transaction;
+use App\Models\T_Logs;
+use App\Models\T_Modules;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Exception;
@@ -24,20 +26,40 @@ class POSRepository
         $this->XenditService = $XenditService;
     }
 
-    public function getAll() {
-
-        return Product::whereHas('inventory', function ($query) {
+    public function getAll()
+    {
+        $products = Product::whereHas('inventory', function ($query) {
             $query->where('isActive', InventoryStatus::Active);
         })
-        ->with(['inventory' => function ($query) {
-            $query->where('isActive', InventoryStatus::Active);
-        }, 'unit', 'categories'])
-        ->latest()
-        ->paginate(10)
-        ->withQueryString(); 
+            ->with([
+                'inventory' => function ($query) {
+                    $query->where('isActive', InventoryStatus::Active);
+                },
+                'unit',
+                'categories'
+            ])
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        $products->getCollection()->transform(function ($product) {
+            $inventory = $product->inventory;
+
+            if ($inventory->qty == 0) {
+                $product->stock_status = 'Unavailable';
+            } elseif ($inventory->qty <= $inventory->minimum_stock) {
+                $product->stock_status = 'Warning';
+            } else {
+                $product->stock_status = 'Available';
+            }
+
+            return $product;
+        });
+
+        return $products;
     }
 
-    
+
     public function findById(int $id): ?T_Staff
     {
         return T_Staff::find($id);
@@ -56,8 +78,10 @@ class POSRepository
             $user = auth()->user();
             $staff = $user->staff;
 
+            $store = $user->store;
             $cashierId = $staff?->id;
             $cashierName = $staff?->name ?? $user->name;
+            $taxPercentage = $store?->taxSetting?->percentage / 100 ?? 0.11;
 
             /*
             |--------------------------------------------------------------------------
@@ -147,7 +171,7 @@ class POSRepository
 
             $discount = 0;
 
-            $tax = $subtotal * 0.11;
+            $tax = $subtotal * $taxPercentage;
 
             $grandTotal = $subtotal + $tax - $discount;
 
@@ -259,6 +283,7 @@ class POSRepository
             // $xenditInvoiceId = null;
             $paymentUrl = null;
             $xenditSessionId = null;
+            $componentsSdkKey = null;
 
             if ($paymentMethod === 'E-PAYMENT') {
 
@@ -339,11 +364,11 @@ class POSRepository
                 // $xenditInvoiceId = $invoice['id'] ?? null;
                 // $invoiceUrl = $invoice['invoice_url'] ?? null;
 
-                 /*
-                |--------------------------------------------------------------------------
-                | Get Session ID
-                |--------------------------------------------------------------------------
-                */
+                /*
+               |--------------------------------------------------------------------------
+               | Get Session ID
+               |--------------------------------------------------------------------------
+               */
 
                 $xenditSessionId = $session['payment_session_id'] ?? null;
                 $componentsSdkKey = $session['components_sdk_key'] ?? null;
@@ -361,7 +386,7 @@ class POSRepository
                 }
 
                 Log::info('Xendit Payment Session created', [
-                    'session' => $session,
+                    'session_id' => $xenditSessionId,
                 ]);
 
                 // $paymentUrl =
@@ -394,9 +419,15 @@ class POSRepository
             |--------------------------------------------------------------------------
             */
 
-            if ($paymentMethod === 'CASH' || $paymentMethod === 'E-PAYMENT') {
+            if ($paymentMethod === 'CASH') {
+
+                $module = T_Modules::firstOrCreate([
+                    'name' => 'Product',
+                ]);
 
                 foreach ($items as $item) {
+                    $oldQty = (int) $item['inventory']->qty;
+                    $newQty = $oldQty - $item['quantity'];
 
                     $item['inventory']->decrement(
                         'qty',
@@ -406,9 +437,17 @@ class POSRepository
                     $item['inventory']->update([
                         'last_stock_out' => $item['quantity'],
                     ]);
+
+                    T_Logs::create([
+                        'module_id' => $module->id,
+                        'user_id' => (string) $user->id,
+                        'references_id' => $item['product']->id,
+                        'old_value' => $oldQty,
+                        'new_value' => $newQty,
+                        'description' => "Penjualan {$invoiceNumber}",
+                    ]);
                 }
             }
-            
 
             /*
             |--------------------------------------------------------------------------
@@ -425,7 +464,7 @@ class POSRepository
                 'change' => $change,
                 'xendit_session_id' => $xenditSessionId,
                 // 'payment_url' => $paymentUrl,
-                'components_sdk_key' => $componentsSdkKey,
+                'components_sdk_key' => $componentsSdkKey ?? null,
             ];
         });
     }

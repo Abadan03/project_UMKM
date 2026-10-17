@@ -1,7 +1,7 @@
 import ProductModal from "./ProductModal";
 import ProductForm from "./ProductForm";
 import { useForm, usePage } from "@inertiajs/react";
-import { CategoriesProps, ProductProps, UnitsProps,  } from "@/types";
+import { CategoriesProps, ProductProps, UnitsProps } from "@/types";
 import { toast } from "sonner";
 import { useEffect } from "react";
 
@@ -24,7 +24,6 @@ export default function Edit({ product, isOpen, onClose }: EditProps) {
         sell_price: product?.sell_price ?? "",
         description: product?.description ?? "",
     });
-
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();

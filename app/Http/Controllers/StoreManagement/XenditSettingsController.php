@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 
 use App\Models\Product;
 use App\Models\T_Sale_Items;
+use App\Models\T_Logs;
+use App\Models\T_Modules;
+use App\Models\User;
 use App\Enums\Inventory\InventoryStatus;
 use App\Models\T_Stores;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +27,8 @@ class XenditSettingsController extends Controller
     public function __construct(
         private XenditService $xenditService,
         private XenditXenditSettingsRepository $xenditSettingsRepository,
-    ) {}
+    ) {
+    }
 
     public function index()
     {
@@ -138,7 +142,7 @@ class XenditSettingsController extends Controller
             ]);
         }
 
-        DB::transaction(function () use ($payload) {
+        DB::transaction(function () use ($payload, $storeId) {
 
             $transaction = T_transaction::where(
                 'reference_number',
@@ -175,6 +179,19 @@ class XenditSettingsController extends Controller
                     $transaction->id
                 );
             }
+
+            $userId = $sale->cashier?->users_id
+                ?? User::where('store_id', $storeId)->value('id');
+
+            if (!$userId) {
+                throw new \Exception(
+                    'User toko tidak ditemukan untuk mencatat pergerakan stok.'
+                );
+            }
+
+            $module = T_Modules::firstOrCreate([
+                'name' => 'Product',
+            ]);
 
             $saleItems = T_Sale_Items::where(
                 'sale_id',
@@ -217,6 +234,9 @@ class XenditSettingsController extends Controller
                     );
                 }
 
+                $oldQty = (int) $inventory->qty;
+                $newQty = $oldQty - $saleItem->quantity;
+
                 $inventory->decrement(
                     'qty',
                     $saleItem->quantity
@@ -224,6 +244,15 @@ class XenditSettingsController extends Controller
 
                 $inventory->update([
                     'last_stock_out' => $saleItem->quantity,
+                ]);
+
+                T_Logs::create([
+                    'module_id' => $module->id,
+                    'user_id' => (string) $userId,
+                    'references_id' => $product->id,
+                    'old_value' => $oldQty,
+                    'new_value' => $newQty,
+                    'description' => "POS sale {$sale->invoice_number}: inventory stock out.",
                 ]);
             }
 

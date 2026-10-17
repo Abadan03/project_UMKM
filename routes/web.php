@@ -100,12 +100,21 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('pos')->group(function () {
         Route::get('/', [CashierController::class, "index"])->name('cashier');
         Route::post('/checkout', [CashierController::class, 'store'])->name('pos.checkout');
-        
+
+        Route::post(
+            '/payment/cancel/{invoice}',
+            [CashierController::class, 'cancelPayment']
+        )->name('pos.payment.cancel');
 
         Route::get(
             '/payment/status/{invoice}',
             [CashierController::class, 'paymentStatus']
         )->name('pos.payment.status');
+
+        Route::get(
+            '/payment/session-key/{invoice}',
+            [CashierController::class, 'paymentSessionKey']
+        )->name('pos.payment.session-key');
     });
         
     // Store Management

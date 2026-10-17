@@ -136,6 +136,7 @@ export interface ProductProps {
     cost_price: number;
     sell_price: number;
     categories_id: number;
+    stock_status?: "Unavailable" | "Warning" | "Available";
     categories?: CategoriesProps | null;
     inventory?: InventoryProps | null;
     description: string;
@@ -260,12 +261,17 @@ export interface StaffFormData {
     // role
 }
 
-
 export interface TaxSettingForm {
-  taxSetting?: {
-    name: string
-    percentage: number
-    is_active: number
-    is_inclusive: number
-  }
+    name: string;
+    percentage: number;
+    is_active: number;
+    is_inclusive: number;
 }
+
+export type PaymentMethodEnum = "CASH" | "E-PAYMENT";
+export type POSCart = Record<number, number>;
+
+export type POSCartLine = ProductProps & {
+    qty: number;
+    lineTotal: number;
+};

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -18,7 +17,7 @@ return new class extends Migration
             $table->integer('percentage')->default(0);
             $table->boolean('is_active')->default(true);
             $table->boolean('is_inclusive')->default(false);
-            $table->dateTime('effective_at');
+            // $table->dateTime('effective_at');
             $table->timestamps();
         });
     }

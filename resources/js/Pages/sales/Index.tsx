@@ -119,42 +119,42 @@ export default function SalesIndex({ sales }: Props) {
     };
 
     // trial
-    const data = {
-        invoice_number: "INV-110020221",
-        cashier_id: 1,
-        cashier_name: "Budi",
-        transaction_date: "2026-09-13 01:30:00",
+    // const data = {
+    //     invoice_number: "INV-110020221",
+    //     cashier_id: 1,
+    //     cashier_name: "Budi",
+    //     transaction_date: "2026-09-13 01:30:00",
 
-        subtotal: 50000,
-        discount: 5000,
-        tax: 4500,
-        grand_total: 49500,
+    //     subtotal: 50000,
+    //     discount: 5000,
+    //     tax: 4500,
+    //     grand_total: 49500,
 
-        payment_method: "cash",
-        payment_status: "paid",
-        status: "completed",
-        notes: "eko 1 2 3",
+    //     payment_method: "cash",
+    //     payment_status: "paid",
+    //     status: "completed",
+    //     notes: "eko 1 2 3",
 
-        items: [
-            {
-                product_id: 1,
-                quantity: 2,
-                price: 25000,
-                discount: 0,
-                subtotal: 50000,
-            },
-        ],
+    //     items: [
+    //         {
+    //             product_id: 1,
+    //             quantity: 2,
+    //             price: 25000,
+    //             discount: 0,
+    //             subtotal: 50000,
+    //         },
+    //     ],
 
-        transaction: {
-            transaction_type: "payment",
-            amount: 49500,
-            payment_method: "cash",
-            reference_number: null,
-            processed_at: "2026-09-13 01:30:00",
-            status: "completed",
-            notes: null,
-        },
-    };
+    //     transaction: {
+    //         transaction_type: "payment",
+    //         amount: 49500,
+    //         payment_method: "cash",
+    //         reference_number: null,
+    //         processed_at: "2026-09-13 01:30:00",
+    //         status: "completed",
+    //         notes: null,
+    //     },
+    // };
 
     const handleRoute = (
         mode: "create" | "preview" | "search" | "delete" | "reset",
@@ -284,12 +284,12 @@ export default function SalesIndex({ sales }: Props) {
                                 </>
                             )}
                         </div>
-                        <button
+                        {/* <button
                             onClick={() => handleRoute("create")}
                             className="cursor-pointer rounded-none text-lg border-2 border-[#1a0a2e] bg-[#3c2060] px-2 py-1 text-[#ffdd00] font-bold shadow-[3px_3px_0px_0px_#1a0a2e] hover:bg-[#ffdd00] hover:text-[#1a0a2e]"
                         >
                             Create
-                        </button>
+                        </button> */}
                     </div>
                 </div>
 

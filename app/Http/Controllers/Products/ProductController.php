@@ -18,11 +18,13 @@ class ProductController extends Controller
 {
     protected ProductRepository $ProductRepository;
     protected CategoriesRepository $CategoriesRepository;
+    protected UnitRepository $UnitRepository;
 
-    public function __construct(ProductRepository $ProductRepository, CategoriesRepository $CategoriesRepository)
+    public function __construct(ProductRepository $ProductRepository, CategoriesRepository $CategoriesRepository, UnitRepository $UnitRepository)
     {
         $this->ProductRepository = $ProductRepository;
         $this->CategoriesRepository = $CategoriesRepository;
+        $this->UnitRepository = $UnitRepository;
     }
 
     public function index()
@@ -31,8 +33,6 @@ class ProductController extends Controller
         $units = T_Units::all();
 
         $getCategories = $this->CategoriesRepository->getAll();
-        // dd($getCategories);
-
 
         return Inertia::render('Products/Products', [
             'products' => $products,
@@ -92,13 +92,13 @@ class ProductController extends Controller
             'code' => ['required', 'unique:t_units,code'],
         ]);
 
-        $this->unitRepository->unitCreate($validated);
+        $this->UnitRepository->unitCreate($validated);
 
         return back()->with('success', 'Product created successfully.');
     }
     public function unitDestroy(string $id)
     {
-        $deleted = $this->unitRepository->unitDelete($id);
+        $deleted = $this->UnitRepository->unitDelete($id);
 
         if (!$deleted) {
             return redirect()->back()->with('error', 'Unit not found.');

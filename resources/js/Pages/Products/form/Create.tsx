@@ -11,7 +11,6 @@ interface CreateProps {
 export default function Create({ isOpen, onClose }: CreateProps) {
     const units = usePage().props.units as UnitsProps[];
     const categories = usePage().props.categories as ProductProps[];
-    const testing = usePage();
 
     const { data, setData, post, processing, errors, reset } = useForm({
         name: "",

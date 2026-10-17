@@ -10,7 +10,7 @@ import { Head, router } from "@inertiajs/react";
 import { LoaderCircle, Package, Search } from "lucide-react";
 import { confirmDialog } from "@/Pages/utils/popupModal";
 import Create from "./form/Create";
-import CreateCategories from "./form/CreateCategories"
+import CreateCategories from "./categories/CreateCategories";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import UnitModal from "./Units/Units";
@@ -116,7 +116,10 @@ export default function ProductsIndex({ products, units }: Props) {
         }
     };
 
-    const handleRoute = (mode: "create" | "edit" | "delete" | "createCategories", id?: number) => {
+    const handleRoute = (
+        mode: "create" | "edit" | "delete" | "createCategories",
+        id?: number,
+    ) => {
         switch (mode) {
             case "create":
                 setShowCreate(true);
@@ -183,24 +186,23 @@ export default function ProductsIndex({ products, units }: Props) {
                     </div>
 
                     <div>
-
                         <button
                             onClick={() => handleRoute("createCategories")}
-                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#ff8800] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
                         >
-                            + Categories
+                            Categories
+                        </button>
+                        <button
+                            onClick={() => setShowUnits(true)}
+                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
+                        >
+                            Units
                         </button>
                         <button
                             onClick={() => handleRoute("create")}
                             className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44cc44] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
                         >
                             + Product
-                        </button>
-                        <button
-                            onClick={() => setShowUnits(true)}
-                            className="border-4 cursor-pointer border-[#1a0a2e] bg-[#44ddff] px-4 py-2 font-bold text-[#1a0a2e] shadow-[4px_4px_0px_0px_#1a0a2e] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_#1a0a2e] transition-all active:bg-[#ffdd00]"
-                        >
-                            View Units
                         </button>
                     </div>
                 </div>
@@ -224,6 +226,9 @@ export default function ProductsIndex({ products, units }: Props) {
                                 <tr>
                                     <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
                                         Name
+                                    </th>
+                                    <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
+                                        Category
                                     </th>
                                     <th className="px-4 py-4 text-center border-r-4 border-[#1a0a2e]">
                                         Description
@@ -255,8 +260,11 @@ export default function ProductsIndex({ products, units }: Props) {
                                         >
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
                                                 {product.name}
-                                                {product.id}
+                                            </td>
 
+                                            <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
+                                                {product.categories?.name ??
+                                                    "-"}
                                             </td>
 
                                             <td className="px-4 py-3 border-r-4 border-[#1a0a2e]">
@@ -359,7 +367,10 @@ export default function ProductsIndex({ products, units }: Props) {
 
             <UnitModal isOpen={showUnits} onClose={() => setShowUnits(false)} />
             <Create isOpen={showCreate} onClose={() => setShowCreate(false)} />
-            <CreateCategories isOpen={ShowCreateCategories} onClose={() => setShowCreateCategories(false)} />
+            <CreateCategories
+                isOpen={ShowCreateCategories}
+                onClose={() => setShowCreateCategories(false)}
+            />
             <Edit
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}

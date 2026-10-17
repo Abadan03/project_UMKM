@@ -71,18 +71,34 @@ class XenditService
 
         Log::info('Xendit createPaymentSession response', [
             'status_code' => $response->status(),
-            'body' => $response->body(),
         ]);
 
         if ($response->failed()) {
             Log::error('Xendit createPaymentSession failed', [
                 'status_code' => $response->status(),
-                'body' => $response->body(),
-                'json' => $response->json(),
             ]);
 
             throw new \Exception(
-                'Xendit Error: ' . $response->body()
+                'Xendit gagal membuat sesi pembayaran.'
+            );
+        }
+
+        return $response->json();
+    }
+
+    public function getPaymentSession(string $apiKey, string $sessionId): ?array
+    {
+        $response = Http::withBasicAuth($apiKey, '')
+            ->get(self::BASE_URL . '/sessions/' . rawurlencode($sessionId));
+
+        if ($response->failed()) {
+            Log::error('Xendit getPaymentSession failed', [
+                'status_code' => $response->status(),
+                'session_id' => $sessionId,
+            ]);
+
+            throw new \Exception(
+                'Xendit gagal mengambil sesi pembayaran.'
             );
         }
 

@@ -31,6 +31,10 @@ class RoleAndUserSeeder extends Seeder
         $adminRole = T_Roles::firstOrCreate(['name' => 'admin']);
         $staffRole = T_Roles::firstOrCreate(['name' => 'staff']);
 
+        // Store Id
+        $StoreId = 1;
+
+
         // =====================
         // Buat Super Admin
         // =====================
@@ -39,7 +43,8 @@ class RoleAndUserSeeder extends Seeder
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
-                'roles_id' => $superAdminRole->id
+                'roles_id' => $superAdminRole->id,
+                'store_id' => $StoreId
             ]
         );
         // $superAdmin->assignRole($superAdminRole);
@@ -52,7 +57,8 @@ class RoleAndUserSeeder extends Seeder
             [
                 'name' => 'Admin',
                 'password' => Hash::make('password'),
-                'roles_id' => $adminRole->id
+                'roles_id' => $adminRole->id,
+                'store_id' => $StoreId
             ]
         );
         // $admin->assignRole($adminRole);
@@ -66,7 +72,8 @@ class RoleAndUserSeeder extends Seeder
                 'name' => 'Staff Toko',
                 // 'password' => Hash::make('password'),
                 'password' => bcrypt('password'),
-                'roles_id' => $staffRole->id
+                'roles_id' => $staffRole->id,
+                'store_id' => $StoreId
             ]
         );
         // $staff->assignRole($staffRole);
