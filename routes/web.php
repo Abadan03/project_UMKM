@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 // controllerr
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Handling\Midtrans\MidtransNotificationsController;
 use App\Http\Controllers\Inventory\InventoryController;
 use App\Http\Controllers\Notes\NotesController;
 use App\Http\Controllers\Products\ProductController;
@@ -82,26 +83,29 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Products
-    Route::prefix('products')->group(function () {
-        Route::get('/', [ProductController::class, "index"])->name('products');
-        Route::get('/search', [ProductController::class, "search"])->name('products.search');
-        Route::post('/store', [ProductController::class, 'store'])->name('products.store');
-        Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
-        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
-    });
-
-    // Categories
-    Route::prefix('categories')->group(function () {
+    Route::prefix("products")->group(function () {
+        Route::get("/", [ProductController::class, "index"])->name("products");
+        Route::get("/search", [ProductController::class, "search"])->name(
+            "products.search",
+        );
+        Route::post("/store", [ProductController::class, "store"])->name(
+            "products.store",
+        );
+        Route::put("/update/{id}", [ProductController::class, "update"])->name(
+            "products.update",
+        );
+        Route::delete("/destroy/{id}", [
+            ProductCon    Route::prefix('categories')->group(function () {
         Route::post('/store', [CategoriesController::class, 'store'])->name('categories.store');
+ost("/store", [CategoriesController::class, "store"])->name(
+            "categories.store",
+        );
         // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
     });
-    
-    // Cashier
-    Route::prefix('pos')->group(function () {
-        Route::get('/', [CashierController::class, "index"])->name('cashier');
-        Route::post('/checkout', [CashierController::class, 'store'])->name('pos.checkout');
 
-        Route::post(
+    // Cashier
+    Route::prefix("pos")->group(function () {
+        Route::get("/", [CashierController::cl        Route::post(
             '/payment/cancel/{invoice}',
             [CashierController::class, 'cancelPayment']
         )->name('pos.payment.cancel');
@@ -115,9 +119,6 @@ Route::middleware(['auth'])->group(function () {
             '/payment/session-key/{invoice}',
             [CashierController::class, 'paymentSessionKey']
         )->name('pos.payment.session-key');
-    });
-        
-    // Store Management
     Route::prefix('storeManagement')->group(function () {
         Route::get('/', [StoreProfileController::class, 'index'])->name('StoreManage');
         Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store.taxsettings');
@@ -144,7 +145,6 @@ Route::middleware(['auth'])->group(function () {
         // Route::post('/tokenSettings', [TokenController::class, 'updateTokenSettings'])->name('store-management.token-settings.update');
         // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
     });
-
 });
 
 Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(function () {
@@ -166,42 +166,12 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
         ->name('destroy');
 
 
-    // Staff Management
-    Route::get('staff', [\App\Http\Controllers\Staff\StaffController::class, 'index'])
-        ->name('staff.index');
-    Route::get('staff/search', [\App\Http\Controllers\Staff\StaffController::class, 'search'])
-        ->name('staff.search');
-    // Route::get('staff/create', [\App\Http\Controllers\StaffController::class, 'create'])
-    //     ->name('staff.create');
-    Route::post('staff', [\App\Http\Controllers\Staff\StaffController::class, 'store'])
-        ->name('staff.store');
-    // Route::get('staff/edit/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'edit'])
-    //     ->name('staff.edit');
-    Route::put('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'update'])
-        ->name('staff.update');
-    Route::delete('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'destroy'])
-        ->name('staff.destroy');
+        // notes
 
-
-    // sales
-    Route::get('sales', [SalesController::class, 'index'])
-        ->name('sales.index');
-    Route::get('sales/search', [SalesController::class, 'search'])
-        ->name('sales.search');
-    Route::get('sales/view/{id}', [SalesController::class, 'view'])
-        ->name('sales.view');
-    Route::post('sales/store', [SalesController::class, 'store'])
-        ->name('sales.store');
-    Route::post('sales/storeTry', [SalesController::class, 'store'])
-        ->name('sales.storeTry');
-    Route::delete('sales/destroy/{id}', [SalesController::class, 'destroy'])
-        ->name('sales.destroy');
-
-    // notes 
-
-    route::get("notes", [NotesController::class, "index"])->name
-    ('notex.index');
-});
+        route::get("notes", [NotesController::class, "index"])->name(
+            "notex.index",
+        );
+    });
 
 // =====================
 // Super Admin
