@@ -10,6 +10,7 @@ use App\Models\T_Sales;
 use App\Models\T_transaction;
 use App\Models\T_Logs;
 use App\Models\T_Modules;
+use App\Repositories\Token\TokenRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Exception;
@@ -20,10 +21,12 @@ use Illuminate\Support\Facades\Log;
 class POSRepository
 {
     protected $XenditService;
+    protected $TokenRepository;
 
-    public function __construct(XenditService $XenditService)
+    public function __construct(XenditService $XenditService, TokenRepository $TokenRepository)
     {
         $this->XenditService = $XenditService;
+        $this->TokenRepository = $TokenRepository;
     }
 
     public function getAll()
@@ -195,9 +198,11 @@ class POSRepository
                 }
 
                 $change = $cashReceived - $grandTotal;
+                // Decrease the token balance for the authenticated user
+                $this->TokenRepository->decreaseToken($user->id);
             }
 
-            /*
+            /*  
             |--------------------------------------------------------------------------
             | 7. Generate invoice number
             |--------------------------------------------------------------------------

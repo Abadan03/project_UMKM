@@ -26,4 +26,21 @@ class TokenRepository
             "status" => "pending",
         ]);
     }
+
+    public function decreaseToken($userId)
+    {
+        $wallet = T_User_Wallets::where("user_id", $userId)->first();
+        // return dd($wallet);
+
+        if(!$wallet) {
+            dd("User wallet not found for user ID: " . $userId);
+        }
+
+        if ($wallet) {
+            $wallet->balance -= 1;
+            $wallet->save();
+        } 
+
+        
+    }
 }

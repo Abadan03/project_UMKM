@@ -17,6 +17,8 @@ use App\Models\T_transaction;
 // Repository
 use App\Repositories\POS\POSRepository;
 use App\Repositories\Tax\TaxRepository;
+use App\Repositories\Token\TokenRepository;
+use App\Services\Xendit\XenditService;
 
 class CashierController extends Controller
 {
@@ -24,11 +26,13 @@ class CashierController extends Controller
 
     protected $POSRepository;
     protected $TaxRepository;
+    protected $TokenRepository;
 
-    public function __construct(POSRepository $POSRepository, TaxRepository $TaxRepository)
+    public function __construct(POSRepository $POSRepository, TaxRepository $TaxRepository, TokenRepository $TokenRepository)
     {
         $this->POSRepository = $POSRepository;
         $this->TaxRepository = $TaxRepository;
+        $this->TokenRepository = $TokenRepository;  
     }
 
     public function index()
