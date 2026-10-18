@@ -262,19 +262,16 @@ export interface StaffFormData {
 }
 
 export interface TaxSettingForm {
-    taxSetting?: {
-        name: string;
-        percentage: number;
-        is_active: number;
-        is_inclusive: number;
-    };
+    name: string;
+    percentage: number;
+    is_active: number;
+    is_inclusive: number;
 }
 
-// export interface T_TokenValid {
-//   taxSetting?: {
-//     name: string
-//     percentage: number
-//     is_active: number
-//     is_inclusive: number
-//   }
-// }
+export type PaymentMethodEnum = "CASH" | "E-PAYMENT";
+export type POSCart = Record<number, number>;
+
+export type POSCartLine = ProductProps & {
+    qty: number;
+    lineTotal: number;
+};

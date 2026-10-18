@@ -59,7 +59,7 @@ Route::post('/xenditSettings-handle/{storeId}', [XenditSettingsController::class
 // =====================
 // POS Payment Redirect
 // =====================
-Route::get('/pos/payment/success',[CashierController::class, 'paymentSuccess'])->name('pos.payment.success');
+Route::get('/pos/payment/success', [CashierController::class, 'paymentSuccess'])->name('pos.payment.success');
 
 // =====================
 // Dashboard
@@ -97,6 +97,20 @@ Route::middleware(['auth'])->group(function () {
         // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
     });
 
+    // sales
+    Route::get('sales', [SalesController::class, 'index'])
+        ->name('sales.index');
+    Route::get('sales/search', [SalesController::class, 'search'])
+        ->name('sales.search');
+    Route::get('sales/view/{id}', [SalesController::class, 'view'])
+        ->name('sales.view');
+    Route::post('sales/store', [SalesController::class, 'store'])
+        ->name('sales.store');
+    Route::post('sales/storeTry', [SalesController::class, 'store'])
+        ->name('sales.storeTry');
+    Route::delete('sales/destroy/{id}', [SalesController::class, 'destroy'])
+        ->name('sales.destroy');
+
     // Cashier
     Route::prefix('pos')->group(function () {
         Route::get('/', [CashierController::class, "index"])->name('cashier');
@@ -122,7 +136,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('storeManagement')->group(function () {
         Route::get('/', [StoreProfileController::class, 'index'])->name('StoreManage');
         Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store.taxsettings');
-        
+
         // PROFILE TOKO
         Route::post('/profile-stores', [StoreProfileController::class, 'index'])->name('store-management.profile.update');
 
@@ -130,20 +144,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/xenditSettings', [XenditSettingsController::class, 'index'])->name('store-management.xendit-settings');
         Route::post('/xenditSettings-test', [XenditSettingsController::class, 'test'])->name('store-management.xendit-settings.test');
         Route::post('/xenditSettings', [XenditSettingsController::class, 'update'])
-        ->name('store-management.xendit-settings.update');
+            ->name('store-management.xendit-settings.update');
 
         // TOKEN
         Route::get('/tokenSettings', [TokenController::class, 'tokenSettings'])->name('store-management.token-settings');
         Route::post('/tokenSettings', [TokenController::class, 'updateTokenSettings'])->name('store-management.token-settings.update');
+        Route::post('/topup', [TokenController::class, 'createPayment'])->name('store-management.token-settings.topup');
 
 
         // TAX SETTINGS
         Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store-management.tax-settings');
         Route::post('/taxSettings', [TaxSettingsController::class, 'update'])->name('store-management.tax-settings.update');
-        
-        
-        // Route::post('/tokenSettings', [TokenController::class, 'updateTokenSettings'])->name('store-management.token-settings.update');
-        // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
+
     });
 });
 
@@ -165,61 +177,23 @@ Route::middleware(['auth', 'role:super admin,admin'])->name('user.')->group(func
     Route::delete('users/{userId}', [UsersController::class, 'destroy'])
         ->name('destroy');
 
+    // Staff Management
+    Route::get('staff', [\App\Http\Controllers\Staff\StaffController::class, 'index'])
+        ->name('staff.index');
+    Route::get('staff/search', [\App\Http\Controllers\Staff\StaffController::class, 'search'])
+        ->name('staff.search');
+    // Route::get('staff/create', [\App\Http\Controllers\StaffController::class, 'create'])
+    //     ->name('staff.create');
+    Route::post('staff', [\App\Http\Controllers\Staff\StaffController::class, 'store'])
+        ->name('staff.store');
+    // Route::get('staff/edit/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'edit'])
+    //     ->name('staff.edit');
+    Route::put('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'update'])
+        ->name('staff.update');
+    Route::delete('staff/{staffId}', [\App\Http\Controllers\Staff\StaffController::class, 'destroy'])
+        ->name('staff.destroy');
 
-        // notes
-
-        route::get("notes", [NotesController::class, "index"])->name(
-            "notex.index",
-        );
-    });
-
-// =====================
-// Super Admin
-// =====================
-// Route::middleware(['auth', 'role:super_admin'])
-//     ->prefix('super-admin')
-//     ->name('super-admin.')
-//     ->group(function () {
-//         // Route::get('/dashboard', [SuperAdminDashboard::class, 'index'])->name('dashboard');
-
-//         // // User Management
-//         // Route::resource('/users', \App\Http\Controllers\SuperAdmin\UserController::class);
-
-//         // // Store Management
-//         // Route::resource('/stores', \App\Http\Controllers\SuperAdmin\StoreController::class);
-//     });
-
-// =====================
-// Admin
-// =====================
-// Route::middleware(['auth', 'role:admin'])
-//     ->prefix('admin')
-//     ->name('admin.')
-//     ->group(function () {
-//         Route::get('/dashboard', [AdminDashboard::class, 'index'])->name('dashboard');
-
-//         // Product Management
-//         Route::resource('/products', \App\Http\Controllers\Admin\ProductController::class);
-
-//         // Reporting
-//         Route::get('/reports', [\App\Http\Controllers\Admin\ReportController::class, 'index'])->name('reports.index');
-//     });
-
-// =====================
-// Staff
-// =====================
-// Route::middleware(['auth'])
-//     ->name('staff.')
-//     ->group(function () {
-//         Route::get('/dashboard', [\App\Http\Controllers\Staff\StaffDashboard::class, 'index'])->name('dashboard');
-
-//         POS
-//         Route::get('/pos', [\App\Http\Controllers\Staff\PosController::class, 'index'])->name('pos.index');
-//         Route::post('/pos/transaction', [\App\Http\Controllers\Staff\PosController::class, 'store'])->name('pos.store');
-//     });
-
-// Route::get('/', function () {
-//     return Inertia::render('Home', [
-//         'nama' => 'Developer'
-//     ]);
-// });
+    // notes 
+    route::get("notes", [NotesController::class, "index"])->name
+    ('notex.index');
+});

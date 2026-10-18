@@ -1,9 +1,4 @@
-<<<<<<< Updated upstream
 import { useState, useMemo, useEffect, useRef } from "react";
-=======
-import React from "react";
-import { useState, useMemo, useEffect } from "react";
->>>>>>> Stashed changes
 import AppLayout from "@/layouts/app-layout";
 import { Head } from "@inertiajs/react";
 import { usePage, router } from "@inertiajs/react";
@@ -11,7 +6,6 @@ import { XenditComponents } from "xendit-components-web";
 import { toast } from "sonner";
 import type { ReceiptData } from "@/Pages/POS/ReceiptView";
 import axios from "axios";
-import { ProductProps, TaxSettingForm, type BreadcrumbItem } from "@/types";
 import {
     ProductProps,
     POSCart,
@@ -132,6 +126,18 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
     const [xenditSdkKey, setXenditSdkKey] = useState<string | null>(null);
     const [paymentInvoice, setPaymentInvoice] = useState<string | null>(
         () => initialDraft?.invoiceNumber ?? null,
+    );
+    const [category, setCategory] = useState("Semua");
+    const [query, setQuery] = useState("");
+    const [cart, setCart] = useState<POSCart>(() => initialDraft?.cart ?? {});
+    const [cash, setCash] = useState(() => initialDraft?.cash ?? "");
+    const [receipt, setReceipt] = useState<ReceiptData | null>(null);
+    const [processing, setProcessing] = useState(false);
+
+    const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnum>(() =>
+        initialDraft?.invoiceNumber
+            ? PAYMENT_METHOD.E_PAYMENT
+            : (initialDraft?.paymentMethod ?? PAYMENT_METHOD.CASH),
     );
     const [showPaymentComponent, setShowPaymentComponent] = useState(false);
     const [showPanelPayment, setShowPanelPayment] = useState(false);
@@ -362,19 +368,6 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
             overlay.removeAttribute("aria-modal");
         }
     }, [showPanelPayment]);
-
-    const [category, setCategory] = useState("Semua");
-    const [query, setQuery] = useState("");
-    const [cart, setCart] = useState<POSCart>(() => initialDraft?.cart ?? {});
-    const [cash, setCash] = useState(() => initialDraft?.cash ?? "");
-    const [receipt, setReceipt] = useState<ReceiptData | null>(null);
-    const [processing, setProcessing] = useState(false);
-
-    const [paymentMethod, setPaymentMethod] = useState<PaymentMethodEnum>(() =>
-        initialDraft?.invoiceNumber
-            ? PAYMENT_METHOD.E_PAYMENT
-            : (initialDraft?.paymentMethod ?? PAYMENT_METHOD.CASH),
-    );
 
     useEffect(() => {
         if (initialDraft) {
