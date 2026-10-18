@@ -83,29 +83,26 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Products
-    Route::prefix("products")->group(function () {
-        Route::get("/", [ProductController::class, "index"])->name("products");
-        Route::get("/search", [ProductController::class, "search"])->name(
-            "products.search",
-        );
-        Route::post("/store", [ProductController::class, "store"])->name(
-            "products.store",
-        );
-        Route::put("/update/{id}", [ProductController::class, "update"])->name(
-            "products.update",
-        );
-        Route::delete("/destroy/{id}", [
-            ProductCon    Route::prefix('categories')->group(function () {
+    Route::prefix('products')->group(function () {
+        Route::get('/', [ProductController::class, "index"])->name('products');
+        Route::get('/search', [ProductController::class, "search"])->name('products.search');
+        Route::post('/store', [ProductController::class, 'store'])->name('products.store');
+        Route::put('/update/{id}', [ProductController::class, 'update'])->name('products.update');
+        Route::delete('/destroy/{id}', [ProductController::class, 'destroy'])->name('products.destroy');
+    });
+
+    // Categories
+    Route::prefix('categories')->group(function () {
         Route::post('/store', [CategoriesController::class, 'store'])->name('categories.store');
-ost("/store", [CategoriesController::class, "store"])->name(
-            "categories.store",
-        );
         // Route::delete('/destroy/{id}', [ProductController::class, 'unitDestroy'])->name('units.destroy');
     });
 
     // Cashier
-    Route::prefix("pos")->group(function () {
-        Route::get("/", [CashierController::cl        Route::post(
+    Route::prefix('pos')->group(function () {
+        Route::get('/', [CashierController::class, "index"])->name('cashier');
+        Route::post('/checkout', [CashierController::class, 'store'])->name('pos.checkout');
+
+        Route::post(
             '/payment/cancel/{invoice}',
             [CashierController::class, 'cancelPayment']
         )->name('pos.payment.cancel');
@@ -119,6 +116,9 @@ ost("/store", [CategoriesController::class, "store"])->name(
             '/payment/session-key/{invoice}',
             [CashierController::class, 'paymentSessionKey']
         )->name('pos.payment.session-key');
+    });
+
+    // Store Management
     Route::prefix('storeManagement')->group(function () {
         Route::get('/', [StoreProfileController::class, 'index'])->name('StoreManage');
         Route::get('/taxSettings', [TaxSettingsController::class, 'index'])->name('store.taxsettings');
