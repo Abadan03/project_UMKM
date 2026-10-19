@@ -291,7 +291,7 @@ class POSRepository
             $componentsSdkKey = null;
 
             if ($paymentMethod === 'E-PAYMENT') {
-
+                $this->TokenRepository->decreaseToken($user->id);
                 $store = $user->store;
 
                 if (!$store) {
