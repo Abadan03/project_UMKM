@@ -12,7 +12,7 @@ use Inertia\Inertia;
 
 
 // Repository
-use App\Repositories\Product\CategoriesRepository;
+use App\Repositories\Categories\CategoriesRepository;
 
 class ProductController extends Controller
 {

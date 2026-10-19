@@ -25,7 +25,6 @@ export default function CreateCategories({ isOpen, onClose }: CreateProps) {
             preserveScroll: true,
             onSuccess: () => {
                 reset();
-                onClose();
                 toast.success("Categories created successfully.");
             },
         });

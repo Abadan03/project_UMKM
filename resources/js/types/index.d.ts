@@ -29,6 +29,8 @@ export interface User {
     email: string;
     avatar?: string;
     roles_id: number;
+    stores_id?: number;
+    balance?: number;
     email_verified_at: string | null;
     remember_token: string | null;
     created_at: string;

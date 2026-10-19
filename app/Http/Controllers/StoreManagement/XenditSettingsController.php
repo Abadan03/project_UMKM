@@ -166,7 +166,7 @@ class XenditSettingsController extends Controller
                     'reference_number' => $transaction->reference_number,
                 ]);
 
-                return; 
+                return;
             }
 
             $sale = $transaction->sales()

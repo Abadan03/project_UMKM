@@ -13,7 +13,7 @@ use App\Http\Requests\POS\POSRequest;
 
 // Repository
 use App\Repositories\POS\POSRepository;
-use App\Repositories\Product\CategoriesRepository;
+use App\Repositories\Categories\CategoriesRepository;
 
 // JSONResponse
 use Illuminate\Http\JsonResponse;

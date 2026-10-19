@@ -117,7 +117,13 @@ const rupiah = (n: number | string) =>
     });
 
 export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
-    const page = usePage<SharedData & { products: { data: ProductProps[] } }>();
+    const page = usePage<
+        SharedData & {
+            products: { data: ProductProps[] };
+            balance?: number | null;
+        }
+    >();
+    const balance = page.props.balance ?? 0;
     const { data: PRODUCTS } = page.props.products;
     const draftStorageKey = `pos-draft:v${POS_DRAFT_VERSION}:${page.props.auth.user.id}`;
     const [initialDraft] = useState(() => loadPOSDraft(draftStorageKey));
@@ -157,6 +163,7 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
     const switchingPaymentMethodRef = useRef(false);
     const cleanupXenditActionRef = useRef<(() => void) | null>(null);
     const draftStorageErrorNotifiedRef = useRef(false);
+    const paymentCompletionHandledRef = useRef(false);
     const [hasCheckedOut, setHasCheckedOut] = useState(() =>
         Boolean(initialDraft?.invoiceNumber),
     );
@@ -301,13 +308,17 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
         }
     };
 
-    const handleXenditSessionComplete = () => {
+    const handleVerifiedPayment = () => {
+        if (paymentCompletionHandledRef.current) return false;
+        paymentCompletionHandledRef.current = true;
+
         setShowPaymentComponent(false);
         setShowPanelPayment(false);
         setHasRestoredPaymentAction(false);
         setXenditSdkKey(null);
         setPaymentInvoice(null);
         setXenditPaymentReady(false);
+        setHasCheckedOut(true);
         try {
             window.sessionStorage.removeItem(draftStorageKey);
         } catch (storageError) {
@@ -317,17 +328,73 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
             );
         }
 
-        router.reload({
-            only: ["products"],
-        });
+        return true;
+    };
+
+    const handleXenditSessionComplete = async () => {
+        if (!paymentInvoice) {
+            toast.error("Nomor transaksi pembayaran tidak ditemukan.");
+            return;
+        }
+
+        try {
+            const response = await axios.get(
+                `/pos/payment/status/${encodeURIComponent(paymentInvoice)}`,
+            );
+
+            const result = response.data;
+            const status = String(
+                response.data.transaction?.status ?? "",
+            ).toLowerCase();
+
+            if (status === "completed") {
+                if (handleVerifiedPayment()) {
+                    toast.success("Pembayaran berhasil ");
+                }
+
+                setReceipt({
+                    lines: cartLines,
+                    subtotal: Number(result.sale.subtotal),
+                    tax: Number(result.sale.tax),
+                    total: Number(result.sale.grand_total),
+                    cash: Number(result.cash_received),
+                    change: Number(result.change),
+                    time: new Date(result.sale.transaction_date),
+                    trxId: result.sale.invoice_number,
+                    cashierName: result.sale.cashier_name,
+                });
+
+                router.reload({
+                    only: ["products"],
+                });
+
+                return;
+            }
+
+            setShowPanelPayment(false);
+            toast.info(
+                "Kanal pembayaran ditutup, tetapi Xendit belum mengonfirmasi pembayaran. Transaksi tetap pending dan status akan diperiksa kembali.",
+            );
+        } catch (error) {
+            console.error(
+                "Gagal memverifikasi pembayaran POS ke Xendit:",
+                error,
+            );
+            toast.error(
+                "Pembayaran belum dapat diverifikasi. Transaksi tetap pending; status akan diperiksa kembali.",
+            );
+        }
     };
 
     const handleXenditSessionExpired = () => {
-        setShowPaymentComponent(false);
+        setShowPaymentComponent(true);
         setShowPanelPayment(false);
         setHasRestoredPaymentAction(false);
         setXenditSdkKey(null);
         setXenditPaymentReady(false);
+        toast.info(
+            "Sesi pembayaran berakhir. Transaksi tetap pending; batalkan transaksi atau periksa status pembayaran.",
+        );
     };
 
     useEffect(() => {
@@ -480,6 +547,56 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
     }, [initialDraft, draftStorageKey]);
 
     useEffect(() => {
+        if (!paymentInvoice || !hasCheckedOut) return;
+
+        let isActive = true;
+        let isChecking = false;
+        let hasReportedError = false;
+
+        const verifyPaymentStatus = async () => {
+            if (!isActive || isChecking) return;
+
+            isChecking = true;
+            try {
+                const response = await axios.get(
+                    `/pos/payment/status/${encodeURIComponent(paymentInvoice)}`,
+                );
+                if (!isActive) return;
+
+                const status = String(
+                    response.data.transaction?.status ?? "",
+                ).toLowerCase();
+
+                if (status === "completed") {
+                    if (handleVerifiedPayment()) {
+                        toast.success(
+                            "Pembayaran berhasil dikonfirmasi Xendit.",
+                        );
+                    }
+                }
+            } catch (error) {
+                console.error("Gagal memeriksa status pembayaran POS:", error);
+                if (!hasReportedError && isActive) {
+                    toast.error(
+                        "Status pembayaran belum dapat diperiksa. POS akan mencoba kembali.",
+                    );
+                    hasReportedError = true;
+                }
+            } finally {
+                isChecking = false;
+            }
+        };
+
+        void verifyPaymentStatus();
+        const interval = window.setInterval(verifyPaymentStatus, 5000);
+
+        return () => {
+            isActive = false;
+            window.clearInterval(interval);
+        };
+    }, [paymentInvoice, hasCheckedOut]);
+
+    useEffect(() => {
         try {
             if (Object.keys(cart).length === 0) {
                 window.sessionStorage.removeItem(draftStorageKey);
@@ -607,6 +724,7 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
         if (!canPay || processing) return;
 
         try {
+            paymentCompletionHandledRef.current = false;
             setProcessing(true);
 
             const payload = {
@@ -707,6 +825,7 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
     };
 
     const newTransaction = () => {
+        paymentCompletionHandledRef.current = false;
         setHasCheckedOut(false);
         setCart({});
         setCash("");
@@ -717,7 +836,7 @@ export default function index({ taxSetting }: { taxSetting: TaxSettingForm }) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout breadcrumbs={breadcrumbs} balance={balance}>
             <Head title="Cashier" />
 
             <div
